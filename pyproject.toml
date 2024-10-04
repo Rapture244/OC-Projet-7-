@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "p7-package"
+version = "0.1.0"
+description = ""
+authors = ["ovidiu.pascal <ovidiu.pascal@orange.com>"]
+readme = "README.md"
+packages = [{include = "p7_package", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
