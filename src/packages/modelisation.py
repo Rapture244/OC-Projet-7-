@@ -1685,3 +1685,93 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         plt.show()
 
 
+    @staticmethod
+    def display_combined_confusion_matrices(directory: Path, model_names: list[str], fraction_prefix: str = "Fraction", save_combined: bool = False):
+        """
+        Combines and displays confusion matrix images from a directory, grouping by fraction, model name, and scoring method.
+
+        Args:
+            directory (Path): Path to the directory containing confusion matrix images.
+            model_names (List[str]): List of model names to filter images for grouping.
+            fraction_prefix (str): Prefix for fraction grouping in filenames. Defaults to "Fraction".
+            save_combined (bool): If True, saves the combined images in the same directory.
+
+        Returns:
+            None
+        """
+        # Ensure the directory exists
+        if not directory.exists():
+            raise FileNotFoundError(f"The directory {directory} does not exist.")
+
+        # Storing
+        scoring_methods: List[str] = ["business", "roc_auc"]
+        image_files: List[Path] = []
+
+        # Fetch all PNG files matching any of the model names
+        for model_name in model_names:
+            image_files.extend(directory.glob(f"*{model_name}*.png"))
+
+        if not image_files:
+            logger.warning(f"No confusion matrix images found in {directory} for models: {', '.join(model_names)}.")
+            return
+
+        # Parse filenames to extract group keys (Fraction, Model, and Scoring)
+        def extract_group_key(file_path: Path) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+            file_stem: str = file_path.stem
+            parts: List[str] = file_stem.split(" - ")
+            fraction: Optional[str] = next((p for p in parts if fraction_prefix in p), None)
+            model: Optional[str] = parts[-1] if parts else None
+            scoring: Optional[str] = next((p for p in scoring_methods if p in file_stem), None)
+            return fraction, model, scoring
+
+
+        # Group files by fraction and model
+        image_files.sort()  # Sort for consistent grouping
+        grouped_files: Dict[Tuple[str, str], Dict[str, Path]] = {}
+
+        for file in image_files:
+            fraction, model, scoring = extract_group_key(file)
+            if not fraction or not model or not scoring:
+                logger.warning(f"Skipping file {file}, missing fraction, model, or scoring key.")
+                continue
+
+            key: Tuple[str, str] = (fraction, model)
+            grouped_files.setdefault(key, {})[scoring] = file
+
+        # Process each group
+        for (fraction, model), scoring_files in grouped_files.items():
+            # Ensure both scoring methods are present
+            if len(scoring_files) != len(scoring_methods):
+                logger.info(f"Skipping group {fraction}-{model}, not all scoring methods found.")
+                continue
+
+            # Load images for the two scoring methods
+            images: List[Image.Image] = [Image.open(scoring_files[method]) for method in scoring_methods]
+
+            # Create a combined image (horizontal layout)
+            widths, heights = zip(*(img.size for img in images))
+            combined_width: int = sum(widths)
+            max_height: int = max(heights)
+
+            combined_image: Image.Image = Image.new("RGB", (combined_width, max_height))
+            x_offset: int = 0
+
+            for img in images:
+                combined_image.paste(img, (x_offset, 0))
+                x_offset += img.width
+
+            # Display the combined image
+            plt.figure(figsize=(16, 8))
+            plt.imshow(combined_image)
+            plt.axis("off")
+            plt.title(f"Combined Confusion Matrices: {fraction} - {model}")
+            plt.show()
+
+            # Optionally save the combined image
+            if save_combined:
+                combined_filename = f"Combined - {fraction} - {model}.png"
+                combined_path = directory / combined_filename
+                combined_image.save(combined_path)
+                logger.info(f"Combined image saved as {combined_path}")
+
+
