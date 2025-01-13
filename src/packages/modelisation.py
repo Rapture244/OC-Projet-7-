@@ -400,3 +400,76 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             return X_train_resampled, y_train_resampled, X_test_final
 
 
+    def get_preprocessor_and_pipeline(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, classifier: BaseEstimator) -> ImbPipeline:
+        """
+        Returns a simplified pipeline with RobustScaler and SMOTETomek for preprocessing.
+
+        Args:
+            trial (optuna.trial.Trial): Optuna trial object for hyperparameter suggestions.
+            X_train (pd.DataFrame): Training feature matrix.
+            classifier (BaseEstimator): Classifier to include in the pipeline.
+
+        Returns:
+            ImbPipeline: A complete pipeline with preprocessing and the classifier.
+        """
+        # Suggest sampling strategy for SMOTETomek
+        sampler_strategy: float = trial.suggest_categorical("sampling_strategy", [0.15, 0.25, 0.30, 0.35])
+
+        # Define custom SMOTE for oversampling
+        custom_smote = SMOTE(
+            sampling_strategy=sampler_strategy,  # Oversample minority class to specified ratio
+            random_state=self.random_state       # Use self.random_state for reproducibility
+            )
+
+        # Define custom TomekLinks for undersampling only the majority class
+        custom_tomek = TomekLinks(
+            sampling_strategy="majority"         # Only clean links from the majority class
+            )
+
+        # Define the oversampler
+        oversampler = SMOTETomek(
+            smote=custom_smote,
+            tomek=custom_tomek,
+            random_state=self.random_state
+            )
+
+        # Set up the RobustScaler
+        robust_scaler = RobustScaler()
+
+        # Identify numeric features
+        numeric_features: List[str] = X_train.select_dtypes(include=["number"]).columns.tolist()
+
+        # Define numeric transformation pipeline
+        numeric_transformer: Pipeline = Pipeline(
+            steps=[("robust_scaler", robust_scaler)]  # Apply RobustScaler
+            )
+
+        # Define preprocessor for numeric features
+        preprocessor: ColumnTransformer = ColumnTransformer(
+            transformers=[("num", numeric_transformer, numeric_features)],
+            remainder="passthrough"
+            )
+
+        # Assemble the pipeline
+        pipeline_steps = [
+            ("preprocessor", preprocessor),  # Apply scaling
+            ("oversampler", oversampler),    # Perform oversampling and undersampling
+            ("classifier", classifier),      # Add the classifier
+            ]
+
+        clf: ImbPipeline = ImbPipeline(pipeline_steps)
+
+        # Attach preprocessing metadata
+        clf.metadata = {
+            "preprocessing_used": {
+                "sampler": "SMOTETomek",
+                "sampling_strategy": sampler_strategy,
+                "scaling": [{"type": "RobustScaler", "parameters": {}}],
+                "custom_smote": {"sampling_strategy": sampler_strategy},
+                "custom_tomek": {"sampling_strategy": "majority"}
+                }
+            }
+
+        return clf
+
+
