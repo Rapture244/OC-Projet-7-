@@ -1283,7 +1283,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         dir_path.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
         current_date = datetime.now().strftime("%Y-%m-%d")
         model_name = f"{type(model).__name__} - {scorer}"
-        filename = f"{current_date}_{model_name}.joblib"
+        filename = f"{current_date} - {model_name}.joblib"
         model_file = dir_path / filename
 
         try:
