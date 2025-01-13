@@ -297,7 +297,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             y_train: pd.Series,
             X_test: pd.DataFrame,
             preprocessing_used: Dict[str, Any],
-            save_scaler: bool = False,
+            return_scaler: bool = False,
             ) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, Optional[Any]]:
         """
         Applies preprocessing by scaling numeric features using RobustScaler and passing through non-numeric features.
@@ -308,14 +308,14 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             y_train (pd.Series): Training target vector.
             X_test (pd.DataFrame): Testing feature matrix.
             preprocessing_used (Dict[str, Any]): Dictionary specifying preprocessing settings:
-            save_scaler (bool): Whether to include the fitted scaler object in the return value.
+            return_scaler (bool): Whether to include the fitted scaler object in the return value.
 
         Returns:
             Tuple[pd.DataFrame, pd.Series, pd.DataFrame, Optional[RobustScaler]]:
                 - Resampled and scaled training feature matrix.
                 - Resampled training target vector.
                 - Scaled testing feature matrix.
-                - Fitted RobustScaler object, if `save_scaler` is True.
+                - Fitted RobustScaler object, if `return_scaler` is True.
 
         Raises:
             ValueError: If preprocessing settings are incomplete or unsupported configurations are provided.
@@ -392,7 +392,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             raise ValueError(f"Sampler {sampler_choice} is not supported.")
 
         # Return results
-        if save_scaler:
+        if return_scaler:
             return X_train_resampled, y_train_resampled, X_test_final, scaler
         else:
             return X_train_resampled, y_train_resampled, X_test_final
