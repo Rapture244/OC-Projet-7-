@@ -4,7 +4,6 @@ import sys
 import platform
 import subprocess
 from pathlib import Path
-from typing import Optional as Opt
 
 # Third-party library imports
 import pandas as pd
@@ -12,6 +11,7 @@ import chardet
 from loguru import logger
 import GPUtil
 import pyopencl as cl
+
 
 # ==================================================================================================================== #
 #                                                        SYSTEM                                                        #
@@ -180,6 +180,50 @@ def concat_dataframes(base_df: pd.DataFrame, concat_df: pd.DataFrame) -> pd.Data
     return concatenated_df
 
 
+def merge_dataframes(base_df: pd.DataFrame, merge_df: pd.DataFrame, merge_key: str, how: str = 'left') -> pd.DataFrame:
+    """
+    Merge a DataFrame with a base DataFrame based on a specified key.
+
+    Args:
+        base_df (pd.DataFrame): The main DataFrame to which another DataFrame will be merged.
+        merge_df (pd.DataFrame): The DataFrame to be merged with the base DataFrame.
+        merge_key (str): The key on which the merging should be performed.
+        how (str, optional): Type of merge to be performed. Default is 'left'.
+
+    Returns:
+        pd.DataFrame: A merged DataFrame resulting from the given DataFrames.
+
+    Raises:
+        ValueError: If the merge key is not found in either DataFrame.
+        ValueError: If the input DataFrames are empty.
+    """
+    # Validate inputs
+    if base_df.empty:
+        logger.error("The base DataFrame is empty.")
+        raise ValueError("The base DataFrame must not be empty.")
+
+    if merge_df.empty:
+        logger.error("The DataFrame to merge is empty.")
+        raise ValueError("The DataFrame to merge must not be empty.")
+
+    if merge_key not in base_df.columns:
+        logger.error(f"Merge key '{merge_key}' not found in base DataFrame.")
+        raise ValueError(f"Merge key '{merge_key}' must exist in the base DataFrame.")
+
+    if merge_key not in merge_df.columns:
+        logger.error(f"Merge key '{merge_key}' not found in the DataFrame to merge.")
+        raise ValueError(f"Merge key '{merge_key}' must exist in the DataFrame to merge.")
+
+    # Perform the merge
+    try:
+        logger.info(f"Merging DataFrames with key '{merge_key}' using '{how}' join.")
+        merged_df = base_df.merge(merge_df, how=how, on=merge_key)
+        logger.success(f"DataFrames merged successfully. Shape of the merged DataFrame: {merged_df.shape}")
+    except Exception as e:
+        logger.exception(f"An error occurred during merging: {e}")
+        raise ValueError(f"Failed to merge DataFrames due to an error: {e}")
+
+    return merged_df
 
 
 
