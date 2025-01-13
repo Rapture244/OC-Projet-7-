@@ -184,7 +184,7 @@ def plot_target_distribution(df: pd.DataFrame) -> None:
     logger.debug("TARGET distribution plots displayed successfully.")
 
 
-def plot_distribution(df: pd.DataFrame, target_col: str = 'TARGET', category_col: str = None, title: str = 'Insert_title') -> None:
+def plot_variable_and_target_distribution(df: pd.DataFrame, target_col: str = 'TARGET', category_col: str = None, title: str = 'Insert_title') -> None:
     """
     Plots the distribution of a specified categorical variable by target variable
     and its overall distribution with count annotations.
