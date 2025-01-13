@@ -229,3 +229,67 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return X_train, X_test, y_train, y_test
 
 
+    def split_data_sample(self, X: pd.DataFrame, y: pd.Series, train_sample_size: float, shuffle: bool = True, stratify: bool = True) -> Tuple[pd.DataFrame, pd.Series]:
+        """
+        Creates a smaller stratified sample from the training dataset.
+
+        Args:
+            X (pd.DataFrame): Full training feature matrix.
+            y (pd.Series): Full training target vector.
+            train_sample_size (float): The proportion of the training dataset to sample.
+            shuffle (bool, optional): Whether to shuffle the data before sampling. Defaults to True.
+            stratify (bool, optional): Whether to stratify the sample by the target variable. Defaults to True.
+
+        Returns:
+            Tuple[pd.DataFrame, pd.Series]:
+                - X_train_sample (pd.DataFrame): Subsampled training feature matrix.
+                - y_train_sample (pd.Series): Subsampled training target vector.
+
+        Raises:
+            ValueError: If the training dataset is too small or stratified sampling is not feasible.
+        """
+        logger.info("Starting training data subsampling.")
+
+        # Validate sample size
+        if not 0 < train_sample_size < 1:
+            logger.error("`train_sample_size` must be a float between 0 and 1.")
+            raise ValueError("`train_sample_size` must be a float between 0 and 1.")
+
+        # Determine stratification parameter
+        stratify_param: Optional[pd.Series] = y if stratify and y.value_counts().min() >= 2 else None
+
+        # Validate dataset size and stratification compatibility
+        if len(y) < 2:
+            logger.error("The dataset is too small for sampling.")
+            raise ValueError("Dataset must contain more than one sample for sampling.")
+
+        if stratify and stratify_param is not None and y.value_counts().min() < 2:
+            logger.error("Stratified sampling is not feasible due to insufficient class distribution.")
+            raise ValueError("Each class needs at least 2 samples for stratified sampling.")
+
+        # Perform the subsampling
+        X_train_sample, _, y_train_sample, _ = train_test_split(
+            X,
+            y,
+            train_size=train_sample_size,
+            random_state=self.random_state,
+            shuffle=shuffle,
+            stratify=stratify_param
+            )
+
+        # Log the distribution of target classes in the sampled training set
+        class_names: Dict[int, str] = {0: "Class 0 (Repaid)", 1: "Class 1 (Not Repaid)"}
+        sample_distribution: Dict[str, str] = {
+            class_names[int(k)]: f"{v / y_train_sample.size * 100:.2f}% ({v})"
+            for k, v in zip(*np.unique(y_train_sample, return_counts=True))
+            }
+
+        logger.debug(f"Class distribution in subsampled training set: {sample_distribution}")
+
+        logger.success(
+            "Subsampled training data:\n"
+            f"X_train_sample: {str(X_train_sample.shape):<20} | y_train_sample: {str(y_train_sample.shape)}"
+            )
+        return X_train_sample, y_train_sample
+
+
