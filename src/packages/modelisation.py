@@ -2010,3 +2010,80 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         self.results_df.reset_index(drop=True, inplace=True)
 
 
+    def threshold_evaluation_cost(self, fitted_model, X_test_processed, y_test):
+        """
+        Evaluates the impact of thresholds on the model's cost, identifies the best threshold,
+        and plots the cost vs. threshold curve along with error breakdown.
+
+        Args:
+            fitted_model: Trained classification model.
+            X_test_processed: Processed test feature matrix.
+            y_test: Test target vector.
+
+        Returns:
+            float: The best threshold value.
+        """
+        logger.info("Starting threshold evaluation.")
+
+        # Generate probabilities for the positive class
+        y_proba = fitted_model.predict_proba(X_test_processed)[:, 1]
+        thresholds = np.linspace(0, 0.7, 71)  # Thresholds from 0 to 0.7 with 71 points
+        costs = []
+        errors = []
+
+        def get_FN_FP(y_true, y_pred):
+            """Helper function to calculate FP and FN from confusion matrix."""
+            cm = confusion_matrix(y_true, y_pred)
+            TN, FP, FN, TP = cm.ravel()
+            return FP, FN
+
+        # Calculate costs and errors for each threshold
+        for threshold in thresholds:
+            y_pred = (y_proba >= threshold).astype(int)
+            cost = self.business_cost(y_test, y_pred)  # Use the static business cost method
+            fp, fn = get_FN_FP(y_test, y_pred)
+            costs.append(cost)
+            errors.append((fp, fn))
+            logger.debug(f"Threshold: {threshold:.2f}, Cost: {cost:.2f}, FP: {fp}, FN: {fn}")
+
+        costs = np.array(costs)
+        errors = np.array(errors)
+        FP = errors[:, 0]
+        FN = errors[:, 1]
+
+        # Find the best threshold
+        best_index = np.argmax(costs)  # Best threshold corresponds to the highest cost (less negative)
+        best_threshold = thresholds[best_index]
+        logger.success(f"Best threshold identified: {best_threshold:.2f} with cost: {costs[best_index]:.2f}")
+
+        # Plotting
+        fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+
+        # Plot Errors
+        ax[0].plot(thresholds, FP + FN, color="indigo", label="Total Errors")
+        ax[0].plot(thresholds, FN, color="royalblue", label="False Negatives")
+        ax[0].plot(thresholds, FP, color="orange", label="False Positives")
+        ax[0].axvline(x=0.5, linestyle="dashed", color="slategray", label="Default Threshold (0.5)")
+        ax[0].axvline(x=best_threshold, linestyle="dashed", color="crimson", label=f"Best Threshold ({best_threshold:.2f})")
+        ax[0].set_title("Errors vs. Threshold")
+        ax[0].set_xlabel("Threshold")
+        ax[0].set_ylabel("Number of Errors")
+        ax[0].legend()
+        ax[0].grid()
+
+        # Plot Costs
+        ax[1].plot(thresholds, costs, color="mediumseagreen", label="Cost")
+        ax[1].axvline(x=0.5, linestyle="dashed", color="slategray", label="Default Threshold (0.5)")
+        ax[1].axvline(x=best_threshold, linestyle="dashed", color="crimson", label=f"Best Threshold ({best_threshold:.2f})")
+        ax[1].set_title("Cost vs. Threshold (Less Negative is Better)")
+        ax[1].set_xlabel("Threshold")
+        ax[1].set_ylabel("Cost (Less Negative is Better)")  # Clarify the optimization goal
+        ax[1].legend()
+        ax[1].grid()
+
+        plt.tight_layout()
+        plt.show()
+
+        return best_threshold
+
+
