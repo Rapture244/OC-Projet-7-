@@ -285,30 +285,50 @@ def plot_variable_and_target_distribution(df: pd.DataFrame, target_col: str = 'T
 # plot_distribution(df= df, target_col = 'TARGET', category_col = 'NAME_CONTRACT_TYPE', title= 'Loan Type')
 
 
-def plot_numerical_distribution_boxplot(df, columns):
+from typing import List
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from loguru import logger
+
+@logger.catch
+def plot_numerical_distribution_boxplot(df: pd.DataFrame, columns: List[str]) -> None:
     """
     Plots histograms and boxplots for specified columns in a DataFrame.
 
     Args:
-    df (pd.DataFrame): The DataFrame containing the data.
-    columns (list): A list of column names for which to plot histograms and boxplots.
+        df (pd.DataFrame): The DataFrame containing the data.
+        columns (List[str]): A list of column names for which to plot histograms and boxplots.
 
     Returns:
-    None: Displays the plots.
+        None: Displays the plots.
     """
-    # Filter columns to ensure they are in the DataFrame
-    valid_cols = [col for col in columns if col in df.columns and df[col].dtype in ['float64', 'int64']]
+    # Filter for valid numeric columns
+    valid_cols: List[str] = [
+        col for col in columns
+        if col in df.columns and pd.api.types.is_numeric_dtype(df[col])
+        ]
 
-    num_columns = 4  # Each row will have 2 histograms and 2 boxplots
-    num_rows = len(valid_cols)  # Each column gets its own row
+    if not valid_cols:
+        logger.warning("No valid numeric columns found. Exiting the plotting function.")
+        return
 
-    plt.figure(figsize=(20, 5 * num_rows))  # Adjust the height based on the number of rows
+    logger.info(f"Plotting for columns: {valid_cols}")
+
+    num_columns: int = 4  # Each row will have 2 histograms and 2 boxplots
+    num_rows: int = len(valid_cols)
+
+    plt.figure(figsize=(20, 5 * num_rows))
 
     for i, col in enumerate(valid_cols):
-        # Drop NaN values from the column for plotting
+        # Drop NaN values
         data = df[col].dropna()
 
-        # Plot histogram in the first column of the pair
+        if data.empty:
+            logger.warning(f"No data available for column {col}. Skipping...")
+            continue
+
+        # Plot histogram
         plt.subplot(num_rows, num_columns, 2 * i + 1)
         sns.histplot(data, kde=False, color='gray', binwidth=(data.max() - data.min()) / 30)
         plt.axvline(data.mean(), color='red', linestyle='dashed', linewidth=1.5, label='Mean')
@@ -316,7 +336,7 @@ def plot_numerical_distribution_boxplot(df, columns):
         plt.title(f'Histogram of {col}')
         plt.legend()
 
-        # Plot boxplot in the second column of the pair
+        # Plot boxplot
         plt.subplot(num_rows, num_columns, 2 * i + 2)
         sns.boxplot(x=data)
         plt.title(f'Boxplot of {col}')
@@ -326,4 +346,139 @@ def plot_numerical_distribution_boxplot(df, columns):
 
 
 
+# == UNUSED ============================================================================================================
 
+def plot_distribution_and_boxplot(data: pd.DataFrame, columns: Union[str, List[str]]) -> None:
+    """Plots the distribution and box plot for specified columns in a DataFrame, and logs the whisker values and counts of outliers.
+
+    This function creates a histogram and a boxplot for each column specified. It also calculates the lower and upper whiskers
+    based on the interquartile range (IQR) and logs these values along with the counts of outliers below and above these whiskers.
+
+    Args:
+        data (pd.DataFrame): The DataFrame containing the data.
+        columns (Union[str, List[str]]): A single column name or a list of column names to plot.
+
+    Returns:
+        None: This function does not return any value. It plots figures and logs information about the plots.
+    """
+    if isinstance(columns, str):
+        columns = [columns]  # Convert to list if only one column name is provided
+
+    valid_cols = [col for col in columns if col in data.columns and data[col].dtype in ['float64', 'int64']]
+
+    if not valid_cols:
+        logger.warning("No valid columns provided or columns do not exist in the DataFrame.")
+        return
+
+    num_rows = len(valid_cols)
+
+    plt.figure(figsize=(20, 5 * num_rows))
+
+    for i, col in enumerate(valid_cols):
+        data_col = data[col].dropna()
+
+        q1 = data_col.quantile(0.25)
+        q3 = data_col.quantile(0.75)
+        iqr = q3 - q1
+        lower_whisker = max(q1 - 1.5 * iqr, data_col.min())  # Ensure the lower whisker is not less than the minimum value
+        upper_whisker = min(q3 + 1.5 * iqr, data_col.max())  # Ensure the upper whisker does not exceed the maximum value
+
+        outliers_below = (data_col < lower_whisker).sum()
+        outliers_above = (data_col > upper_whisker).sum()
+
+        plt.subplot(num_rows, 2, 2 * i + 1)
+        sns.histplot(data_col, kde=False, color='gray', binwidth=(data_col.max() - data_col.min()) / 30)
+        plt.axvline(data_col.mean(), color='red', linestyle='dashed', linewidth=1.5, label='Mean')
+        plt.axvline(data_col.median(), color='blue', linestyle='dashed', linewidth=1.5, label='Median')
+        plt.title(f'Histogram of {col}')
+        plt.legend()
+
+        plt.subplot(num_rows, 2, 2 * i + 2)
+        sns.boxplot(x=data_col)
+        plt.title(f'Boxplot of {col}')
+
+        logger.info(f"Completed plotting distributions for {col}.")
+        logger.info(f"{col}: Lower Whisker = {lower_whisker}, Outliers below = {outliers_below}")
+        logger.info(f"{col}: Upper Whisker = {upper_whisker}, Outliers above = {outliers_above}")
+
+    plt.tight_layout(pad=3.0)
+    plt.show()
+
+# Example usage:
+# plot_distribution_boxplot(df, 'AMT_ANNUITY')
+# plot_distribution_boxplot(df, ['AMT_CREDIT', 'AMT_ANNUITY'])
+
+
+def plot_transformations(data: pd.DataFrame, column: str):
+    """
+    Applies suitable transformations to a specified column in the DataFrame based on its values,
+    plots histograms and boxplots for each, and reports the number of outliers before and after each transformation.
+
+    Args:
+        data (pd.DataFrame): The DataFrame containing the data.
+        column (str): The column name to apply transformations on.
+
+    Returns:
+        None: Plots histograms and boxplots for each transformed version of the column, logs outlier counts.
+    """
+    if column not in data.columns or data[column].dtype not in ['float64', 'int64']:
+        logger.warning(f"Column {column} is not valid or does not exist in the DataFrame.")
+        return
+
+    # Clean data from NaNs and Infs
+    clean_data = data[column].replace([np.inf, -np.inf], np.nan).dropna()
+
+    # Ensure checks for transformations are accurate
+    positive_values = clean_data[clean_data >= 0]
+    non_zero_values = clean_data[clean_data != 0]
+
+    # Determine outliers in the original data
+    q1 = clean_data.quantile(0.25)
+    q3 = clean_data.quantile(0.75)
+    iqr = q3 - q1
+    lower_bound = max(clean_data.min(), q1 - 1.5 * iqr)
+    upper_bound = min(clean_data.max(), q3 + 1.5 * iqr)
+    original_outliers = ((clean_data < lower_bound) | (clean_data > upper_bound)).sum()
+    logger.info(f"Original data for {column} contains {original_outliers} outliers.")
+
+    # Preparing transformations
+    transformations = {}
+    if positive_values.size > 0:  # Check if there are positive values for log and sqrt
+        transformations['log'] = np.log(positive_values + 1)
+        transformations['sqrt'] = np.sqrt(positive_values)
+    if non_zero_values.size > 0:  # Check if there are non-zero values for inverse
+        transformations['inverse'] = 1 / non_zero_values
+    # Applying Yeo-Johnson which works with any real numbers
+    transformations['yeo-johnson'] = pd.Series(yeojohnson(clean_data)[0])
+
+    plt.figure(figsize=(15, len(transformations) * 5))
+
+    for i, (key, transformed_col) in enumerate(transformations.items(), 1):
+        # Determine outliers in the transformed data
+        q1_t = transformed_col.quantile(0.25)
+        q3_t = transformed_col.quantile(0.75)
+        iqr_t = q3_t - q1_t
+        lower_bound_t = max(transformed_col.min(), q1_t - 1.5 * iqr_t)
+        upper_bound_t = min(transformed_col.max(), q3_t + 1.5 * iqr_t)
+        transformed_outliers = ((transformed_col < lower_bound_t) | (transformed_col > upper_bound_t)).sum()
+        logger.info(f"{key} transformation --> {transformed_outliers} outliers.")
+
+        # Plot Histogram
+        plt.subplot(len(transformations), 2, 2 * i - 1)
+        sns.histplot(transformed_col, kde=False, color='gray', binwidth=(transformed_col.max() - transformed_col.min()) / 30)
+        plt.axvline(transformed_col.mean(), color='red', linestyle='dashed', linewidth=1.5, label='Mean')
+        plt.axvline(transformed_col.median(), color='blue', linestyle='dashed', linewidth=1.5, label='Median')
+        plt.title(f'Histogram of {column} ({key})')
+        plt.legend()
+
+        # Plot Boxplot
+        plt.subplot(len(transformations), 2, 2 * i)
+        sns.boxplot(x=transformed_col)
+        plt.title(f'Boxplot of {column} ({key})')
+
+    plt.tight_layout(pad=3.0)
+    plt.show()
+    logger.info(f"Completed plotting distributions for {column} with various transformations.")
+
+# Example usage:
+# plot_transformations(df, 'your_column_name')
