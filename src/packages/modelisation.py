@@ -951,3 +951,96 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    def lightgbm_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str = 'roc_auc') -> float:
+        """
+        Define the optimization objective for LightGBM.
+
+        Args:
+            trial (optuna.trial.Trial): An Optuna trial object for suggesting hyperparameters.
+            X_train (pd.DataFrame): Training feature matrix.
+            y_train (pd.Series): Training target vector.
+            scorer (str): Scoring method to evaluate model performance. Either 'roc_auc' or 'business'.
+
+        Returns:
+            float: The mean score from cross-validation based on the chosen scorer.
+        """
+        # Suggest parameters for LightGBM
+        model_params: Dict[str, Any] = {
+            'objective': 'binary',
+            'metric': 'auc',  # Fix metric to 'auc' as it has low importance for the business metric
+            'verbosity': -1,  # Minimal verbosity
+            'boosting_type': 'gbdt',
+
+            # High-Impact Parameters (Retained and Refined)
+            'num_leaves': trial.suggest_int('num_leaves', 30, 150),
+            'n_estimators': trial.suggest_int('n_estimators', 300, 1500),
+            'lambda_l2': trial.suggest_loguniform('lambda_l2', 1e-3, 1.0),
+            'feature_fraction': trial.suggest_float('feature_fraction', 0.5, 0.9),
+            'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.1),
+            'min_child_samples': trial.suggest_int('min_child_samples', 20, 200),
+
+            # Fixed or Less Important Parameters
+            'random_state': self.random_state,  # Use consistent random state
+            'device': 'gpu',  # GPU for faster computation
+            'gpu_platform_id': 0,
+            'gpu_device_id': 0
+            }
+
+        # Add class_weight if the scorer is 'business'
+        if scorer == 'business':
+            model_params['class_weight'] = {0: 1, 1: 10}
+
+
+        # Create the LightGBM classifier
+        classifier: lgb.LGBMClassifier = lgb.LGBMClassifier(**model_params)
+
+        # Create the pipeline with preprocessing
+        pipeline: ImbPipeline = self.get_preprocessor_and_pipeline(trial, X_train, classifier)
+
+        # Attach full metadata but ensure separation of preprocessing and model parameters
+        pipeline.metadata = {
+            "preprocessing_used": pipeline.metadata,  # Preprocessing details
+            "best_params": model_params,  # Model parameters
+            }
+
+        # Custom scoring function for business cost
+        if scorer == "roc_auc":
+            scoring = "roc_auc"
+        elif scorer == 'business':
+            scoring = make_scorer(
+                ModelPipeline.business_cost,  # Using your static method
+                greater_is_better=True,                # Keep the raw score positive such that optuna can try to minize it
+                response_method="predict",              # Ensure binary predictions
+                )
+        else:
+            raise ValueError("Invalid scorer specified. Choose either 'roc_auc' or 'business'.")
+
+        # Cross-validation with n_jobs=1 to prevent GPU contention
+        skf: StratifiedKFold = StratifiedKFold(n_splits=5, shuffle=True, random_state=self.random_state)
+        scores: np.ndarray = cross_val_score(pipeline, X_train, y_train, scoring= scoring, cv=skf, n_jobs=1)
+
+        # Log the trial score
+        mean_score = np.mean(scores)
+        logger.info(
+            f"Trial {trial.number}: "
+            f"Score = {mean_score:.4f}, "
+            f"Scorer = {scoring}"
+            )
+
+        # Log GPU state during and after the trial
+        gpus = GPUtil.getGPUs()
+        if not gpus:
+            logger.warning("No GPUs detected after the trial. Ensure GPU is properly configured.")
+        else:
+            for gpu in gpus:
+                logger.info(f"GPU ID: {gpu.id}, Name: {gpu.name}, "
+                            f"Load: {gpu.load * 100:.1f}%, "
+                            f"Memory: {gpu.memoryUsed}MB/{gpu.memoryTotal}MB")
+
+        # Save metadata for the trial
+        trial.set_user_attr("metadata", pipeline.metadata)
+
+        # Return mean score
+        return mean_score
+
+
