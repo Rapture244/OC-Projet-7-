@@ -103,3 +103,90 @@ def plot_dtype_distribution(df: pd.DataFrame, main_title: str = "Data Type Distr
 # plot_dtype_distribution(df)
 
 
+
+# ==================================================================================================================== #
+#                                                     DISTRIBUTION                                                     #
+# ==================================================================================================================== #
+def plot_target_distribution(df: pd.DataFrame) -> None:
+    """
+    Plots the distribution of the TARGET variable as a pie chart and a bar chart,
+    with consistent colors, annotations, and a legend for the pie chart.
+
+    Args:
+        df (pd.DataFrame): The dataframe containing the TARGET column.
+
+    Raises:
+        ValueError: If the dataframe is empty or does not contain the TARGET column.
+    """
+    # Validate input dataframe
+    if df.empty or 'TARGET' not in df.columns:
+        logger.error("The dataframe is either empty or missing the 'TARGET' column.")
+        raise ValueError("The dataframe must contain a non-empty 'TARGET' column.")
+
+    # Calculate the percentage and counts of each value in TARGET
+    target_counts = df['TARGET'].value_counts()
+    target_percentages = target_counts / len(df) * 100
+
+    # Define the figure with a 1-row, 2-column layout
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(16, 6))
+
+    # Plot 1: Pie chart for TARGET distribution
+    wedges, texts, autotexts = axes[0].pie(
+        target_percentages,
+        labels=target_percentages.index,
+        autopct=lambda pct: f"{pct:.1f}%" if pct > 0 else "",
+        startangle=90,
+        colors=sns.color_palette('colorblind'),
+        textprops={'fontsize': 12, 'weight': 'bold'}
+        )
+    axes[0].set_title("Distribution", fontsize=14, weight='bold')
+    axes[0].axis('equal')  # Draw the pie as a circle
+
+    # Add a legend for the pie chart
+    axes[0].legend(
+        wedges,
+        [f"{idx} ({count:,})" for idx, count in zip(target_counts.index, target_counts)],
+        title="TARGET",
+        loc="upper right",
+        fontsize=10
+        )
+
+    # Plot 2: Bar plot for TARGET counts
+    sns.barplot(
+        x=target_counts.index,
+        y=target_counts.values,
+        ax=axes[1],
+        palette="colorblind"
+        )
+    axes[1].set_title("Count", fontsize=14, weight='bold')
+    axes[1].set_xlabel("TARGET", fontsize=12)
+    axes[1].set_ylabel("Count", fontsize=12)
+
+    # Annotate bar plot with counts
+    for p, count in zip(axes[1].patches, target_counts.values):
+        axes[1].annotate(
+            f'{count:,}',
+            (p.get_x() + p.get_width() / 2., p.get_height()),
+            ha='center',
+            va='baseline',
+            fontsize=11,
+            color='black',
+            xytext=(0, 5),
+            textcoords='offset points'
+            )
+
+    # Overall title for the figure
+    fig.suptitle('Distribution of TARGET Variable', fontsize=16)
+
+    # Adjust layout and display the plots
+    plt.tight_layout(rect=[0, 0, 1, 0.96])
+    plt.show()
+
+    # Log success message and perform garbage collection
+    logger.info("TARGET distribution plots displayed successfully.")
+    gc.collect()
+    # Log success message
+    logger.debug("TARGET distribution plots displayed successfully.")
+
+
+
