@@ -107,6 +107,8 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 # ==================================================================================================================== #
 #                                                    UTILITY METHODS                                                   #
 # ==================================================================================================================== #
+
+    # ================================================ PREPARE_DATASET =============================================== #
     def prepare_dataset(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
         """
         Prepares the dataset by sampling a fraction of it and splitting into features and target.
@@ -132,7 +134,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 
         return X, y
 
-
+    # ================================================ GET_RESULTS_DF ================================================ #
     def get_results_df(self) -> pd.DataFrame:
         """
         Returns the current state of the results DataFrame.
@@ -144,7 +146,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return self.results_df
 
 
-
+    # =============================================== RESET_RESULTS_DF =============================================== #
     def reset_results_df(self) -> None:
         """
         Resets the results DataFrame to an empty state.
@@ -155,6 +157,8 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 # ==================================================================================================================== #
 #                                                  DATA PREPROCESSING                                                  #
 # ==================================================================================================================== #
+
+    # ================================================== SPLIT_DATA ================================================== #
     def split_data(self, X: pd.DataFrame, y: pd.Series, shuffle: bool = True, stratify: bool = True) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
         """
         Splits the dataset into training and testing sets.
@@ -232,6 +236,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return X_train, X_test, y_train, y_test
 
 
+    # =============================================== SPLIT_DATA_SAMPLE ============================================== #
     def split_data_sample(self, X: pd.DataFrame, y: pd.Series, train_sample_size: float, shuffle: bool = True, stratify: bool = True) -> Tuple[pd.DataFrame, pd.Series]:
         """
         Creates a smaller stratified sample from the training dataset.
@@ -296,6 +301,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return X_train_sample, y_train_sample
 
 
+    # ============================================== APPLY_PREPROCESSING ============================================= #
     def apply_preprocessing(
             self,
             X_train: pd.DataFrame,
@@ -403,6 +409,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             return X_train_resampled, y_train_resampled, X_test_final
 
 
+    # ========================================= GET_PREPROCESSOR_AND_PIPELINE ======================================== #
     def get_preprocessor_and_pipeline(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, classifier: BaseEstimator) -> ImbPipeline:
         """
         Returns a simplified pipeline with RobustScaler and SMOTETomek for preprocessing.
@@ -479,6 +486,8 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 # =================================================================================================================== #
 #                                                HYPERPARAMETER TUNING                                                #
 # =================================================================================================================== #
+
+    # ============================================= TUNE_HYPERPARAMETERS ============================================= #
     def tune_hyperparameters(self, X_train: pd.DataFrame, y_train: pd.Series, model: str, scorer: str = 'roc_auc', max_trials: int = 20) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         """
         Tunes hyperparameters using Optuna for a given model using 'roc_auc' as the scoring metric.
@@ -598,6 +607,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return best_params, preprocessing_used
 
 
+    # =========================================== PLOT_OPTIMIZATION_HISTORY ========================================== #
     def plot_optimization_history(self, model: str, scorer: str, save_img: bool = False) -> None:
         """
         Plot optimization history using Matplotlib, save the plot locally, and log it to MLflow.
@@ -647,6 +657,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         plt.show()
 
 
+    # ============================================= PLOT_PARAM_IMPORTANCE ============================================ #
     def plot_param_importance(self, model: str, scorer: str, save_img: bool = False) -> None:
         """
         Plot parameter importance from the Optuna study, save the plot locally, and log it to MLflow.
@@ -709,6 +720,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         plt.show()
 
 
+    # ========================================= LOGISTIC_REGRESSION_OBJECTIVE ======================================== #
     def logistic_regression_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str = 'roc_auc') -> float:
         """
         Defines the optimization objective for LogisticRegression using Optuna.
@@ -798,6 +810,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    # ============================================ RANDOM_FOREST_OBJECTIVE =========================================== #
     def random_forest_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str) -> float:
         """
         Define the optimization objective for RandomForestClassifier.
@@ -868,6 +881,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    # =============================================== XGBOOST_OBJECTIVE ============================================== #
     def xgboost_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str) -> float:
         """
         Optimization objective for XGBoost.
@@ -951,6 +965,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    # ============================================== LIGHTGBM_OBJECTIVE ============================================== #
     def lightgbm_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str = 'roc_auc') -> float:
         """
         Define the optimization objective for LightGBM.
@@ -1044,6 +1059,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    # ========================================== DUMMY_CLASSIFIER_OBJECTIVE ========================================== #
     def dummy_classifier_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str) -> float:
         """
         Objective function for tuning the DummyClassifier, including preprocessing steps.
@@ -1100,6 +1116,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    # ============================================ REFINED_LIGHTGBM_TUNING =========================================== #
     def refined_lightgbm_tuning(self, X_train: pd.DataFrame, y_train: pd.Series, max_trials: int = 30) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         """
         Performs a refined hyperparameter tuning for LightGBM using Optuna and business score as the scorer.
@@ -1217,6 +1234,8 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 # ==================================================================================================================== #
 #                                               MODEL SAVING AND LOADING                                               #
 # ==================================================================================================================== #
+
+    # ================================================== SAVE_SCALER ================================================= #
     def save_scaler(self, scaler: Any, dir_path: Path, log_to_mlflow: bool = False) -> None:
         """
         Saves a fitted scaler to the specified directory and optionally logs it to MLflow as an artifact.
@@ -1257,6 +1276,8 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             logger.error(f"Failed to save/log scaler: {e}")
             raise
 
+
+    # ============================================== SAVE_MODEL_LOCALLY ============================================== #
     @staticmethod
     def save_model_locally(model: Any, scorer: str, dir_path: Path) -> str:
         """
@@ -1285,6 +1306,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             raise
 
 
+    # =============================================== DETECT_FRAMEWORK =============================================== #
     @staticmethod
     def detect_framework(model: Any) -> str:
         """
@@ -1306,6 +1328,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             raise ValueError(f"Unsupported model type: {type(model).__name__}")
 
 
+    # =============================================== MLFLOW_LOG_MODEL =============================================== #
     def mlflow_log_model(self, model: Any, x_train: pd.DataFrame, registered_model_name: Optional[str] = None) -> None:
         """
         Logs a model as an artifact to the current MLflow run and optionally registers it in the MLflow Model Registry.
@@ -1364,6 +1387,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             logger.error(f"Failed to log model: {e}")
             raise
 
+    # ========================================== _VERIFY_MODEL_REGISTRATION ========================================== #
     def _verify_model_registration(self, model_name: str) -> None:
         """
         Verifies if a model is successfully registered in the MLflow Model Registry.
@@ -1386,6 +1410,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             raise RuntimeError(f"Model '{model_name}' is not registered. Please check the registration process.") from e
 
 
+    # ================================================== LOAD_MODEL ================================================== #
     @staticmethod
     def load_model(model_path: Path) -> Any:
         """
@@ -1421,6 +1446,8 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 # ==================================================================================================================== #
 #                                                     ISUALIZATION                                                     #
 # ==================================================================================================================== #
+
+    # =========================================== DISPLAY_CONFUSION_MATRIX =========================================== #
     def display_confusion_matrix(self, y_test: pd.Series, y_pred: pd.Series, model_name: str, scorer: str, threshold: float = 0.5, save_img: bool = False) -> None:
         """
         Displays and logs the confusion matrix to MLflow if tracking is enabled, and optionally saves the image locally.
@@ -1485,6 +1512,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         plt.show()
 
 
+    # ============================================== DISPLAY_COST_MATRIX ============================================= #
     def display_cost_matrix(self, y_test: pd.Series, y_pred: pd.Series, model_name: str, scorer: str, threshold: Optional[float] = None, save_img: bool = False) -> None:
         """
         Displays and logs the cost matrix to MLflow if tracking is enabled, and optionally saves the image locally.
@@ -1581,6 +1609,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         plt.show()
 
 
+    # ======================================== DISPLAY_CONFUSION_COST_MATRICES ======================================= #
     def display_confusion_cost_matrices(self, y_test: pd.Series, y_pred: pd.Series, model_name: str, scorer: str, threshold: float = 0.5, save_img: bool = False) -> None:
         """
         Displays the confusion matrix and cost matrix side by side in a single figure.
@@ -1685,6 +1714,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         plt.show()
 
 
+    # ====================================== DISPLAY_COMBINED_CONFUSION_MATRICES ===================================== #
     @staticmethod
     def display_combined_confusion_matrices(directory: Path, model_names: list[str], fraction_prefix: str = "Fraction", save_combined: bool = False):
         """
@@ -1778,6 +1808,8 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 # ==================================================================================================================== #
 #                                                   MODEL EVALUATION                                                   #
 # ==================================================================================================================== #
+
+    # ============================================= INSTANTIATE_FIT_MODEL ============================================ #
     def instantiate_fit_model(self, X_train: pd.DataFrame, y_train: pd.Series, best_params: Dict[str, Union[str, int, float, Any]]) -> BaseEstimator:
         """
         Instantiates a model using the best parameters and fits it, raising a warning if convergence fails.
@@ -1835,6 +1867,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return None
 
 
+    # =============================================== MODEL_EVALUATION =============================================== #
     def model_evaluation(self, model: Any, X_test: pd.DataFrame, y_test: pd.Series, threshold: Optional[float], scorer: str, save_img: bool = False, log_to_mlflow: bool = False) -> None:
         """
         Evaluates the model on the test data using specified metrics and updates the results DataFrame.
@@ -1927,6 +1960,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return None
 
 
+    # ============================================== _CALCULATE_METRICS ============================================== #
     def _calculate_metrics(self, y_test: pd.Series, y_pred: pd.Series, y_proba: pd.Series, tn: int, fp: int, fn: int, tp: int) -> Dict[str, float]:
         """
         Calculate evaluation metrics based on predictions and confusion matrix.
@@ -1977,6 +2011,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             }
 
 
+    # =========================================== _UPDATE_RESULTS_DATAFRAME ========================================== #
     def _update_results_dataframe(self, new_results: pd.DataFrame, model_name: str):
         """
         Update the results DataFrame with new evaluation results.
@@ -2010,6 +2045,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         self.results_df.reset_index(drop=True, inplace=True)
 
 
+    # =========================================== THRESHOLD_EVALUATION_COST ========================================== #
     def threshold_evaluation_cost(self, fitted_model, X_test_processed, y_test):
         """
         Evaluates the impact of thresholds on the model's cost, identifies the best threshold,
@@ -2087,6 +2123,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return best_threshold
 
 
+    # ========================================== THRESHOLD_EVALUATION_PROFIT ========================================= #
     def threshold_evaluation_profit(self, fitted_model, X_test_processed, y_test):
         """
         Evaluates the impact of thresholds on the model's profit, identifies the best threshold,
@@ -2181,6 +2218,8 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 # ==================================================================================================================== #
 #                                                    SCORING METRICS                                                   #
 # ==================================================================================================================== #
+
+    # ================================================= BUSINESS_COST ================================================ #
     @staticmethod
     def business_cost(y_true: pd.Series, y_pred: pd.Series) -> float:
         """
@@ -2214,6 +2253,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return -business_cost
 
 
+    # =============================================== BUSINESS_COST_STD ============================================== #
     @staticmethod
     def business_cost_std(y_true: pd.Series, y_pred: pd.Series) -> float:
         """
