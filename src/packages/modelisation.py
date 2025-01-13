@@ -1485,3 +1485,99 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         plt.show()
 
 
+    def display_cost_matrix(self, y_test: pd.Series, y_pred: pd.Series, model_name: str, scorer: str, threshold: Optional[float] = None, save_img: bool = False) -> None:
+        """
+        Displays and logs the cost matrix to MLflow if tracking is enabled, and optionally saves the image locally.
+
+        Args:
+            y_test (pd.Series): True target values.
+            y_pred (pd.Series): Predicted target values by the model.
+            model_name (str): Name of the model to display in the title.
+            scorer (str): Scorer used for evaluation ('roc_auc', 'business', etc.).
+            threshold (Optional[float]): Threshold used for predictions. Default is None.
+            save_img (bool): Flag to save the image locally and log it to MLflow.
+
+        Returns:
+            None
+        """
+        # Cost constants
+        FN_BASE_COST = 10  # Base cost for FN
+        FP_COST = 1        # Cost for FP
+
+        # Compute confusion matrix
+        tn, fp, fn, tp = confusion_matrix(y_test, y_pred, labels=[0, 1]).ravel()
+
+        # Calculate costs for FN and FP, set TN and TP to 0
+        cost_matrix = np.array([
+            [0, -fp * FP_COST],   # Row for actual negative (TN, FP)
+            [-fn * FN_BASE_COST, 0]  # Row for actual positive (FN, TP)
+            ])
+
+        # Define labels for the matrix
+        labels = ["Class 0 (Repaid)", "Class 1 (Not Repaid)"]
+
+        # Create the plot with constrained layout for better adjustment
+        fig, ax = plt.subplots(figsize=(6, 6), constrained_layout=True)
+        cax = ax.matshow(cost_matrix, cmap="viridis")
+        ax.grid(False)  # Disable grid lines
+
+        # Add color bar with adjusted size
+        fig.colorbar(cax, ax=ax, fraction=0.046, pad=0.04)
+
+        # Annotate each cell with formatted values and dynamic text color
+        def format_value(value):
+            return f"{value:,.0f}".replace(",", " ")  # Replace commas with spaces
+
+        # Determine the text color based on the cell's background brightness
+        norm = plt.Normalize(vmin=cost_matrix.min(), vmax=cost_matrix.max())
+        cmap = plt.cm.viridis
+
+        for (i, j), value in np.ndenumerate(cost_matrix):
+            background_color = cmap(norm(value))
+            text_color = "white" if sum(background_color[:3]) / 3 < 0.5 else "black"
+            ax.text(j, i, format_value(value), va='center', ha='center', color=text_color)
+
+        # Set ticks and labels
+        ax.set_xticks(range(len(labels)))
+        ax.set_yticks(range(len(labels)))
+        ax.set_xticklabels(labels)
+        ax.set_yticklabels(labels)
+
+        # Move X-ticks to the bottom
+        ax.xaxis.set_ticks_position('bottom')
+
+        # Add labels and title
+        if threshold is None or threshold == 0.5:
+            title = f"Cost Matrix for {model_name} (Scorer: {scorer})"
+            filename = f"Cost_Matrix_{model_name}_{scorer}.png"
+        else:
+            title = f"Cost Matrix for {model_name} (Scorer: {scorer}) at Threshold = {threshold:.2f}"
+            filename = f"Cost_Matrix_{model_name}_{scorer}_Threshold_{threshold:.2f}.png"
+        plt.title(title, pad=20)
+
+        ax.set_xlabel("Predicted Label")
+        ax.set_ylabel("True Label")
+
+        # Save and log the plot if save_img is True
+        if save_img:
+            # Define the directory and file path for the image
+            image_dir: Path = Path(ROOT_DIR) / "assets" / "plots"
+            image_dir.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
+            image_path: Path = image_dir / filename
+
+            try:
+                # Save the plot as a file
+                plt.savefig(image_path, bbox_inches='tight')  # Use bbox_inches to include all elements
+                logger.success(f"Cost matrix image saved successfully at: {image_path}")
+
+                # Log the image to MLflow
+                if self.mlflow_tracking:
+                    mlflow.log_artifact(str(image_path))  # Directly log to artifacts folder
+                    logger.info(f"Cost matrix image logged to MLflow successfully for model: {model_name}")
+            except Exception as e:
+                logger.error(f"Failed to save or log cost matrix image: {e}")
+
+        # Show the plot
+        plt.show()
+
+
