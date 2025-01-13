@@ -1,64 +1,53 @@
-# ---- Imports ---------------------------------------------------------------------------------------------------------
 # ---- Standard Library Imports ----
-import gc
-import warnings
-import json
-import time
-from pathlib import Path
 from datetime import datetime
-from threading import Thread
-from functools import partial, lru_cache
-from typing import Tuple, Type, Any, Dict, Optional, List, Union
-from itertools import groupby
-
-from typing import Optional
+from functools import partial
+from pathlib import Path
+import json
+import warnings
+from typing import Optional, Tuple, Dict, List, Any, Union
 
 # ---- Third-Party Library Imports ----
 import numpy as np
 import pandas as pd
-from pandas import DataFrame, Series
-from loguru import logger
 import matplotlib.pyplot as plt
-from PIL import Image
 import joblib
 import optuna
-import plotly.io as pio
+from optuna.samplers import TPESampler
+from optuna.exceptions import TrialPruned
+import mlflow
+from mlflow.models.signature import infer_signature
+from mlflow.tracking import MlflowClient
+from loguru import logger
 import GPUtil
+import xgboost as xgb
+import lightgbm as lgb
 
-# ---- Machine Learning and Data Preprocessing ----
-from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
-from sklearn.dummy import DummyClassifier
+# ---- Scikit-Learn and Imbalanced-Learn Imports ----
+from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import RobustScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import (
-    train_test_split,
-    StratifiedKFold,
-    cross_val_score,
-    cross_val_predict,
-    )
+from sklearn.dummy import DummyClassifier
 from sklearn.metrics import (
+    make_scorer,
+    roc_auc_score,
+    confusion_matrix,
+    ConfusionMatrixDisplay,
+    classification_report,
     precision_score,
     recall_score,
     fbeta_score,
-    roc_auc_score,
-    confusion_matrix,
-    classification_report,
-    ConfusionMatrixDisplay,
-    make_scorer,
     )
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import StandardScaler, RobustScaler
-from imblearn.pipeline import Pipeline as ImbPipeline
-from imblearn.over_sampling import SMOTE
+from sklearn.exceptions import ConvergenceWarning
 from imblearn.combine import SMOTETomek
+from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import TomekLinks
+from imblearn.pipeline import Pipeline as ImbPipeline
 
-# ---- MLflow ----
-from mlflow.tracking import MlflowClient
-from mlflow.models.signature import infer_signature
-
-# --- Local packages ---
+# ---- Local Imports ----
 from src.packages.constants.paths import ROOT_DIR
 
 
