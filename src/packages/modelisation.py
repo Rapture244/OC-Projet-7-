@@ -99,3 +99,53 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             f"{'Test Size':<20} | {self.test_size}\n"
             f"{'MLflow Tracking':<20} | {'Enabled' if self.mlflow_tracking else 'Disabled'}"
             )
+
+
+# ==================================================================================================================== #
+#                                                    UTILITY METHODS                                                   #
+# ==================================================================================================================== #
+    def prepare_dataset(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
+        """
+        Prepares the dataset by sampling a fraction of it and splitting into features and target.
+
+        Args:
+            df (pd.DataFrame): The complete dataframe to sample from.
+
+        Returns:
+            Tuple[pd.DataFrame, pd.Series]: A tuple containing:
+                - X (pd.DataFrame): The feature matrix.
+                - y (pd.Series): The target vector.
+        """
+        # Log the original DataFrame shape
+        logger.info(f"Original DataFrame shape: {df.shape}")
+
+        # Split the DataFrame into features (X) and target (y)
+        X: pd.DataFrame = df.drop('TARGET', axis=1)  # Features matrix
+        y: pd.Series = df['TARGET']  # Target vector
+
+        # Log the shapes of X and y for debugging purposes
+        logger.debug(f"X shape: {X.shape}")  # Log feature matrix shape
+        logger.debug(f"y shape: {y.shape}")  # Log target vector shape
+
+        return X, y
+
+
+    def get_results_df(self) -> pd.DataFrame:
+        """
+        Returns the current state of the results DataFrame.
+
+        Returns:
+            pd.DataFrame: The results DataFrame.
+        """
+        # Return the current results DataFrame
+        return self.results_df
+
+
+
+    def reset_results_df(self) -> None:
+        """
+        Resets the results DataFrame to an empty state.
+        """
+        self.results_df = pd.DataFrame()
+        logger.success("Results DataFrame has been reset.")
+
