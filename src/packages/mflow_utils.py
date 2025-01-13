@@ -1,12 +1,17 @@
+# === Logging and Utilities ===
+from loguru import logger
+from pathlib import Path
+import sqlite3
+
+# === Type Hints ===
+from typing import List, Optional
+
+# === MLflow Core ===
 import mlflow
 from mlflow.tracking import MlflowClient
-from mlflow.entities import ViewType
-from mlflow.entities import Experiment
-from mlflow.entities.model_registry import RegisteredModel
-from loguru import logger
-import sqlite3
-from pathlib import Path
-from typing import Optional, List
+from mlflow.entities import Experiment, ViewType
+
+# === MLflow Model Registry ===
 from mlflow.entities.model_registry import RegisteredModel, ModelVersion
 
 # ==================================================================================================================== #
@@ -282,7 +287,7 @@ def transition_model_stage(model_name: str, version: int, stage: str, descriptio
 # transition_model_stage("MyModelName", version=1, stage="Production")
 
 
-def hard_delete_registered_model(model_name: str) -> NoReturn:
+def hard_delete_registered_model(model_name: str) -> None:
     """
     Hard deletes a registered model along with all its versions.
 
