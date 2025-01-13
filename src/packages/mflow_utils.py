@@ -2,10 +2,12 @@ import mlflow
 from mlflow.tracking import MlflowClient
 from mlflow.entities import ViewType
 from mlflow.entities import Experiment
+from mlflow.entities.model_registry import RegisteredModel
 from loguru import logger
 import sqlite3
 from pathlib import Path
 from typing import Optional, List
+from mlflow.entities.model_registry import RegisteredModel, ModelVersion
 
 # ==================================================================================================================== #
 #                                                      EXPERIMENTS                                                     #
@@ -200,5 +202,38 @@ def delete_active_experiment(experiment_identifier: str) -> None:
 # Usage example
 # delete_experiment("Fine-Tuning Models")
 # delete_experiment("3")
+
+
+# ==================================================================================================================== #
+#                                                    MODEL REGISTRY                                                    #
+# ==================================================================================================================== #
+def list_all_registered_models_and_versions() -> None:
+    """
+    Lists all registered models and all their versions in the MLflow Model Registry.
+    """
+    logger.info("=== LISTING ALL REGISTERED MODELS AND ALL THEIR VERSIONS ===")
+    client: MlflowClient = MlflowClient()
+    registered_models = client.search_registered_models()
+
+    if not registered_models:
+        logger.success("No registered models found in the MLflow Model Registry\n")
+        return
+
+    for model in registered_models:
+        logger.success(f"Model Name ---> '{model.name}'")
+
+        # Fetch all versions of the current model
+        model_versions = client.search_model_versions(f"name='{model.name}'")
+
+        for version in model_versions:
+            logger.debug(
+                f" - Version {version.version:<3} | Stage: {version.current_stage:<10} | "
+                f"Run ID: {version.run_id:<35} | Description: {version.description or 'None'}"
+                )
+
+# Usage Example:
+# list_all_registered_models_and_versions()
+
+
 
 
