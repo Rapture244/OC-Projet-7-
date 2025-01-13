@@ -94,6 +94,55 @@ def check_full_system_environment() -> None:
 
     logger.success("Comprehensive system and GPU environment checks completed successfully.")
 
+# ==================================================================================================================== #
+#                                                       DATASETS                                                       #
+# ==================================================================================================================== #
+def load_csv(file_name: str, parent_path: Path) -> pd.DataFrame:
+    """
+    Load a CSV file into a Pandas DataFrame after detecting the encoding,
+    and drop the 'Unnamed: 0' column if it exists.
+
+    Args:
+        file_name (str): The file name of the CSV file to load.
+        parent_path (Path): Path object representing the base directory for datasets.
+
+    Returns:
+        pd.DataFrame: The loaded DataFrame if successful.
+    """
+    csv_file_path: Path = parent_path / file_name
+
+    try:
+        # Detect encoding by reading a sample of the file
+        with csv_file_path.open('rb') as file:
+            encoding_result = chardet.detect(file.read(10_000))
+            file_encoding: str = encoding_result['encoding']
+
+        # Read the CSV file with the detected encoding
+        df: pd.DataFrame = pd.read_csv(csv_file_path, encoding=file_encoding)
+
+        # Drop 'Unnamed: 0' column if it exists
+        if 'Unnamed: 0' in df.columns:
+            df.drop(columns=['Unnamed: 0'], inplace=True)
+
+        logger.info(
+            f"{'Loaded':<10} {file_name:<40} {'Shape:':<10} {str(df.shape):<20} {'Encoding:':<10} {file_encoding}"
+            )
+
+        return df
+
+    except FileNotFoundError:
+        logger.error(f"FileNotFoundError: '{csv_file_path}' could not be found.")
+    except UnicodeDecodeError:
+        logger.error(f"UnicodeDecodeError: Could not decode '{csv_file_path}' with detected encoding '{file_encoding}'.")
+    except pd.errors.EmptyDataError:
+        logger.error(f"EmptyDataError: The file '{csv_file_path}' is empty and cannot be read as a DataFrame.")
+    except pd.errors.ParserError:
+        logger.error(f"ParserError: The file '{csv_file_path}' could not be parsed correctly. Please check for inconsistencies.")
+    except Exception as e:
+        logger.exception(f"UnexpectedError: An unexpected error occurred while loading '{csv_file_path}'. Error: {e}")
+
+    # Return None if loading fails
+    return None
 
 
 
