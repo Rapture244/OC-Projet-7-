@@ -598,3 +598,114 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return best_params, preprocessing_used
 
 
+    def plot_optimization_history(self, model: str, scorer: str, save_img: bool = False) -> None:
+        """
+        Plot optimization history using Matplotlib, save the plot locally, and log it to MLflow.
+
+        Args:
+            model (str): Name of the model being optimized.
+            scorer (str): Scorer used during optimization.
+            save_img (bool): Flag to save the image locally and log to MLflow.
+
+        Raises:
+            ValueError: If no Optuna study exists in the current instance.
+        """
+        if self.study is None:
+            raise ValueError("No Optuna study found. Please run hyperparameter tuning first.")
+
+        # Extract trial numbers and values
+        trial_numbers = [t.number for t in self.study.trials if t.state == optuna.trial.TrialState.COMPLETE]
+        values = [t.value for t in self.study.trials if t.state == optuna.trial.TrialState.COMPLETE]
+
+        # Plot the optimization history
+        plt.figure(figsize=(10, 6))
+        plt.plot(trial_numbers, values, marker="o", linestyle="-", label="Trial Value")
+        plt.xlabel("Trial Number")
+        plt.ylabel("Objective Value")
+        plt.title(f"{model} Optimization History (Scorer: {scorer})")
+        plt.legend()
+        plt.grid()
+
+        if save_img:
+            # Define the directory and file path for the image
+            image_dir: Path = Path(ROOT_DIR) / "assets" / "plots"
+            image_dir.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
+            image_path: Path = image_dir / f"optimization_history_{model}_{scorer}.png"
+
+            try:
+                # Save the plot locally
+                plt.savefig(image_path, bbox_inches='tight')
+                logger.success(f"Optimization history plot saved locally at: {image_path}")
+
+                # Log the plot to MLflow
+                if self.mlflow_tracking:
+                    mlflow.log_artifact(str(image_path))  # Directly log to artifacts folder
+                    logger.info(f"Optimization history plot logged to MLflow for model: {model}")
+            except Exception as e:
+                logger.error(f"Failed to save or log optimization history plot: {e}")
+
+        plt.show()
+
+
+    def plot_param_importance(self, model: str, scorer: str, save_img: bool = False) -> None:
+        """
+        Plot parameter importance from the Optuna study, save the plot locally, and log it to MLflow.
+
+        Args:
+            model (str): Name of the model being optimized.
+            scorer (str): Scorer used during optimization.
+            save_img (bool): Flag to save the image locally and log to MLflow.
+
+        Raises:
+            ValueError: If no Optuna study exists in the current instance.
+        """
+        if self.study is None:
+            raise ValueError("No Optuna study found. Please run hyperparameter tuning first.")
+
+        # Get parameter importances
+        param_importances = optuna.importance.get_param_importances(self.study)
+
+        if not param_importances:
+            raise ValueError("No parameter importances found. Ensure the study contains completed trials.")
+
+        # Log parameter importances using loguru
+        logger.info("Logging parameter importances:")
+        for param, importance in param_importances.items():
+            logger.info(f"Parameter: {param:<20} | Importance: {importance:.4f}")
+
+        # Convert to DataFrame for sorting and visualization
+        importance_df = pd.DataFrame({
+            "Parameter": list(param_importances.keys()),
+            "Importance": list(param_importances.values())
+            }).sort_values(by="Importance", ascending=True)  # Sort for horizontal bar plot
+
+        # Plot parameter importance
+        plt.figure(figsize=(10, 6))
+        plt.barh(importance_df["Parameter"], importance_df["Importance"])
+        plt.xlabel("Importance")
+        plt.ylabel("Parameter")
+        plt.title(f"{model} Parameter Importance (Scorer: {scorer})")
+        plt.grid(axis="x", linestyle="--", alpha=0.7)
+        plt.tight_layout()
+
+        if save_img:
+            # Define the directory and file path
+            image_dir: Path = Path(ROOT_DIR) / "assets" / "plots"
+            image_dir.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
+            image_path: Path = image_dir / f"parameter_importance_{model}_{scorer}.png"
+
+            try:
+                # Save the plot locally
+                plt.savefig(image_path, bbox_inches='tight')
+                logger.success(f"Parameter importance plot saved locally at: {image_path}")
+
+                # Log the plot to MLflow
+                if self.mlflow_tracking:
+                    mlflow.log_artifact(str(image_path))  # Directly log to artifacts folder
+                    logger.info(f"Parameter importance plot logged to MLflow for model: {model}")
+            except Exception as e:
+                logger.error(f"Failed to save or log parameter importance plot: {e}")
+
+        plt.show()
+
+
