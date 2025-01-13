@@ -58,6 +58,9 @@ from imblearn.under_sampling import TomekLinks
 from mlflow.tracking import MlflowClient
 from mlflow.models.signature import infer_signature
 
+# --- Local packages ---
+from src.packages.constants.paths import ROOT_DIR
+
 
 # ==================================================================================================================== #
 #                                                 MODEL PIPELINE CLASS                                                 #
@@ -471,5 +474,127 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             }
 
         return clf
+
+
+# =================================================================================================================== #
+#                                                HYPERPARAMETER TUNING                                                #
+# =================================================================================================================== #
+    def tune_hyperparameters(self, X_train: pd.DataFrame, y_train: pd.Series, model: str, scorer: str = 'roc_auc', max_trials: int = 20) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        """
+        Tunes hyperparameters using Optuna for a given model using 'roc_auc' as the scoring metric.
+
+        Args:
+            X_train (pd.DataFrame): Training feature matrix.
+            y_train (pd.Series): Training target vector.
+            model (str): The model type to tune. Currently supports 'LogisticRegression', 'RandomForest',
+                         'XGBoost', 'LightGBM', and 'DummyClassifier'.
+            scorer (str): Scoring metric for evaluation ('roc_auc' or 'business').
+            max_trials (int): Maximum number of trials for optimization. Defaults to 30.
+
+        Returns:
+            Tuple[Dict[str, Any], Dict[str, Any]]:
+                - Best hyperparameters (Dict[str, Any]): A dictionary of the best hyperparameters for the model.
+                - Preprocessing details (Dict[str, Any]): A dictionary of preprocessing settings.
+
+        Raises:
+            ValueError: If the specified model is unsupported.
+        """
+        # Supported models and objectives
+        supported_models: Dict[str, Any] = {
+            'LogisticRegression': self.logistic_regression_objective,
+            'RandomForest': self.random_forest_objective,
+            'XGBoost': self.xgboost_objective,
+            'LightGBM': self.lightgbm_objective,
+            'DummyClassifier': self.dummy_classifier_objective,
+            }
+
+        # Check for valid model
+        if model not in supported_models:
+            supported_models_list: str = "\n".join(supported_models)
+            logger.warning(f"Unsupported model type: {model}.\nPlease select one of the supported models:\n{supported_models_list}")
+            raise ValueError(f"Unsupported model type: {model}. Supported models are:\n{supported_models_list}")
+
+        # Log the start of tuning
+        logger.info(f"Starting hyperparameter tuning using Optuna --> {model} & scorer: {scorer}")
+
+        # Define the objective function
+        objective_func: Any = partial(
+            supported_models[model],
+            X_train=X_train,
+            y_train=y_train,
+            scorer=scorer,  # Pass scorer dynamically
+            )
+
+        sampler = TPESampler(
+            n_startup_trials=7,     # IMPORTANT: n_startup_trials defines initial random exploration, while max_trials sets the total number of trials including TPE-guided optimization
+            n_ei_candidates=24,      # Default EI candidates
+            multivariate=False,       # Joint parameter sampling
+            group=False,              # Group correlated parameters
+            seed=self.random_state                  # Random seed for reproducibility
+            )
+
+
+        pruner = optuna.pruners.NopPruner()       # No pruning to avoid plateau
+
+        # Determine n_jobs based on whether the model is GPU-based
+        gpu_models = ['XGBoost', 'LightGBM']
+        use_gpu = model in gpu_models
+
+        if use_gpu:
+            n_jobs = 1  # Single job for GPU-based models to avoid contention
+            logger.info(f"Detected GPU-based model: {model}. Using n_jobs=1 to avoid resource contention.")
+        else:
+            n_jobs = -1  # Use all available CPU cores for CPU-based models
+            logger.info(f"Detected CPU-based model: {model}. Using n_jobs=-1 for parallel optimization.")
+
+        # Define the optimization direction dynamically
+        #direction = "maximize" if scorer == "roc_auc" else "maximize"
+
+        # Create the study with the conditional sampler and pruner
+        self.study: optuna.Study = optuna.create_study(
+            direction= "maximize",  # business_cost -> returns a negative value, in make_scorer, greater_is_better= True which mean we try to minimize the cost so to keep the logic, 'maximize' with optuna
+            sampler = sampler,
+            pruner = pruner
+            )
+
+        # Conditionally run opimization based on if model is GPU based or not
+        self.study.optimize(objective_func, n_trials=max_trials, n_jobs =n_jobs)
+
+        # Retrieve metadata from the best trial
+        best_trial = self.study.best_trial
+        best_metadata: Dict[str, Any] = best_trial.user_attrs["metadata"]
+        logger.debug(f"Raw metadata from best trial: {best_metadata}")
+
+        # Extract preprocessing metadata and model parameters separately
+        preprocessing_used = best_metadata.get("preprocessing_used", {})
+        raw_best_params = best_metadata.get("best_params", {})
+
+        best_params = {"model": model, **raw_best_params}
+
+
+        # Log best parameters and preprocessing
+        logger.success(f"Optuna optimization completed. Best score: {self.study.best_value:.4f}")
+        logger.success(f"Best model hyperparameters: {best_params}")
+        logger.success(f"Preprocessing steps used: {preprocessing_used}")
+
+        # Log to MLflow if tracking is enabled
+        if self.mlflow_tracking:
+            # Log model name and scorer
+            mlflow.log_param("model", model)
+            mlflow.log_param("scorer", scorer)
+
+            # Log best parameters as a single JSON string
+            mlflow.log_param("best_parameters", json.dumps(best_params))
+
+            # Log preprocessing details as a single JSON string
+            mlflow.log_param("preprocessing_used", json.dumps(preprocessing_used))
+
+            # Log the best score
+            mlflow.log_metric("best_score", round(self.study.best_value, 4))
+
+
+            logger.success(f"MLFLOW --> Model: {model} | Best parameters, preprocessing, and score logged as single entries")
+
+        return best_params, preprocessing_used
 
 
