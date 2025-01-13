@@ -1214,3 +1214,46 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return best_params, preprocessing_used
 
 
+# ==================================================================================================================== #
+#                                               MODEL SAVING AND LOADING                                               #
+# ==================================================================================================================== #
+    def save_scaler(self, scaler: Any, dir_path: Path, log_to_mlflow: bool = False) -> None:
+        """
+        Saves a fitted scaler to the specified directory and optionally logs it to MLflow as an artifact.
+
+        Args:
+            scaler (Any): The fitted scaler to save (e.g., RobustScaler).
+            dir_path (Path): Directory to save the scaler locally.
+            log_to_mlflow (bool): If True, logs the scaler to MLflow as an artifact.
+
+        Raises:
+            ValueError: If the scaler is not fitted or dir_path is invalid.
+        """
+        # Ensure the directory exists
+        dir_path.mkdir(parents=True, exist_ok=True)
+
+        # Dynamically generate the scaler name
+        scaler_name = f"{type(scaler).__name__}"
+
+        # Create a filename with the current date and scaler name
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        filename = f"{current_date} - {scaler_name}.joblib"
+        scaler_file = dir_path / filename
+
+        try:
+            # Save locally using joblib
+            joblib.dump(scaler, scaler_file)
+            logger.success(f"Scaler saved locally at: {scaler_file}")
+
+            # Log to MLflow as an artifact if enabled
+            if log_to_mlflow and self.mlflow_tracking:
+                try:
+                    mlflow.log_artifact(str(scaler_file), artifact_path="scalers")
+                    logger.success(f"Scaler logged to MLflow under artifact path 'scalers'")
+                except Exception as e:
+                    logger.error(f"Failed to log scaler to MLflow: {e}")
+                    raise
+        except Exception as e:
+            logger.error(f"Failed to save/log scaler: {e}")
+            raise
+
