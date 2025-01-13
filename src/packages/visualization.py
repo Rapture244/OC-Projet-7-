@@ -285,4 +285,45 @@ def plot_variable_and_target_distribution(df: pd.DataFrame, target_col: str = 'T
 # plot_distribution(df= df, target_col = 'TARGET', category_col = 'NAME_CONTRACT_TYPE', title= 'Loan Type')
 
 
+def plot_numerical_distribution_boxplot(df, columns):
+    """
+    Plots histograms and boxplots for specified columns in a DataFrame.
+
+    Args:
+    df (pd.DataFrame): The DataFrame containing the data.
+    columns (list): A list of column names for which to plot histograms and boxplots.
+
+    Returns:
+    None: Displays the plots.
+    """
+    # Filter columns to ensure they are in the DataFrame
+    valid_cols = [col for col in columns if col in df.columns and df[col].dtype in ['float64', 'int64']]
+
+    num_columns = 4  # Each row will have 2 histograms and 2 boxplots
+    num_rows = len(valid_cols)  # Each column gets its own row
+
+    plt.figure(figsize=(20, 5 * num_rows))  # Adjust the height based on the number of rows
+
+    for i, col in enumerate(valid_cols):
+        # Drop NaN values from the column for plotting
+        data = df[col].dropna()
+
+        # Plot histogram in the first column of the pair
+        plt.subplot(num_rows, num_columns, 2 * i + 1)
+        sns.histplot(data, kde=False, color='gray', binwidth=(data.max() - data.min()) / 30)
+        plt.axvline(data.mean(), color='red', linestyle='dashed', linewidth=1.5, label='Mean')
+        plt.axvline(data.median(), color='blue', linestyle='dashed', linewidth=1.5, label='Median')
+        plt.title(f'Histogram of {col}')
+        plt.legend()
+
+        # Plot boxplot in the second column of the pair
+        plt.subplot(num_rows, num_columns, 2 * i + 2)
+        sns.boxplot(x=data)
+        plt.title(f'Boxplot of {col}')
+
+    plt.tight_layout(pad=3.0)
+    plt.show()
+
+
+
 
