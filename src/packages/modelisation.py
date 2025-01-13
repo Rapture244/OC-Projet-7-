@@ -1581,3 +1581,107 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         plt.show()
 
 
+    def display_confusion_cost_matrices(self, y_test: pd.Series, y_pred: pd.Series, model_name: str, scorer: str, threshold: float = 0.5, save_img: bool = False) -> None:
+        """
+        Displays the confusion matrix and cost matrix side by side in a single figure.
+        Optionally saves the combined image locally and logs it to MLflow.
+
+        Args:
+            y_test (pd.Series): True target values.
+            y_pred (pd.Series): Predicted target values by the model.
+            model_name (str): Name of the model to display in the title.
+            scorer (str): Scorer used for evaluation ('roc_auc', 'business', etc.).
+            threshold (float): Threshold used for predictions. Default is 0.5.
+            save_img (bool): Flag to save the combined image locally and log it to MLflow.
+
+        Returns:
+            None
+        """
+        # Cost constants
+        FN_BASE_COST = 10  # Base cost for FN
+        FP_COST = 1        # Cost for FP
+
+        # Compute the confusion matrix
+        cm: np.ndarray = confusion_matrix(y_test, y_pred)
+        tn, fp, fn, tp = cm.ravel()
+
+        # Compute the cost matrix
+        cost_matrix = np.array([
+            [0, -fp * FP_COST],   # Row for actual negative (TN, FP)
+            [-fn * FN_BASE_COST, 0]  # Row for actual positive (FN, TP)
+            ])
+
+        # Compute the combined cost value
+        combined_cost = -fn * FN_BASE_COST + -fp * FP_COST
+
+        # Labels for matrices
+        labels = ["Class 0 (Repaid)", "Class 1 (Not Repaid)"]
+
+        # Construct the main title based on the model name, scorer, and threshold
+        main_title = f"Confusion-Cost Matrices for {model_name} (Scorer: {scorer})"
+        if threshold != 0.5:
+            main_title += f" at Threshold {threshold:.2f}"
+
+        # Create a figure with two subplots
+        fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+        fig.suptitle(main_title, fontsize=16, weight='bold', y=1.05)  # Add main title with extra padding
+
+        # ---- Plot Confusion Matrix ----
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
+        disp.plot(ax=axes[0], values_format='d')
+        axes[0].set_title("Confusion Matrix")  # Subplot title
+        axes[0].grid(False)  # Disable grid lines
+        axes[0].set_xlabel("Predicted Label")
+        axes[0].set_ylabel("True Label")
+
+        # ---- Plot Cost Matrix ----
+        cax = axes[1].matshow(cost_matrix, cmap="viridis")
+        fig.colorbar(cax, ax=axes[1], fraction=0.046, pad=0.04)
+        axes[1].set_title(f"Cost Matrix (cost = {combined_cost:,.0f})")  # Subplot title with combined cost
+        axes[1].grid(False)  # Disable grid lines
+        axes[1].set_xticks(range(len(labels)))
+        axes[1].set_yticks(range(len(labels)))
+        axes[1].set_xticklabels(labels)
+        axes[1].set_yticklabels(labels)
+        axes[1].xaxis.set_ticks_position('bottom')
+        axes[1].set_xlabel("Predicted Label")  # No y-axis label for cost matrix
+
+        # Annotate the cost matrix with values
+        def format_value(value):
+            return f"{value:,.0f}".replace(",", " ")  # Replace commas with spaces
+
+        norm = plt.Normalize(vmin=cost_matrix.min(), vmax=cost_matrix.max())
+        cmap = plt.cm.viridis
+
+        for (i, j), value in np.ndenumerate(cost_matrix):
+            background_color = cmap(norm(value))
+            text_color = "white" if sum(background_color[:3]) / 3 < 0.5 else "black"
+            axes[1].text(j, i, format_value(value), va='center', ha='center', color=text_color)
+
+        # Adjust layout to avoid overlapping elements
+        plt.tight_layout()
+
+        # Save and log the plot if save_img is True
+        if save_img:
+            # Define the directory and file path for the image
+            filename = f"Combined_Matrix_{model_name}_{scorer}_Threshold_{threshold:.2f}.png"
+            image_dir: Path = Path(ROOT_DIR) / "assets" / "plots"
+            image_dir.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
+            image_path: Path = image_dir / filename
+
+            try:
+                # Save the plot as a file
+                plt.savefig(image_path, bbox_inches='tight')  # Use bbox_inches to include all elements
+                logger.success(f"Combined matrix image saved successfully at: {image_path}")
+
+                # Log the image to MLflow
+                if self.mlflow_tracking:
+                    mlflow.log_artifact(str(image_path))  # Directly log to artifacts folder
+                    logger.info(f"Combined matrix image logged to MLflow successfully for model: {model_name}")
+            except Exception as e:
+                logger.error(f"Failed to save or log combined matrix image: {e}")
+
+        # Show the combined plot
+        plt.show()
+
+
