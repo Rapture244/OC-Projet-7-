@@ -1,15 +1,22 @@
-import pandas as pd
+# Standard Library Imports
+import gc
+
+# Third-Party Library Imports
+import faiss  # Required for FAISS-based KNN imputation
+import matplotlib.pyplot as plt
 import numpy as np
-from typing import List, Tuple, Union, Optional
+import pandas as pd
+import seaborn as sns
 from loguru import logger
-from lightgbm import LGBMClassifier
+from lightgbm import LGBMClassifier, early_stopping, log_evaluation
+from scipy.stats import yeojohnson
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import KFold, StratifiedKFold
-from lightgbm import early_stopping, log_evaluation
-import matplotlib.pyplot as plt
-import seaborn as sns
-import gc
-from scipy.stats import yeojohnson
+from sklearn.preprocessing import RobustScaler
+
+# Typing Imports
+from typing import List, Tuple, Union, Optional
+
 
 
 # ==================================================================================================================== #
@@ -335,16 +342,6 @@ def faiss_knn_imputation(
 
     logger.success("FAISS KNN imputation completed successfully.")
     return df[[target_column] + [col for col in df.columns if col != target_column]]
-
-
-
-
-
-
-
-
-
-
 
 
 
