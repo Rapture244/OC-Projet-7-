@@ -1835,3 +1835,178 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return None
 
 
+    def model_evaluation(self, model: Any, X_test: pd.DataFrame, y_test: pd.Series, threshold: Optional[float], scorer: str, save_img: bool = False, log_to_mlflow: bool = False) -> None:
+        """
+        Evaluates the model on the test data using specified metrics and updates the results DataFrame.
+
+        Args:
+            model (BaseEstimator): Trained classification model.
+            X_test (pd.DataFrame): Test feature matrix.
+            y_test (pd.Series): Test target vector.
+            threshold (Optional[float]): Custom threshold for classification. Default is None.
+            scorer (str): Scoring method used ('roc_auc' or 'business').
+            save_img (bool, optional): If True, saves visualizations (confusion matrix, cost matrix) locally. Default is False.
+            log_to_mlflow (bool, optional): If True, disables MLflow tracking for this function. Default is False.
+
+        Returns:
+            None
+        """
+        # Dynamically retrieve the model's class name for logging and display
+        model_name: str = type(model).__name__
+
+        # Generate probabilities for the positive class
+        y_proba: pd.Series = model.predict_proba(X_test)[:, 1]
+
+        # ---- Determine the threshold to use ----
+        if threshold is None:
+            threshold_to_use = 0.5
+            logger.info(f"Evaluating model '{model_name}' with default threshold = {threshold_to_use}.")
+        else:
+            threshold_to_use = threshold
+            logger.info(f"Evaluating model '{model_name}' with custom threshold = {threshold_to_use}.")
+
+        # Generate predictions using the determined threshold
+        y_pred: pd.Series = (y_proba >= threshold_to_use).astype(int)
+        tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()  # Confusion matrix breakdown
+
+        # Compute metrics and costs for the determined threshold
+        metrics = self._calculate_metrics(y_test, y_pred, y_proba, tn, fp, fn, tp)
+        total_cost = metrics["cost"]
+        total_profit = metrics["profit"]
+        business_cost_std = self.business_cost_std(y_test, y_pred)
+
+        # Log metrics and costs for the determined threshold
+        logger.debug(
+            f"Standardized Business Cost for threshold ({threshold_to_use}):\n"
+            f"TN: {tn}, FP: {fp}\n"
+            f"FN: {fn}, TP: {tp}\n"
+            f"Profit: {total_profit:<10,} | Cost: {total_cost:<10,} | Standardized Cost: {business_cost_std:.2f}"
+            )
+
+        # Store results for the determined threshold
+        results = {
+            "Model": model_name,
+            "Scorer": scorer,
+            "Threshold": threshold_to_use,
+            "Precision": metrics["precision"],
+            "Recall": metrics["recall"],
+            "FNR": metrics["fnr"],
+            "F2 Score": metrics["f2_score"],
+            "ROC-AUC": metrics["roc_auc"],
+            "FN": fn,
+            "FP": fp,
+            "Cost": total_cost,
+            "Profit": total_profit,
+            "Business Cost Std": business_cost_std,
+            }
+
+        # Log classification report for the determined threshold
+        logger.success(f"Classification Report for '{model_name}' with threshold = {threshold_to_use}:\n"
+                       f"{classification_report(y_test, y_pred, target_names=['Class 0 (Repaid)', 'Class 1 (Not Repaid)'])}")
+
+        # Display combined visualizations (confusion matrix and cost matrix) for the determined threshold
+        self.display_confusion_cost_matrices(y_test, y_pred, model_name, scorer, threshold=threshold_to_use, save_img=save_img)
+
+        # ---- Update results and log metrics to MLflow (if enabled) ----
+        new_results = pd.DataFrame([results])  # Convert results to DataFrame
+        self._update_results_dataframe(new_results, model_name)  # Update the results DataFrame
+
+        if self.mlflow_tracking and log_to_mlflow:
+            mlflow.log_param("Threshold", results['Threshold'])
+            mlflow.log_metric("Precision", round(results["Precision"], 4))
+            mlflow.log_metric("Recall", round(results["Recall"], 4))
+            mlflow.log_metric("FNR", round(results["FNR"], 4))
+            mlflow.log_metric("F2_Score", round(results["F2 Score"], 4))
+            mlflow.log_metric("ROC_AUC", round(results["ROC-AUC"], 4))
+            mlflow.log_metric("FN", results["FN"])
+            mlflow.log_metric("FP", results["FP"])
+            mlflow.log_metric("Cost", round(results["Cost"], 2))
+            mlflow.log_metric("Profit", round(results["Profit"], 2))
+            mlflow.log_metric("Business_Cost_Std", round(results["Business Cost Std"], 4))
+
+        return None
+
+
+    def _calculate_metrics(self, y_test: pd.Series, y_pred: pd.Series, y_proba: pd.Series, tn: int, fp: int, fn: int, tp: int) -> Dict[str, float]:
+        """
+        Calculate evaluation metrics based on predictions and confusion matrix.
+
+        Args:
+            y_test (pd.Series): True target values.
+            y_pred (pd.Series): Predicted target values.
+            y_proba (pd.Series): Predicted probabilities for the positive class.
+            tn (int): True Negatives count.
+            fp (int): False Positives count.
+            fn (int): False Negatives count.
+            tp (int): True Positives count.
+
+        Returns:
+            Dict[str, float]: Dictionary of evaluation metrics.
+        """
+        # Constants for cost calculation
+        FN_BASE_COST = 10  # Base cost for False Negatives
+        FP_BASE_COST = 1        # Cost for False Positives
+
+        # Constant profit & loss for profit calculation
+        TN_PROFIT = 6
+        FP_LOSS = 4
+        FN_LOSS = 40
+        TP_PROFIT = 0
+
+        # Standard metrics
+        precision = precision_score(y_test, y_pred, pos_label=1)
+        recall = recall_score(y_test, y_pred, pos_label=1)
+        f2_score_val = fbeta_score(y_test, y_pred, beta=2, pos_label=1)
+        roc_auc = roc_auc_score(y_test, y_proba)
+        fnr = fn / (fn + tp) if (fn + tp) > 0 else 0  # Avoid division by zero
+
+        # Calculate cost
+        total_cost = -fp * FP_BASE_COST - fn * FN_BASE_COST
+
+        # Calculate profit
+        total_profit = TN_PROFIT * tn - FP_LOSS * fp - FN_LOSS * fn + TP_PROFIT * tp
+
+        return {
+            "precision": precision,
+            "recall": recall,
+            "f2_score": f2_score_val,
+            "roc_auc": roc_auc,
+            "fnr": fnr,
+            "cost": total_cost,  # Add the cost as part of metrics
+            "profit": total_profit,
+            }
+
+
+    def _update_results_dataframe(self, new_results: pd.DataFrame, model_name: str):
+        """
+        Update the results DataFrame with new evaluation results.
+
+        Args:
+            new_results (pd.DataFrame): DataFrame containing new evaluation results.
+            model_name (str): Name of the evaluated model.
+        """
+        if self.results_df.empty:
+            self.results_df = new_results
+        else:
+            for _, new_row in new_results.iterrows():
+                # Check if the same Model, Scorer, and Threshold exist
+                mask = (
+                        (self.results_df["Model"] == new_row["Model"]) &
+                        (self.results_df["Scorer"] == new_row["Scorer"]) &
+                        (self.results_df["Threshold"] == new_row["Threshold"])
+                )
+
+                if mask.any():
+                    # Replace existing rows with matching Model and Scorer
+                    self.results_df.loc[mask, :] = new_row.values
+                else:
+                    # Append new row if no match
+                    self.results_df = pd.concat(
+                        [self.results_df, pd.DataFrame([new_row])], ignore_index=True
+                        )
+
+        # Sort by ROC-AUC
+        self.results_df.sort_values("Business Cost Std", ascending=False, inplace=True)
+        self.results_df.reset_index(drop=True, inplace=True)
+
+
