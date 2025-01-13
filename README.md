@@ -4,7 +4,7 @@ Vous êtes Data Scientist au sein d'une société financière, nommée **"Prêt
 
 L’entreprise souhaite **mettre en œuvre un outil de “scoring crédit” pour calculer la probabilité** qu’un client rembourse son crédit, puis classifie la demande en crédit accordé ou refusé. Elle souhaite donc développer un **algorithme de classification** en s’appuyant sur des sources de données variées (données comportementales, données provenant d'autres institutions financières, etc.)
 
->[!info]
+>[!INFO]  
 >Voici [les données](https://www.kaggle.com/c/home-credit-default-risk/data) dont vous aurez besoin pour réaliser l’algorithme de classification. Pour plus de simplicité, vous pouvez les télécharger à [cette adresse](https://s3-eu-west-1.amazonaws.com/static.oc-static.com/prod/courses/files/Parcours_data_scientist/Projet+-+Impl%C3%A9menter+un+mod%C3%A8le+de+scoring/Projet+Mise+en+prod+-+home-credit-default-risk.zip).
 >
 >:bulb: Vous aurez besoin de joindre les différentes tables entre elles.
@@ -20,7 +20,7 @@ L’entreprise souhaite **mettre en œuvre un outil de “scoring crédit” po
 
 Michaël, votre manager, vous incite à sélectionner un ou des kernels Kaggle pour vous faciliter l’analyse exploratoire, la préparation des données et le feature engineering nécessaires à l’élaboration du modèle de scoring.
 
->[!info]
+>[!INFO]  
 >Si vous le faites, vous devez analyser ce ou ces kernels et le ou les adapter pour vous assurer qu’il(s) répond(ent) aux besoins de votre mission.
 >
 >Par exemple vous pouvez vous inspirer des kernels suivants : 
@@ -29,16 +29,10 @@ Michaël, votre manager, vous incite à sélectionner un ou des kernels Kaggle p
 >
 >C’est optionnel, mais nous vous encourageons à le faire afin de vous permettre de vous focaliser sur l’élaboration du modèle, son optimisation et sa compréhension.
 
-
 ## Work 
 
-**Work Done**
-- [x] **Learned Poetry** &xrarr; For package dependencies management 
-
-
-
-**Work in Progress**
-- [ ] 
+Notebooks:
+- [EDA & Feature Engineering](./notebooks/01.%20Preprocessing.ipynb) &xrarr; Explore the dataset, applied the kaggle to the dataset 
 
 
 
