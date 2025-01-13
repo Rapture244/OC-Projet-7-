@@ -868,3 +868,86 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    def xgboost_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str) -> float:
+        """
+        Optimization objective for XGBoost.
+        """
+        # Define the parameter space for XGBoost
+        model_params = {
+            'verbosity': 1,  # Controls verbosity of training
+            'objective': 'binary:logistic',  # Binary classification
+            'eval_metric': 'auc',  # Evaluation metric
+            'tree_method': 'hist',  # Use histogram-based optimization
+            'device': 'cuda',  # Use GPU for training
+
+            # High-impact parameters
+            'learning_rate': trial.suggest_float('learning_rate', 0.005, 0.1, log=True),  # Allow slower learning rates
+            'n_estimators': trial.suggest_int('n_estimators', 200, 2000),  # Wider range for boosting rounds
+            'max_depth': trial.suggest_int('max_depth', 2, 10),  # Include shallower trees
+            'min_child_weight': trial.suggest_int('min_child_weight', 1, 10),  # Wider range for balancing splits
+            'gamma': trial.suggest_float('gamma', 0.0, 10.0),  # Increase range for regularization
+            'subsample': trial.suggest_float('subsample', 0.6, 1.0),  # Allow slightly smaller subsamples
+            'colsample_bytree': trial.suggest_float('colsample_bytree', 0.5, 1.0),  # Allow smaller feature fractions
+            'lambda': trial.suggest_loguniform('lambda', 1e-3, 10.0),
+            'alpha': trial.suggest_loguniform('alpha', 1e-3, 10.0),
+
+            # Fixed Parameters
+            'random_state': self.random_state,  # Ensures reproducibility
+            }
+
+        if scorer == 'business':  # Custom scoring scenario
+            model_params['scale_pos_weight'] = 10  # Adjust for class imbalance
+
+        # Create the XGBoost classifier
+        classifier = xgb.XGBClassifier(**model_params)
+
+        # Create the pipeline with preprocessing
+        pipeline = self.get_preprocessor_and_pipeline(trial, X_train, classifier)
+
+        # Attach full metadata but ensure separation of preprocessing and model parameters
+        pipeline.metadata = {
+            "preprocessing_used": pipeline.metadata,  # Preprocessing details
+            "best_params": model_params,  # Model parameters
+            }
+
+        # Custom scoring function for business cost
+        if scorer == "roc_auc":
+            scoring = make_scorer(roc_auc_score)
+        elif scorer == 'business':
+            scoring = make_scorer(
+                ModelPipeline.business_cost,  # Using your static method
+                greater_is_better=True,                # Keep the raw score positive such that optuna can try to minize it
+                response_method="predict",              # Ensure binary predictions
+                )
+        else:
+            raise ValueError("Invalid scorer specified.")
+
+        # Cross-validation with n_jobs=1 to prevent GPU contention
+        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=self.random_state)
+        scores = cross_val_score(pipeline, X_train, y_train, scoring=scoring, cv=skf, n_jobs=1)
+
+        # Log the trial score
+        mean_score = np.mean(scores)
+        logger.info(
+            f"Trial {trial.number}: "
+            f"Score = {mean_score:.4f}, "
+            f"Scorer = {scoring}"
+            )
+
+        # Log GPU state during and after the trial
+        gpus = GPUtil.getGPUs()
+        if not gpus:
+            logger.warning("No GPUs detected after the trial. Ensure GPU is properly configured.")
+        else:
+            for gpu in gpus:
+                logger.info(f"GPU ID: {gpu.id}, Name: {gpu.name}, "
+                            f"Load: {gpu.load * 100:.1f}%, "
+                            f"Memory: {gpu.memoryUsed}MB/{gpu.memoryTotal}MB")
+
+        # Save metadata for the trial
+        trial.set_user_attr("metadata", pipeline.metadata)
+
+        # Return mean score
+        return mean_score
+
+
