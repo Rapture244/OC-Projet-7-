@@ -293,3 +293,110 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return X_train_sample, y_train_sample
 
 
+    def apply_preprocessing(
+            self,
+            X_train: pd.DataFrame,
+            y_train: pd.Series,
+            X_test: pd.DataFrame,
+            preprocessing_used: Dict[str, Any],
+            save_scaler: bool = False,
+            ) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, Optional[Any]]:
+        """
+        Applies preprocessing by scaling numeric features using RobustScaler and passing through non-numeric features.
+        Handles resampling using SMOTETomek for imbalanced datasets.
+
+        Args:
+            X_train (pd.DataFrame): Training feature matrix.
+            y_train (pd.Series): Training target vector.
+            X_test (pd.DataFrame): Testing feature matrix.
+            preprocessing_used (Dict[str, Any]): Dictionary specifying preprocessing settings:
+            save_scaler (bool): Whether to include the fitted scaler object in the return value.
+
+        Returns:
+            Tuple[pd.DataFrame, pd.Series, pd.DataFrame, Optional[RobustScaler]]:
+                - Resampled and scaled training feature matrix.
+                - Resampled training target vector.
+                - Scaled testing feature matrix.
+                - Fitted RobustScaler object, if `save_scaler` is True.
+
+        Raises:
+            ValueError: If preprocessing settings are incomplete or unsupported configurations are provided.
+        """
+        logger.info(f"Starting preprocessing with the following settings: {preprocessing_used}")
+
+        # Extract the nested preprocessing settings
+        preprocessing_settings = preprocessing_used.get("preprocessing_used", {})
+        if not preprocessing_settings:
+            logger.error("Missing 'preprocessing_used' key in preprocessing_used.")
+            raise ValueError("Preprocessing settings must be provided under the key 'preprocessing_used'.")
+
+        # Identify numeric features
+        numeric_features: List[str] = X_train.select_dtypes(include=["number"]).columns.tolist()
+
+        # Identify passthrough features (non-numeric features)
+        passthrough_features = [col for col in X_train.columns if col not in numeric_features]
+        logger.debug(f"Passthrough features: {passthrough_features}")
+
+        # Validate preprocessing settings
+        scaling_steps = preprocessing_settings.get("scaling", [])
+        sampler_choice = preprocessing_settings.get("sampler")
+        sampling_strategy = preprocessing_settings.get("sampling_strategy")
+        smote_params = preprocessing_settings.get("custom_smote", {})
+        tomek_params = preprocessing_settings.get("custom_tomek", {})
+
+        if not all([sampler_choice, sampling_strategy, scaling_steps]):
+            logger.error("Incomplete preprocessing settings in preprocessing_used.")
+            raise ValueError("Preprocessing settings (sampler, sampling_strategy, scaling) must be provided.")
+
+        # Extract scaler type and parameters
+        scaler_type = scaling_steps[0].get("type")
+        scaler_params = scaling_steps[0].get("parameters", {})
+        if scaler_type != "RobustScaler":
+            logger.error(f"Unsupported scaler type: {scaler_type}")
+            raise ValueError(f"Only 'RobustScaler' is supported. Got {scaler_type}.")
+
+        # Initialize RobustScaler
+        scaler = RobustScaler(**scaler_params)
+
+        # Scale numeric features
+        X_train_scaled_numeric = pd.DataFrame(
+            scaler.fit_transform(X_train[numeric_features]),
+            columns=numeric_features,
+            index=X_train.index
+            )
+        X_test_scaled_numeric = pd.DataFrame(
+            scaler.transform(X_test[numeric_features]),
+            columns=numeric_features,
+            index=X_test.index
+            )
+        logger.debug("Numeric features scaled successfully.")
+
+        # Concatenate numeric features with passthrough features
+        X_train_final = pd.concat([X_train_scaled_numeric, X_train[passthrough_features]], axis=1)
+        X_test_final = pd.concat([X_test_scaled_numeric, X_test[passthrough_features]], axis=1)
+
+        # Ensure columns are in the original order
+        X_train_final = X_train_final[X_train.columns]
+        X_test_final = X_test_final[X_test.columns]
+        logger.debug("Columns reordered to match original structure.")
+
+        # Handle sampling
+        if sampler_choice == "SMOTETomek":
+            sampler = SMOTETomek(
+                smote=SMOTE(**smote_params),
+                tomek=TomekLinks(**tomek_params),
+                sampling_strategy=sampling_strategy
+                )
+            X_train_resampled, y_train_resampled = sampler.fit_resample(X_train_final, y_train)
+            logger.success("Resampling completed successfully.")
+        else:
+            logger.error(f"Unsupported sampler choice: {sampler_choice}")
+            raise ValueError(f"Sampler {sampler_choice} is not supported.")
+
+        # Return results
+        if save_scaler:
+            return X_train_resampled, y_train_resampled, X_test_final, scaler
+        else:
+            return X_train_resampled, y_train_resampled, X_test_final
+
+
