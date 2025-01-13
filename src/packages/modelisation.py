@@ -798,3 +798,73 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    def random_forest_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str) -> float:
+        """
+        Define the optimization objective for RandomForestClassifier.
+
+        Args:
+            trial (optuna.trial.Trial): An Optuna trial object for suggesting hyperparameters.
+            X_train (pd.DataFrame): Training feature matrix.
+            y_train (pd.Series): Training target vector.
+            scorer (str): Scoring method to evaluate the model.
+
+        Returns:
+            float: The mean score from cross-validation based on the chosen scorer.
+        """
+
+        # Define the scorer
+        if scorer == "roc_auc":
+            scoring = "roc_auc"
+        elif scorer == 'business':
+            scoring = make_scorer(
+                ModelPipeline.business_cost,  # Using your static method
+                greater_is_better=True,       # Keep the raw score positive such that Optuna can maximize
+                response_method="predict",    # Ensure binary predictions
+                )
+        else:
+            raise ValueError("Invalid scorer specified. Choose either 'roc_auc' or 'business'.")
+
+        # Hyperparameters to tune
+        model_params: Dict[str, Any] = {
+            "n_estimators": trial.suggest_int("n_estimators", 50, 300, step=50),  # Reduce range for faster tuning
+            "max_depth": trial.suggest_categorical("max_depth", [10, 20, 30, None]),  # Focus on meaningful depths
+            "min_samples_split": trial.suggest_int("min_samples_split", 2, 10),  # Retain as it's crucial for tree growth
+            "max_features": trial.suggest_categorical("max_features", ["sqrt", "log2"]),  # Focus on commonly used options
+            "bootstrap": trial.suggest_categorical("bootstrap", [True, False]),  # Sampling impacts generalization
+            "random_state": self.random_state,  # Consistency in results
+            "n_jobs": -1,  # Use all available cores
+            }
+        # Add class_weight if the scorer is 'business'
+        if scorer == 'business':
+            model_params['class_weight'] = {0: 1, 1: 10}
+
+        # Model and pipeline
+        classifier: RandomForestClassifier = RandomForestClassifier(**model_params)
+        pipeline: ImbPipeline = self.get_preprocessor_and_pipeline(trial, X_train, classifier)
+
+        # Attach metadata
+        pipeline.metadata = {
+            "preprocessing_used": pipeline.metadata,  # Preprocessing details
+            "best_params": model_params,              # Model parameters
+            }
+
+        # Evaluate the model using cross-validation
+        skf: StratifiedKFold = StratifiedKFold(n_splits=5, shuffle=True, random_state=self.random_state)
+        scores: np.ndarray = cross_val_score(pipeline, X_train, y_train, scoring=scoring, cv=skf, n_jobs=-1)
+
+        # Calculate mean score
+        mean_score = np.mean(scores)
+
+        # Log the trial score
+        logger.info(
+            f"Trial {trial.number}: "
+            f"Score = {mean_score:.4f}, "
+            f"Scorer = {scoring}"
+            )
+
+        # Save metadata for the trial
+        trial.set_user_attr("metadata", pipeline.metadata)
+
+        return mean_score
+
+
