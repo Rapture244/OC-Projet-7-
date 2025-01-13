@@ -61,39 +61,53 @@ def one_hot_encoder(dataframe: pd.DataFrame, nan_as_category: bool = True) -> Tu
 # ==================================================================================================================== #
 #                                                MODELING AND EVALUATION                                               #
 # ==================================================================================================================== #
-def kfold_lightgbm(df: pd.DataFrame, num_folds: int, stratified: bool = False, debug: bool = False) -> pd.DataFrame:
+def kfold_lightgbm(df: pd.DataFrame, num_folds: int, stratified: bool = False) -> pd.DataFrame:
     """
-    Runs a LightGBM model with K-Fold or Stratified K-Fold cross-validation.
+    Runs a LightGBM model with K-Fold or Stratified K-Fold cross-validation using GPU acceleration.
 
     Args:
         df (pd.DataFrame): The input dataframe containing training and test data.
         num_folds (int): Number of folds for cross-validation.
         stratified (bool, optional): Whether to use stratified K-Fold. Defaults to False.
-        debug (bool, optional): Debug flag. If True, submission file is not generated. Defaults to False.
 
     Returns:
         pd.DataFrame: Dataframe containing feature importances across all folds.
     """
+    import gc
+    import numpy as np
+    import pandas as pd
+    from lightgbm import LGBMClassifier, early_stopping, log_evaluation
+    from sklearn.model_selection import KFold, StratifiedKFold
+    from sklearn.metrics import roc_auc_score
+
+    # Split data into training and test sets based on the 'TARGET' column
     train_df = df[df['TARGET'].notnull()]
     test_df = df[df['TARGET'].isnull()].copy()
     logger.info(f"Starting LightGBM with KFold. Train shape: {train_df.shape}, Test shape: {test_df.shape}")
     del df
-    gc.collect()
+    gc.collect()  # Perform garbage collection
 
-    # Initialize KFold or StratifiedKFold
-    folds = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=1001) if stratified else KFold(n_splits=num_folds, shuffle=True, random_state=1001)
+    # Initialize KFold or StratifiedKFold based on the 'stratified' parameter
+    folds = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=42) if stratified else KFold(n_splits=num_folds, shuffle=True, random_state=42)
     logger.info(f"Using {'StratifiedKFold' if stratified else 'KFold'} with {num_folds} folds.")
 
+    # Initialize arrays for out-of-fold predictions and test predictions
     oof_preds = np.zeros(train_df.shape[0])
     sub_preds = np.zeros(test_df.shape[0])
     feature_importance_df = pd.DataFrame()
+
+    # Identify features to use for training
     feats = [f for f in train_df.columns if f not in ['TARGET', 'SK_ID_CURR', 'SK_ID_BUREAU', 'SK_ID_PREV', 'index']]
 
+    # Iterate through each fold
     for n_fold, (train_idx, valid_idx) in enumerate(folds.split(train_df[feats], train_df['TARGET'])):
         logger.info(f"Starting fold {n_fold + 1}...")
+
+        # Split the data into training and validation sets for the current fold
         train_x, train_y = train_df[feats].iloc[train_idx], train_df['TARGET'].iloc[train_idx]
         valid_x, valid_y = train_df[feats].iloc[valid_idx], train_df['TARGET'].iloc[valid_idx]
 
+        # Initialize the LightGBM classifier with specified hyperparameters
         clf = LGBMClassifier(
             nthread=4,
             n_estimators=10000,
@@ -106,9 +120,14 @@ def kfold_lightgbm(df: pd.DataFrame, num_folds: int, stratified: bool = False, d
             reg_lambda=0.0735294,
             min_split_gain=0.0222415,
             min_child_weight=39.3259775,
-            verbose=-1  # Set verbosity here
+            verbose=-1,
+            random_state=42,
+            device='gpu',  # Enable GPU
+            gpu_platform_id=0,  # Specify GPU platform ID
+            gpu_device_id=0  # Specify GPU device ID
             )
 
+        # Train the model with early stopping and evaluation metrics
         clf.fit(
             train_x, train_y,
             eval_set=[(train_x, train_y), (valid_x, valid_y)],
@@ -116,30 +135,32 @@ def kfold_lightgbm(df: pd.DataFrame, num_folds: int, stratified: bool = False, d
             callbacks=[early_stopping(200), log_evaluation(200)]
             )
 
+        # Make predictions for validation and test sets
         oof_preds[valid_idx] = clf.predict_proba(valid_x, num_iteration=clf.best_iteration_)[:, 1]
         sub_preds += clf.predict_proba(test_df[feats], num_iteration=clf.best_iteration_)[:, 1] / folds.n_splits
 
+        # Store feature importance for the current fold
         fold_importance_df = pd.DataFrame()
         fold_importance_df["feature"] = feats
         fold_importance_df["importance"] = clf.feature_importances_
         fold_importance_df["fold"] = n_fold + 1
         feature_importance_df = pd.concat([feature_importance_df, fold_importance_df], axis=0)
 
+        # Calculate and log AUC score for the current fold
         auc_score = roc_auc_score(valid_y, oof_preds[valid_idx])
         logger.info(f'Fold {n_fold + 1} AUC : {auc_score:.6f}')
 
+        # Clean up memory for the current fold
         del clf, train_x, train_y, valid_x, valid_y
         gc.collect()
 
+    # Calculate and log the overall AUC score
     full_auc = roc_auc_score(train_df["TARGET"], oof_preds)
     logger.info(f'Full AUC score: {full_auc:.6f}')
 
-    if not debug:
-        test_df['TARGET'] = sub_preds
-        test_df[['SK_ID_CURR', 'TARGET']].to_csv("submission_kernel02.csv", index=False)
-        logger.info("Submission file saved as 'submission_kernel02.csv'.")
-
+    # Display feature importance across all folds
     display_importances(feature_importance_df)
+
     return feature_importance_df
 
 def display_importances(feature_importance_df_: pd.DataFrame, top_n: int = 40) -> None:
@@ -150,15 +171,41 @@ def display_importances(feature_importance_df_: pd.DataFrame, top_n: int = 40) -
         feature_importance_df_ (pd.DataFrame): Dataframe containing feature importances.
         top_n (int, optional): Number of top features to display. Defaults to 40.
     """
+    # Log the start of the visualization process
     logger.info(f"Displaying top {top_n} feature importances...")
-    cols = feature_importance_df_[["feature", "importance"]].groupby("feature").mean().sort_values(by="importance", ascending=False)[:top_n].index
-    best_features = feature_importance_df_.loc[feature_importance_df_.feature.isin(cols)]
-    plt.figure(figsize=(8, 10))
-    sns.barplot(x="importance", y="feature", data=best_features.sort_values(by="importance", ascending=False))
-    plt.title('LightGBM Features (avg over folds)')
-    plt.tight_layout()
+
+    # Compute the average importance of each feature and select the top_n features
+    cols = (
+        feature_importance_df_[["feature", "importance"]]
+        .groupby("feature")
+        .mean()
+        .sort_values(by="importance", ascending=False)
+        .head(top_n)
+        .index
+    )
+
+    # Filter the dataframe to include only the top features
+    best_features = feature_importance_df_.loc[feature_importance_df_["feature"].isin(cols)]
+
+    # Create the plot
+    plt.figure(figsize=(8, 10))  # Set figure size
+    sns.barplot(
+        x="importance",
+        y="feature",
+        data=best_features.sort_values(by="importance", ascending=False),
+        palette="viridis"
+        )
+    plt.title('LightGBM Features (avg over folds)', fontsize=14, weight='bold')  # Add a descriptive title
+    plt.xlabel('Importance', fontsize=12)  # Label x-axis
+    plt.ylabel('Feature', fontsize=12)  # Label y-axis
+    plt.tight_layout()  # Adjust layout to avoid overlapping
+
+    # Display the plot
     plt.show()
-    logger.info("Feature importances displayed.")
+
+
+
+
 
 
 
