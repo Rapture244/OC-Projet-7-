@@ -149,3 +149,83 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         self.results_df = pd.DataFrame()
         logger.success("Results DataFrame has been reset.")
 
+# ==================================================================================================================== #
+#                                                  DATA PREPROCESSING                                                  #
+# ==================================================================================================================== #
+    def split_data(self, X: pd.DataFrame, y: pd.Series, shuffle: bool = True, stratify: bool = True) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+        """
+        Splits the dataset into training and testing sets.
+
+        Args:
+            X (pd.DataFrame): The feature matrix.
+            y (pd.Series): The target vector.
+            shuffle (bool, optional): Whether to shuffle the data before splitting. Defaults to True.
+            stratify (bool, optional): Whether to stratify the split by the target variable. Defaults to True.
+
+        Returns:
+            Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+                A tuple containing:
+                - X_train (pd.DataFrame): Training feature matrix.
+                - X_test (pd.DataFrame): Testing feature matrix.
+                - y_train (pd.Series): Training target vector.
+                - y_test (pd.Series): Testing target vector.
+
+        Raises:
+            ValueError: If the dataset is too small or stratified splitting is not feasible.
+        """
+        logger.info("Starting Data Splitting.")
+
+        # Determine stratification parameter
+        stratify_param: Optional[pd.Series] = y if stratify and y.value_counts().min() >= 2 else None
+
+        # Validate dataset size and stratification compatibility
+        if len(y) < 2:
+            logger.error("The dataset is too small to split.")
+            raise ValueError("Dataset must contain more than one sample for splitting.")
+
+        # Perform the data split
+        X_train, X_test, y_train, y_test = train_test_split(
+            X,
+            y,
+            test_size = self.test_size,
+            random_state = self.random_state,
+            shuffle = shuffle,
+            stratify = stratify_param)
+
+        # == LOGGING ====
+        # Map class labels to human-readable names
+        class_names: Dict[int, str] = {0: "Class 0 (Repaid)", 1: "Class 1 (Not Repaid)"}
+
+        # Calculate the distribution of target classes in the train and test sets
+        train_distribution: Dict[str, str] = {
+            class_names[int(k)]: f"{v / y_train.size * 100:.2f}% ({v})"
+            for k, v in zip(*np.unique(y_train, return_counts=True))
+            }
+
+        test_distribution: Dict[str, str] = {
+            class_names[int(k)]: f"{v / y_test.size * 100:.2f}% ({v})"
+            for k, v in zip(*np.unique(y_test, return_counts=True))
+            }
+
+        # Log the distribution
+        logger.debug(f"Class distribution in training set: {train_distribution}")
+        logger.debug(f"Class distribution in testing set: {test_distribution}")
+
+        logger.debug(
+            "Types:\n"
+            f"X_train ---> {type(X_train)}\n"
+            f"X_test ---> {type(X_test)}\n"
+            f"y_train ---> {type(y_train)}\n"
+            f"y_test ---> {type(y_test)}"
+            )
+
+        # Successful loging
+        logger.success(
+            "Data splitting successful:\n"
+            f"X_train: {X_train.shape} | X_test: {X_test.shape}\n"
+            f"y_train: {y_train.shape} | y_test: {y_test.shape}."
+            )
+
+        return X_train, X_test, y_train, y_test
+
+
