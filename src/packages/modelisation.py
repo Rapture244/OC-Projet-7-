@@ -1418,3 +1418,70 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 
 
 
+# ==================================================================================================================== #
+#                                                     ISUALIZATION                                                     #
+# ==================================================================================================================== #
+    def display_confusion_matrix(self, y_test: pd.Series, y_pred: pd.Series, model_name: str, scorer: str, threshold: float = 0.5, save_img: bool = False) -> None:
+        """
+        Displays and logs the confusion matrix to MLflow if tracking is enabled, and optionally saves the image locally.
+
+        Args:
+            y_test (pd.Series): True target values.
+            y_pred (pd.Series): Predicted target values by the model.
+            model_name (str): Name of the model to display in the title.
+            scorer (str): Scorer used for evaluation ('roc_auc', 'business', etc.).
+            threshold (float): Threshold used for predictions. Default is 0.5.
+            save_img (bool): Flag to save the image locally and log it to MLflow.
+
+        Returns:
+            None
+        """
+        # Compute the confusion matrix
+        cm: np.ndarray = confusion_matrix(y_test, y_pred)
+        disp: ConfusionMatrixDisplay = ConfusionMatrixDisplay(
+            confusion_matrix=cm,
+            display_labels=["Class 0 (Repaid)", "Class 1 (Not Repaid)"]
+            )
+
+        # Construct the title and filename based on the threshold
+        if threshold == 0.5:
+            title = f"Confusion Matrix for {model_name} (Scorer: {scorer})"
+            filename = f"Confusion_Matrix_{model_name}_{scorer}.png"
+        else:
+            title = f"Confusion Matrix for {model_name} (Scorer: {scorer}) at Threshold {threshold:.2f}"
+            filename = f"Confusion_Matrix_{model_name}_{scorer}_Threshold_{threshold:.2f}.png"
+
+        # Plotting the confusion matrix without default annotations
+        fig, ax = plt.subplots()
+        disp.plot(ax=ax, values_format='d')  # Default annotations with integer formatting
+        ax.grid(False)  # Disable the grid
+        plt.title(title, pad=20)
+        plt.tight_layout()  # Adjust layout to make room for the title
+
+        # Explicitly setting axis labels
+        ax.set_xlabel('Predicted Label')
+        ax.set_ylabel('True Label')
+
+        # Save and log the plot if save_img is True
+        if save_img:
+            # Define the directory and file path for the image using pathlib
+            image_dir: Path = Path(ROOT_DIR) / "assets" / "plots"
+            image_dir.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
+            image_path: Path = image_dir / filename
+
+            try:
+                # Save the plot as a file
+                plt.savefig(image_path, bbox_inches='tight')  # Use bbox_inches to include all elements
+                logger.success(f"Confusion matrix image saved successfully at: {image_path}")
+
+                # Log the image to MLflow
+                if self.mlflow_tracking:
+                    mlflow.log_artifact(str(image_path))  # Directly log to artifacts folder
+                    logger.info(f"Confusion matrix image logged to MLflow successfully for model: {model_name}")
+            except Exception as e:
+                logger.error(f"Failed to save or log confusion matrix image: {e}")
+
+        # Show plot
+        plt.show()
+
+
