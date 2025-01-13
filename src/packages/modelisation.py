@@ -2087,3 +2087,94 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return best_threshold
 
 
+    def threshold_evaluation_profit(self, fitted_model, X_test_processed, y_test):
+        """
+        Evaluates the impact of thresholds on the model's profit, identifies the best threshold,
+        and plots errors and profit vs. threshold.
+
+        Args:
+            fitted_model: Trained classification model.
+            X_test_processed: Processed test feature matrix.
+            y_test: Test target vector.
+
+        Returns:
+            float: The best threshold value that maximizes profit.
+        """
+        logger.info("Starting threshold evaluation.")
+
+        # Generate probabilities for the positive class
+        y_proba = fitted_model.predict_proba(X_test_processed)[:, 1]
+        thresholds = np.round(np.arange(0, 1.01, 0.01), 2)  # Thresholds from 0.00 to 1.00 with step of 0.01
+
+        def get_FN_FP(y_true, y_pred):
+            cm = confusion_matrix(y_true, y_pred)
+            TN, FP, FN, TP = cm.ravel()
+            return FP, FN
+
+        def get_profit_custom(y_true, y_pred):
+            # Similar to how the cost of errors is calculated, the profit calculation must be refined by business experts.
+            # Each client correctly identified as creditworthy and given a loan (TN) generates a profit of 6.
+            # Each client incorrectly identified as creditworthy (FP) incurs a cost of 4 (lost revenue, slightly lower  than the TN profit to maintain discrimination).
+            # Clients incorrectly granted loans despite being insolvent (FN) incur a significant cost of 40 (10 times the FP cost due to maintaining a relationship and potential recovery efforts).
+            # Clients correctly identified as non-creditworthy and denied loans (TP) generate neither profit nor cost (0).
+            cm = confusion_matrix(y_true, y_pred)
+            TN, FP, FN, TP = cm.ravel()
+            total_revenue = 6 * TN - 4 * FP - 40 * FN + 0 * TP
+            return total_revenue
+
+        def to_labels(prob_1, threshold):
+            return (prob_1 >= threshold).astype(int)
+
+        # Evaluate profit and errors for each threshold
+        profits = []
+        errors = []
+        for threshold in thresholds:
+            y_pred = to_labels(y_proba, threshold)
+            profit = get_profit_custom(y_test, y_pred)
+            fp, fn = get_FN_FP(y_test, y_pred)
+            profits.append(profit)
+            errors.append((fp, fn))
+            logger.debug(f"Threshold: {threshold:.2f}, Profit: {profit}, FP: {fp}, FN: {fn}")
+
+        # Find the best threshold
+        profits = np.array(profits)
+        idx_max = np.argmax(profits)
+        best_threshold = thresholds[idx_max]
+        logger.success(f"Highest profit: {profits[idx_max]:,.2f} at threshold: {best_threshold:.2f}")
+
+        # Extract errors for plotting
+        errors = np.array(errors)
+        FP = errors[:, 0]
+        FN = errors[:, 1]
+
+        # Plotting
+        fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+
+        # Plot Errors
+        ax[0].plot(thresholds, FP + FN, color="indigo", label="Total Errors")
+        ax[0].plot(thresholds, FN, color="royalblue", label="False Negatives")
+        ax[0].plot(thresholds, FP, color="orange", label="False Positives")
+        ax[0].axvline(x=0.5, linestyle="dashed", color="slategray", label="Default Threshold (0.5)")
+        ax[0].axvline(x=best_threshold, linestyle="dashed", color="crimson", label=f"Best Threshold ({best_threshold:.2f})")
+        ax[0].set_title("Errors vs. Threshold")
+        ax[0].set_xlabel("Threshold")
+        ax[0].set_ylabel("Number of Errors")
+        ax[0].legend()
+        ax[0].grid()
+
+        # Plot Profits
+        ax[1].plot(thresholds, profits, color="mediumseagreen", label="Profit")
+        ax[1].axvline(x=0.5, linestyle="dashed", color="slategray", label="Default Threshold (0.5)")
+        ax[1].axvline(x=best_threshold, linestyle="dashed", color="crimson", label=f"Best Threshold ({best_threshold:.2f})")
+        ax[1].set_title("Profit vs. Threshold")
+        ax[1].set_xlabel("Threshold")
+        ax[1].set_ylabel("Profit")
+        ax[1].legend()
+        ax[1].grid()
+
+        plt.tight_layout()
+        plt.show()
+
+        return best_threshold
+
+
