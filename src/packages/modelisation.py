@@ -1044,3 +1044,59 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    def dummy_classifier_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str) -> float:
+        """
+        Objective function for tuning the DummyClassifier, including preprocessing steps.
+
+        Args:
+            trial (optuna.trial.Trial): An Optuna trial object for suggesting parameters.
+            X_train (pd.DataFrame): Training feature matrix.
+            y_train (pd.Series): Training target vector.
+            scorer (str): scorer method to evaluate the model.
+
+        Returns:
+            float: The mean score from cross-validation, including preprocessing.
+        """
+        # Define the scorer
+        if scorer == "roc_auc":
+            scoring = "roc_auc"
+        elif scorer == 'business':
+            scoring = make_scorer(
+                ModelPipeline.business_cost,  # Using your static method
+                greater_is_better=True,       # Keep the raw score positive such that Optuna can maximize
+                response_method="predict",    # Ensure binary predictions
+                )
+        else:
+            raise ValueError("Invalid scorer specified. Choose either 'roc_auc' or 'business'.")
+
+        # Suggest strategy for the DummyClassifier
+        strategy: str = trial.suggest_categorical("strategy", ["stratified"])
+
+        # Model + pipeline
+        classifier: DummyClassifier = DummyClassifier(strategy=strategy, random_state=self.random_state)
+        pipeline: ImbPipeline = self.get_preprocessor_and_pipeline(trial, X_train, classifier)
+
+        # Attach metadata
+        pipeline.metadata = {
+            "preprocessing_used": pipeline.metadata,  # Preprocessing details
+            "best_params": {"strategy": strategy},    # Model parameters
+            }
+
+        # Setup cross-validation
+        skf: StratifiedKFold = StratifiedKFold(n_splits=5, shuffle=True, random_state=self.random_state)
+        scores: np.ndarray = cross_val_score(pipeline, X_train, y_train, scoring=scorer, cv=skf, n_jobs=-1)
+
+        # Log the trial score
+        mean_score = np.mean(scores)
+        logger.info(
+            f"Trial {trial.number}: "
+            f"Score = {mean_score:.4f}, "
+            f"Scorer = {scoring}"
+            )
+
+        # Save metadata for the trial
+        trial.set_user_attr("metadata", pipeline.metadata)
+
+        return mean_score
+
+
