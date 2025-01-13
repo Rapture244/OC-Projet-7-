@@ -709,3 +709,92 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         plt.show()
 
 
+    def logistic_regression_objective(self, trial: optuna.trial.Trial, X_train: pd.DataFrame, y_train: pd.Series, scorer: str = 'roc_auc') -> float:
+        """
+        Defines the optimization objective for LogisticRegression using Optuna.
+
+        Args:
+            trial (optuna.trial.Trial): An Optuna trial object for suggesting hyperparameters.
+            X_train (pd.DataFrame): Training feature matrix.
+            y_train (pd.Series): Training target vector.
+            scorer (str): Scoring method to evaluate model performance. Either 'roc_auc' or 'business'.
+
+        Returns:
+            float: The mean score from cross-validation based on the specified scoring method.
+        """
+        # Define scoring metric
+        if scorer == "roc_auc":
+            scoring = "roc_auc"
+        elif scorer == 'business':
+            scoring = make_scorer(
+                ModelPipeline.business_cost,
+                greater_is_better=True,
+                response_method="predict",
+                )
+        else:
+            raise ValueError("Invalid scorer specified. Choose either 'roc_auc' or 'business'.")
+
+        # Suggest hyperparameters
+        solver_penalty_combinations: list[str] = [
+            "saga_elasticnet",  # Scalable, supports elasticnet
+            "saga_l1",          # Scalable, supports l1
+            "saga_l2",          # Scalable, supports l2
+            "sag_l2"            # Efficient, supports l2 only
+            ]
+        solver_penalty = trial.suggest_categorical("solver_penalty", solver_penalty_combinations)
+        solver, penalty = solver_penalty.split("_")
+        C = trial.suggest_loguniform("C", 0.01, 10)
+        max_iter = trial.suggest_categorical("max_iter", [1000, 2000])
+        l1_ratio = trial.suggest_float("l1_ratio", 0.1, 0.9) if penalty == "elasticnet" else None
+
+        # Model parameters
+        model_params = {
+            'C': C,
+            'solver': solver,
+            'penalty': penalty,
+            'max_iter': max_iter,
+            'class_weight': 'balanced',
+            'random_state': self.random_state,
+            'n_jobs': -1,
+            }
+        if l1_ratio is not None:
+            model_params['l1_ratio'] = l1_ratio
+
+        # Create classifier
+        classifier = LogisticRegression(**model_params)
+
+        # Create pipeline with preprocessing
+        pipeline = self.get_preprocessor_and_pipeline(trial, X_train, classifier)
+
+        # Attach metadata
+        pipeline.metadata = {
+            "preprocessing_used": pipeline.metadata,  # Preprocessing details
+            "best_params": model_params,             # Model parameters
+            }
+
+        # Save metadata to the trial
+        trial.set_user_attr("metadata", pipeline.metadata)
+
+        # Evaluate the model using cross-validation with pruning on convergence warnings
+        try:
+            with warnings.catch_warnings():
+                warnings.filterwarnings("error", category=ConvergenceWarning)
+
+                skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=self.random_state)
+                scores = cross_val_score(pipeline, X_train, y_train, scoring=scoring, cv=skf, n_jobs=-1)
+
+        except ConvergenceWarning as e:
+            logger.warning(f"Trial {trial.number} pruned due to convergence warning: {e}")
+            raise TrialPruned(f"Trial pruned due to convergence warning: {e}")
+
+        # Log the trial score
+        mean_score = np.mean(scores)
+        logger.info(
+            f"Trial {trial.number}: "
+            f"Score = {mean_score:.4f}, "
+            f"Scorer = {scoring}"
+            )
+
+        return mean_score
+
+
