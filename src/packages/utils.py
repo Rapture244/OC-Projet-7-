@@ -144,9 +144,10 @@ def load_csv(file_name: str, parent_path: Path) -> pd.DataFrame:
     # Return None if loading fails
     return None
 
+
 def concat_dataframes(base_df: pd.DataFrame, concat_df: pd.DataFrame) -> pd.DataFrame:
     """
-    Concatenate two DataFrames into one.
+    Concatenate two DataFrames into one, handling cases where columns do not match by adding missing columns as NaN.
 
     Args:
         base_df (pd.DataFrame): The main DataFrame to which another DataFrame will be concatenated.
@@ -157,7 +158,6 @@ def concat_dataframes(base_df: pd.DataFrame, concat_df: pd.DataFrame) -> pd.Data
 
     Raises:
         ValueError: If either of the input DataFrames is empty.
-        ValueError: If the columns of the DataFrames do not match.
     """
     # Validate input DataFrames
     if base_df.empty:
@@ -168,9 +168,10 @@ def concat_dataframes(base_df: pd.DataFrame, concat_df: pd.DataFrame) -> pd.Data
         logger.error("The DataFrame to concatenate is empty.")
         raise ValueError("The DataFrame to concatenate must not be empty.")
 
-    if not base_df.columns.equals(concat_df.columns):
-        logger.error("The columns of the DataFrames do not match.")
-        raise ValueError("Both DataFrames must have the same columns to concatenate.")
+    # Align columns by adding missing columns with NaN
+    all_columns = sorted(set(base_df.columns).union(concat_df.columns))
+    base_df = base_df.reindex(columns=all_columns, fill_value=pd.NA)
+    concat_df = concat_df.reindex(columns=all_columns, fill_value=pd.NA)
 
     # Concatenate the DataFrames
     concatenated_df = pd.concat([base_df, concat_df], ignore_index=True)
