@@ -158,3 +158,47 @@ def erase_deleted_experiments(db_path: str) -> None:
 
 
 
+def delete_active_experiment(experiment_identifier: str) -> None:
+    """
+    Deletes an active MLflow experiment by its name or ID.
+
+    Args:
+        experiment_identifier (str): The name or ID of the experiment to delete.
+    """
+    logger.info("=== DELETING EXPERIMENT ===")
+    client: MlflowClient = MlflowClient()
+
+    try:
+        # Determine if the identifier is numeric (assume it's an ID)
+        if experiment_identifier.isdigit():
+            experiment_id: str = experiment_identifier
+            experiment: Optional[Experiment] = client.get_experiment(experiment_id)
+        else:
+            # Assume it's a name and retrieve the experiment by name
+            experiment: Optional[Experiment] = client.get_experiment_by_name(experiment_identifier)
+            experiment_id: Optional[str] = experiment.experiment_id if experiment else None
+
+        # Validate the experiment exists
+        if not experiment:
+            logger.error(f"Experiment not found ---> {experiment_identifier:<25}")
+            return
+
+        # Ensure the experiment is active before attempting deletion
+        if experiment.lifecycle_stage != "active":
+            logger.warning(
+                f"Experiment is not active ---> {experiment_identifier:<25} | Lifecycle: {experiment.lifecycle_stage}"
+                )
+            return
+
+        # Delete the experiment
+        client.delete_experiment(experiment_id)
+        logger.success(f"Deleted experiment ---> {experiment.name:<25} | ID: {experiment_id}")
+
+    except Exception as e:
+        logger.error(f"Failed to delete experiment ---> {experiment_identifier:<25} | Error: {e}")
+
+# Usage example
+# delete_experiment("Fine-Tuning Models")
+# delete_experiment("3")
+
+
