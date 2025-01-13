@@ -1257,3 +1257,132 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             logger.error(f"Failed to save/log scaler: {e}")
             raise
 
+    @staticmethod
+    def save_model_locally(model: Any, scorer: str, dir_path: Path) -> str:
+        """
+        Saves a fitted model locally using joblib.
+
+        Args:
+            model (Any): The fitted model to save.
+            scorer (str): Scorer used for evaluation.
+            dir_path (Path): Directory to save the model locally.
+
+        Returns:
+            str: The name of the saved model (model_name).
+        """
+        dir_path.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        model_name = f"{type(model).__name__} - {scorer}"
+        filename = f"{current_date}_{model_name}.joblib"
+        model_file = dir_path / filename
+
+        try:
+            joblib.dump(model, model_file)  # Save model using joblib
+            logger.success(f"==== [LOCAL] ====\n---> Model Saved at: {model_file}")
+            return model_name  # Return the model name instead of the file path
+        except Exception as e:
+            logger.error(f"Failed to save model locally: {e}")
+            raise
+
+
+    @staticmethod
+    def detect_framework(model: Any) -> str:
+        """
+        Detects the framework of the given model.
+
+        Args:
+            model (Any): The model object to detect.
+
+        Returns:
+            str: Framework name ("sklearn", "lightgbm", "xgboost").
+        """
+        if isinstance(model, (LogisticRegression, RandomForestClassifier, DummyClassifier)):
+            return "sklearn"
+        elif isinstance(model, lgb.LGBMClassifier):
+            return "lightgbm"
+        elif isinstance(model, xgb.XGBClassifier):
+            return "xgboost"
+        else:
+            raise ValueError(f"Unsupported model type: {type(model).__name__}")
+
+
+    def mlflow_log_model(self, model: Any, x_train: pd.DataFrame, registered_model_name: Optional[str] = None) -> None:
+        """
+        Logs a model as an artifact to the current MLflow run and optionally registers it in the MLflow Model Registry.
+
+        Args:
+            model (Any): The model to log.
+            x_train (pd.DataFrame): Training data for inferring input-output signatures.
+            registered_model_name (Optional[str]): If provided, registers the model in the Model Registry under this name.
+
+        Returns:
+            None
+        """
+        # Detect the framework
+        framework = ModelPipeline.detect_framework(model)
+
+        # Infer input-output signature
+        signature = None
+        try:
+            if x_train is not None and hasattr(model, "predict"):
+                predictions = model.predict(x_train.sample(min(50, len(x_train)), random_state=self.random_state))
+                signature = infer_signature(x_train, predictions)
+        except Exception as e:
+            logger.warning(f"Could not infer signature: {e}")
+
+        # Log the model
+        artifact_path = "model"  # Default artifact path for the model
+        try:
+            if framework == "sklearn":
+                mlflow.sklearn.log_model(
+                    sk_model=model,
+                    artifact_path=artifact_path,
+                    signature=signature,
+                    registered_model_name=registered_model_name
+                    )
+            elif framework == "lightgbm":
+                mlflow.lightgbm.log_model(
+                    lgb_model=model,
+                    artifact_path=artifact_path,
+                    signature=signature,
+                    registered_model_name=registered_model_name
+                    )
+            elif framework == "xgboost":
+                mlflow.xgboost.log_model(
+                    booster=model,
+                    artifact_path=artifact_path,
+                    signature=signature,
+                    registered_model_name=registered_model_name
+                    )
+            else:
+                raise ValueError(f"Unsupported framework: {framework}")
+
+            # Verify registration if a registered model name is provided
+            if registered_model_name:
+                self._verify_model_registration(registered_model_name)
+        except Exception as e:
+            logger.error(f"Failed to log model: {e}")
+            raise
+
+    def _verify_model_registration(self, model_name: str) -> None:
+        """
+        Verifies if a model is successfully registered in the MLflow Model Registry.
+
+        Args:
+            model_name (str): The name of the registered model to verify.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If the model is not found in the Model Registry.
+        """
+        client = MlflowClient()
+        try:
+            registered_model = client.get_registered_model(name=model_name)
+            logger.success(f"Model --> '{model_name}' is successfully registered. Details:\n {registered_model}")
+        except Exception as e:
+            logger.error(f"Model '{model_name}' could not be found in the Model Registry: {e}")
+            raise RuntimeError(f"Model '{model_name}' is not registered. Please check the registration process.") from e
+
+
