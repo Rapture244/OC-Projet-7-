@@ -2178,3 +2178,122 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return best_threshold
 
 
+# ==================================================================================================================== #
+#                                                    SCORING METRICS                                                   #
+# ==================================================================================================================== #
+    @staticmethod
+    def business_cost(y_true: pd.Series, y_pred: pd.Series) -> float:
+        """
+        Calculate the business cost with a dynamic penalty for FN based on current recall.
+
+        Args:
+            y_true (pd.Series): True target values (binary).
+            y_pred (pd.Series): Predicted target values (binary).
+
+        Returns:
+            float: The calculated business cost (to be minimized).
+        """
+        # Cost constants
+        FN_BASE_COST = 10  # Base cost for FN
+        FP_COST = 1        # Cost for FP
+
+        # Confusion matrix breakdown
+        tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=[0, 1]).ravel()
+
+        # Calculate recall
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0  # Avoid division by zero
+
+        # Dynamic FN cost adjustment based on recall
+        recall_penalty = max(1, 1 / (recall + 1e-6))  # Larger penalty for lower recall
+        adjusted_fn_cost = FN_BASE_COST * recall_penalty
+
+        # Calculate the adjusted business cost
+        business_cost = (fn * adjusted_fn_cost) + (fp * FP_COST)
+
+        # Return the negative of the business cost for maximization
+        return -business_cost
+
+
+    @staticmethod
+    def business_cost_std(y_true: pd.Series, y_pred: pd.Series) -> float:
+        """
+        Standardize the business cost to a score between 0 and 1, strongly emphasizing FN reduction
+        while acknowledging that zero FN is impractical.
+
+        Args:
+            y_true (pd.Series): True target values.
+            y_pred (pd.Series): Predicted target values (binary).
+
+        Returns:
+            float: Standardized score between 0 and 1 (1 being the best score, 0 the worst).
+        """
+        # Cost constants
+        FN_COST = 10  # Increased FN cost for stronger penalty
+        FP_COST = 1   # Cost for False Positives
+
+        # Confusion matrix breakdown
+        tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=[0, 1]).ravel()
+
+        # Current business cost
+        current_cost = (fn * FN_COST) + (fp * FP_COST)
+
+        # Total positives and negatives
+        total_positives = (y_true == 1).sum()
+        total_negatives = (y_true == 0).sum()
+
+        # Worst-case scenario:
+        worst_fn_cost = total_positives * FN_COST
+        worst_fp_cost = total_negatives * FP_COST * 0.5  # Downscaled FP impact
+        worst_cost = worst_fn_cost + worst_fp_cost
+
+        # Target FN for diminishing returns:
+        target_fn = int(0.15 * total_positives)  # 20% of positives as target FN
+
+        # FN penalty adjustment with sharper differentiation:
+        if fn <= target_fn:
+            fn_penalty = FN_COST * ((fn / target_fn) ** 2.5)  # Steeper quadratic scaling
+        else:
+            fn_penalty = FN_COST + (FN_COST * ((fn - target_fn) / total_positives))  # Proportional increase
+
+        # Adjusted current cost:
+        adjusted_cost = (fn * fn_penalty) + (fp * FP_COST * 0.5)  # Slightly reduce FP weight
+
+        # Standardized score calculation:
+        score_standardized = 1 - ((adjusted_cost - 0) / (worst_cost - 0))
+
+        # Ensure the score remains within bounds [0, 1]
+        score_standardized = max(0, min(1, score_standardized))
+
+        return score_standardized
+
+
+
+""" 
+BUSINESS COST EXPLANATION  
+
+Why a negative cost and not a positive cost? ---> In optimization, finding the minimum is always easier than everything !!! 
+
+Components: 
+- False Negatives (FN): Real loss. This happens when a bad customer is predicted as good, leading to a loss of capital (e.g., unpaid loans). This has the highest cost.
+- False Positives (FP): Hypothetical loss. Denying loans to good customers means missing out on potential revenue, but there's no real money lost.
+- True Negatives (TN): Real gain. Correctly identifying good customers avoids bad debts, allowing the bank to earn profit (e.g., from loan repayments or interest).
+
+How to perceive improvements ----> A lower business cost indicates better performance
+1. You are reducing real losses (lower FN).
+2. You are increasing real gains (higher TN).
+3. You are limiting unnecessary denials (reasonable FP).
+
+In term of metrics:
+- Better Recall → Fewer FN → Lower business cost.
+- Higher TN Count → More real gains → Lower business cost.
+
+Interpretation: 
+- A negative business cost (e.g., -50,000) indicates net profit. The larger the magnitude of the negative value, the better (e.g., -80,000 is better than -50,000).
+- A positive business cost (e.g., 20,000) signals net loss. A lower positive value (closer to 0) is better (e.g., 5,000 is better than 20,000).
+
+What to look for ?
+- Pattern: A threshold should strike the right balance between reducing FN and keeping FP low enough to maximize TN gain.
+- Lower Business Cost: If the cost consistently reduces with certain thresholds or cost ratios, it indicates better alignment with business goals.
+- Recall vs Precision Trade-off: Focus on maximizing Recall (reduce FN) while ensuring that Precision (low FP) doesn't degrade excessively.
+"""
+
