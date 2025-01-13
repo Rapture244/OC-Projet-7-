@@ -235,5 +235,52 @@ def list_all_registered_models_and_versions() -> None:
 # list_all_registered_models_and_versions()
 
 
+def transition_model_stage(model_name: str, version: int, stage: str, description: Optional[str] = None) -> None:
+    """
+    Transitions a model version to a specified stage in the MLflow Model Registry and optionally sets a description.
+
+    Args:
+        model_name (str): Name of the registered model.
+        version (int): Version number of the model to transition.
+        stage (str): Target stage (e.g., "Staging", "Production", "Archived").
+        description (Optional[str]): Description to associate with the model version.
+
+    Returns:
+        None
+    """
+    valid_stages = {"None", "Staging", "Production", "Archived"}
+    logger.info(f"=== TRANSITIONING MODEL STAGE ===")
+
+    if stage not in valid_stages:
+        logger.error(f"Invalid stage: {stage}. Must be one of {valid_stages}.")
+        return
+
+    try:
+        client = MlflowClient()
+
+        # Transition the model version to the specified stage
+        client.transition_model_version_stage(
+            name=model_name,
+            version=version,
+            stage=stage,
+            archive_existing_versions=False
+            )
+        logger.success(f"Model '{model_name}' version {version} transitioned to stage '{stage}'.")
+
+        # Optionally update the description
+        if description:
+            client.update_model_version(
+                name=model_name,
+                version=version,
+                description=description
+                )
+            logger.success(f"Description updated for model '{model_name}' version {version}: {description}")
+    except Exception as e:
+        logger.error(f"Failed to transition stage for model '{model_name}' version {version}: {e}")
+
+# Usage Example:
+# transition_model_stage("MyModelName", version=1, stage="Production")
+
+
 
 
