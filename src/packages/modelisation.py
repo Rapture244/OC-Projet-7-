@@ -1775,3 +1775,63 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
                 logger.info(f"Combined image saved as {combined_path}")
 
 
+# ==================================================================================================================== #
+#                                                   MODEL EVALUATION                                                   #
+# ==================================================================================================================== #
+    def instantiate_fit_model(self, X_train: pd.DataFrame, y_train: pd.Series, best_params: Dict[str, Union[str, int, float, Any]]) -> BaseEstimator:
+        """
+        Instantiates a model using the best parameters and fits it, raising a warning if convergence fails.
+
+        Args:
+            X_train (pd.DataFrame): Training feature matrix.
+            y_train (pd.Series): Training target vector.
+            best_params (Dict[str, Union[str, int, float, Any]]): Dictionary of the best hyperparameters for the model.
+
+        Returns:
+            BaseEstimator: The instantiated and fitted model.
+
+        Raises:
+            ValueError: If the specified model type is unsupported.
+        """
+        # Extract the model type from the parameters and remove it from the dictionary
+        params_copy: Dict[str, Any] = best_params.copy()
+        model_type: str = params_copy.pop("model")
+
+        # Dynamically instantiate the appropriate model based on the 'model' type
+        try:
+            if model_type == "LogisticRegression":
+                model = LogisticRegression(**params_copy)
+            elif model_type == "RandomForest":
+                model = RandomForestClassifier(**params_copy)
+            elif model_type == "XGBoost":
+                model = xgb.XGBClassifier(**params_copy)
+            elif model_type == "LightGBM":
+                model = lgb.LGBMClassifier(**params_copy)
+            elif model_type == "DummyClassifier":
+                strategy: str = best_params.get("strategy", "most_frequent")
+                model = DummyClassifier(strategy=strategy)
+            else:
+                raise ValueError(f"Model type {model_type} is not supported.")
+        except Exception as e:
+            logger.error(f"Error instantiating model of type {model_type}: {e}")
+            return None  # Gracefully handle instantiation errors
+
+        logger.success(f"Model object instantiated:\n {model}")
+
+        # Fit the model and handle convergence warnings
+        try:
+            with warnings.catch_warnings():
+                warnings.filterwarnings("error", category=ConvergenceWarning)  # Treat ConvergenceWarning as an error
+                model.fit(X_train, y_train)  # Attempt to fit the model
+                logger.success(f"Model successfully fitted:\n {model}")
+                return model  # Return the fitted model if successful
+        except ConvergenceWarning as e:
+            logger.warning(f"{model_type} model failed to converge: {e}")
+        except Exception as e:
+            logger.error(f"Error fitting {model_type} model: {e}")
+
+        # If the model failed to fit, return None and log the failure
+        logger.warning(f"Skipping model with parameters: {best_params}")
+        return None
+
+
