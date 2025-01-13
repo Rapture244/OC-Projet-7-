@@ -98,10 +98,8 @@ def plot_dtype_distribution(df: pd.DataFrame, main_title: str = "Data Type Distr
 
     logger.debug("Pie and bar charts displayed successfully.")
 
-
 # Example usage:
 # plot_dtype_distribution(df)
-
 
 
 # ==================================================================================================================== #
@@ -176,17 +174,115 @@ def plot_target_distribution(df: pd.DataFrame) -> None:
             )
 
     # Overall title for the figure
-    fig.suptitle('Distribution of TARGET Variable', fontsize=16)
+    fig.suptitle('Distribution of TARGET Variable', fontsize=16, fontweight='bold', color='black', family="Arial")
 
     # Adjust layout and display the plots
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     plt.show()
 
-    # Log success message and perform garbage collection
-    logger.info("TARGET distribution plots displayed successfully.")
-    gc.collect()
     # Log success message
     logger.debug("TARGET distribution plots displayed successfully.")
+
+
+def plot_distribution(df: pd.DataFrame, target_col: str = 'TARGET', category_col: str = None, title: str = 'Insert_title') -> None:
+    """
+    Plots the distribution of a specified categorical variable by target variable
+    and its overall distribution with count annotations.
+
+    Args:
+        df (pd.DataFrame): The dataframe containing the data.
+        target_col (str): The name of the target column (default is 'TARGET').
+        category_col (str): The name of the categorical column to plot (default is None, must be provided).
+        title (str): The title to be used in the plot (default is 'Insert_title').
+
+    Returns:
+        None: Displays the plots.
+
+    Raises:
+        ValueError: If the dataframe is missing necessary columns, is empty, or if category_col is not provided.
+    """
+    # Validate input parameters
+    if category_col is None:
+        logger.error("Category column must be specified.")
+        raise ValueError("category_col cannot be None.")
+
+    if df.empty:
+        logger.error("The dataframe is empty.")
+        raise ValueError("The dataframe must not be empty.")
+
+    required_columns = {target_col, category_col}
+    if not required_columns.issubset(df.columns):
+        logger.error(f"The dataframe must contain the columns: {required_columns}")
+        raise ValueError(f"Dataframe must contain columns: {required_columns}")
+
+    # Define title properties
+    title_props = {"family": "Arial", "color": "black", "weight": "bold", "size": 16}
+
+    # Get unique categories, ignoring NaN values
+    unique_categories = df[category_col].dropna().unique()
+
+    # Define color palette
+    palette = sns.color_palette("colorblind", len(unique_categories))
+    color_mapping = {cat: palette[i] for i, cat in enumerate(unique_categories)}
+    category_order = sorted(unique_categories)
+
+    # Set up the figure
+    fig, axs = plt.subplots(ncols=2, figsize=(16, 8))
+
+    # Plot 1: Distribution of category_col by target_col
+    sns.countplot(
+        data=df,
+        x=target_col,
+        hue=category_col,
+        hue_order=category_order,
+        ax=axs[0],
+        palette=color_mapping
+        )
+    axs[0].set_title('Distribution by TARGET', fontdict=title_props)
+    axs[0].set_xlabel(target_col, fontsize=12)
+    axs[0].set_ylabel(f'Count of {category_col}', fontsize=12)
+    axs[0].legend(title=category_col, fontsize=10, title_fontsize=12)
+
+    # Plot 2: Overall distribution of category_col
+    sns.countplot(
+        data=df,
+        x=category_col,
+        order=category_order,
+        ax=axs[1],
+        palette=color_mapping
+        )
+    axs[1].set_title(f'Distribution of {category_col}', fontdict=title_props)
+    axs[1].set_xlabel(category_col, fontsize=12)
+    axs[1].set_ylabel('Count', fontsize=12)
+
+    # Rotate x-ticks if any category name is too long
+    if any(len(str(cat)) > 3 for cat in category_order):
+        axs[1].tick_params(axis='x', rotation=45)
+
+    # Annotate bar counts
+    for p in axs[1].patches:
+        axs[1].annotate(
+            f'{int(p.get_height()):,}',
+            (p.get_x() + p.get_width() / 2., p.get_height()),
+            ha='center',
+            va='baseline',
+            fontsize=11,
+            color='black',
+            xytext=(0, 5),
+            textcoords='offset points'
+            )
+
+    # Add a main title using the `title` parameter
+    fig.suptitle(title, fontsize=20, fontweight='bold', color='black', family="Arial")
+
+    # Adjust layout and show plots
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    plt.show()
+
+    logger.info(f"Distribution plots for {category_col} by {target_col} generated successfully.")
+
+# Example usage:
+# plot_distribution(df= df, target_col = 'TARGET', category_col = 'NAME_CONTRACT_TYPE', title= 'Loan Type')
 
 
 
