@@ -1100,3 +1100,117 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         return mean_score
 
 
+    def refined_lightgbm_tuning(self, X_train: pd.DataFrame, y_train: pd.Series, max_trials: int = 30) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        """
+        Performs a refined hyperparameter tuning for LightGBM using Optuna and business score as the scorer.
+
+        Args:
+            X_train (pd.DataFrame): Training feature matrix.
+            y_train (pd.Series): Training target vector.
+            max_trials (int): Maximum number of trials for Optuna. Defaults to 50.
+
+        Returns:
+            Tuple[Dict[str, Any], Dict[str, Any]]:
+                - Best hyperparameters (Dict[str, Any]): A dictionary of the best hyperparameters for LightGBM.
+                - Preprocessing details (Dict[str, Any]): A dictionary of preprocessing settings.
+        """
+        def lightgbm_objective(trial: optuna.trial.Trial) -> float:
+            """Objective function for Optuna optimization."""
+            # Define a refined hyperparameter space based on the logs
+            model_params: Dict[str, Any] = {
+                'objective': 'binary',
+                'metric': 'auc',
+                'verbosity': -1,
+                'boosting_type': 'gbdt',
+                'num_leaves': trial.suggest_int('num_leaves', 20, 60),
+                'n_estimators': trial.suggest_int('n_estimators', 300, 1500),
+                'lambda_l2': trial.suggest_loguniform('lambda_l2', 1e-3, 0.5),
+                'feature_fraction': trial.suggest_float('feature_fraction', 0.5, 0.8),
+                'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.05),
+                'min_child_samples': trial.suggest_int('min_child_samples', 20, 120),
+                'class_weight': {0: 1, 1: 10},  # Fixed for imbalanced target
+                'random_state': self.random_state,
+                'device': 'gpu',
+                'gpu_platform_id': 0,
+                'gpu_device_id': 0
+                }
+
+            # Create the LightGBM classifier
+            classifier: lgb.LGBMClassifier = lgb.LGBMClassifier(**model_params)
+
+            # Preprocessing and pipeline creation
+            pipeline: ImbPipeline = self.get_preprocessor_and_pipeline(trial, X_train, classifier)
+
+            # Business scoring function
+            scoring = make_scorer(
+                ModelPipeline.business_cost,
+                greater_is_better=True,
+                response_method="predict"
+                )
+
+            # Cross-validation with n_jobs=1 to prevent GPU contention
+            skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=self.random_state)
+            scores = cross_val_score(pipeline, X_train, y_train, scoring=scoring, cv=skf, n_jobs=1)
+
+            # Log the trial score
+            mean_score = np.mean(scores)
+            logger.info(
+                f"Trial {trial.number}: "
+                f"Score = {mean_score:.4f}, "
+                f"Scorer = {scoring}"
+                )
+
+            # Log GPU state during and after the trial
+            gpus = GPUtil.getGPUs()
+            if not gpus:
+                logger.warning("No GPUs detected after the trial. Ensure GPU is properly configured.")
+            else:
+                for gpu in gpus:
+                    logger.info(f"GPU ID: {gpu.id}, Name: {gpu.name}, "
+                                f"Load: {gpu.load * 100:.1f}%, "
+                                f"Memory: {gpu.memoryUsed}MB/{gpu.memoryTotal}MB")
+
+            # Save trial metadata
+            trial.set_user_attr("metadata", {
+                "preprocessing_used": pipeline.metadata,
+                "best_params": model_params
+                })
+
+            return mean_score
+
+        # Configure Optuna sampler and study
+        sampler = TPESampler(
+            n_startup_trials=10,  # n_startup_trials defines initial random exploration, while max_trials sets the total number of trials including TPE-guided optimization.
+            n_ei_candidates=24,
+            seed=self.random_state
+            )
+
+        # Assign study to self for future access
+        self.study = optuna.create_study(direction="maximize", sampler=sampler)
+
+        # Optimize with n_jobs=1 for GPU-based models
+        self.study.optimize(lightgbm_objective, n_trials=max_trials, n_jobs=1)
+
+        # Retrieve best parameters and preprocessing metadata
+        best_trial = self.study.best_trial
+        best_metadata: Dict[str, Any] = best_trial.user_attrs["metadata"]
+        best_params = {"model": "LightGBM", **best_metadata.get("best_params", {})}
+        preprocessing_used = best_metadata.get("preprocessing_used", {})
+
+        # Logging results
+        logger.success(f"Refined LightGBM tuning completed. Best score: {self.study.best_value:.4f}")
+        logger.success(f"Best hyperparameters: {best_params}")
+        logger.success(f"Preprocessing details: {preprocessing_used}")
+
+        # Log results to MLflow
+        if self.mlflow_tracking:
+            mlflow.log_param("model", "LightGBM")
+            mlflow.log_param("scorer", "business")
+            mlflow.log_param("best_parameters", json.dumps(best_params))
+            mlflow.log_param("preprocessing_used", json.dumps(preprocessing_used))
+            mlflow.log_metric("best_score", round(self.study.best_value, 4))
+            logger.success("MLflow logging completed for LightGBM tuning.")
+
+        return best_params, preprocessing_used
+
+
