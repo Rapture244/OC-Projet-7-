@@ -282,5 +282,48 @@ def transition_model_stage(model_name: str, version: int, stage: str, descriptio
 # transition_model_stage("MyModelName", version=1, stage="Production")
 
 
+def hard_delete_registered_model(model_name: str) -> NoReturn:
+    """
+    Hard deletes a registered model along with all its versions.
+
+    Args:
+        model_name (str): Name of the registered model to delete.
+    """
+    logger.info(f"=== DELETING REGISTERED MODEL ===")
+    client: MlflowClient = MlflowClient()
+
+    try:
+        # Attempt to delete the registered model
+        client.delete_registered_model(name=model_name)
+        logger.success(f"Successfully hard deleted model ---> {model_name}")
+    except Exception as e:
+        # Log the error with details
+        logger.error(f"Failed to hard delete model ---> {model_name} | Error: {e}")
+        raise
+
+# Usage Example:
+# hard_delete_registered_model("MyModelName")
+
+
+def hard_delete_model_version(model_name: str, version: int) -> None:
+    """
+    Hard deletes a specific version of a registered model.
+
+    Args:
+        model_name (str): Name of the registered model.
+        version (int): Version number of the model to delete.
+    """
+    logger.info(f"=== DELETING MODEL VERSION ===")
+    client: MlflowClient = MlflowClient()
+
+    try:
+        # Attempt to delete the specified model version
+        client.delete_model_version(name=model_name, version=version)
+        logger.success(f"Successfully deleted version {version} of model ---> {model_name}")
+    except Exception as e:
+        logger.error(f"Failed to delete version {version} of model ---> {model_name} | Error: {e}")
+
+# Usage Example:
+# hard_delete_model_version("MyModelName", version=3)
 
 
