@@ -100,3 +100,61 @@ def create_experiment(experiment_name: str, artifact_uri: str) -> str:
 
 
 
+def erase_deleted_experiments(db_path: str) -> None:
+    """
+    Permanently deletes all deleted MLflow experiments from the SQLite database.
+
+    Args:
+        db_path (str): Path to the SQLite database file.
+    """
+    logger.info("=== ERASING DELETED EXPERIMENTS ===")
+    logger.debug(f"Using SQLite database at: {db_path}")
+
+    client: MlflowClient = MlflowClient()
+    deleted_experiments: List = client.search_experiments(view_type=ViewType.DELETED_ONLY)
+    deleted_experiment_ids: List[int] = [int(exp.experiment_id) for exp in deleted_experiments]
+
+    # Log the number of deleted experiments found
+    logger.debug(f"Found {len(deleted_experiment_ids)} deleted experiments to process.")
+
+    # Exit early if no deleted experiments are found
+    if not deleted_experiment_ids:
+        logger.success("No deleted experiments to hard delete.")
+        return
+
+    logger.debug(f"Hard deleting experiments with IDs: {deleted_experiment_ids}")
+
+    try:
+        # Connect to the SQLite database
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.cursor()
+
+            # Delete records from the "experiments" table
+            logger.debug("Deleting records from the 'experiments' table.")
+            query = (
+                f"DELETE FROM experiments WHERE experiment_id IN ({', '.join(['?'] * len(deleted_experiment_ids))})"
+            )
+            cursor.execute(query, deleted_experiment_ids)
+
+            # Delete records from the "runs" table associated with the experiments
+            logger.debug("Deleting records from the 'runs' table.")
+            query = (
+                f"DELETE FROM runs WHERE experiment_id IN ({', '.join(['?'] * len(deleted_experiment_ids))})"
+            )
+            cursor.execute(query, deleted_experiment_ids)
+
+            # Commit changes
+            conn.commit()
+            logger.success(f"Successfully hard deleted experiments: {deleted_experiment_ids}")
+
+    except sqlite3.Error as e:
+        logger.error(f"Error interacting with SQLite database: {e}")
+    finally:
+        logger.debug("SQLite connection closed")
+
+# usage example
+# sqlite_db_path: str = f"{ML_FLOW_DIR}/ml_flow.db"
+# erase_deleted_experiments(sqlite_db_path)
+
+
+
