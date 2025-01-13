@@ -206,22 +206,13 @@ def display_importances(feature_importance_df_: pd.DataFrame, top_n: int = 40) -
 # ==================================================================================================================== #
 #                                                  FILLING NAN VALUES                                                  #
 # ==================================================================================================================== #
-import faiss
-import numpy as np
-import pandas as pd
-from loguru import logger
-from sklearn.preprocessing import RobustScaler
-import warnings
-from typing import List
-
-warnings.filterwarnings("ignore", category=SyntaxWarning)
-
+@logger.catch
 def faiss_knn_imputation(
         df: pd.DataFrame,
         target_column: str = "TARGET",
         bool_column: str = "CODE_GENDER_0",
         threshold: float = 25.0,
-        valid_row_threshold: float = 0.5,  # Adjusted to 50% for more valid rows
+        valid_row_threshold: float = 0.5,
         batch_size: int = 40000
         ) -> pd.DataFrame:
     """
@@ -230,119 +221,120 @@ def faiss_knn_imputation(
         - Iterative for columns > threshold missing values.
         - Valid rows: rows with > valid_row_threshold non-NaN values.
         - Remaining NaNs after FAISS are filled with the column median.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame with missing values.
+        target_column (str): Target column to exclude from imputation.
+        bool_column (str): Boolean column to exclude from scaling.
+        threshold (float): Missing value threshold for non-iterative vs. iterative imputation.
+        valid_row_threshold (float): Minimum fraction of valid values required per row.
+        batch_size (int): Batch size for FAISS nearest neighbor search.
+
+    Returns:
+        pd.DataFrame: DataFrame with imputed values.
     """
-    try:
-        logger.info(f"Starting FAISS KNN imputation for dataframe with shape: {df.shape}")
-        df = df.copy()
+    logger.info(f"Starting FAISS KNN imputation for dataframe with shape: {df.shape}")
 
-        # Store original data types
-        original_dtypes = df.dtypes
+    # Copy DataFrame to avoid modifying the original
+    df = df.copy()
 
-        # Replace infinite values with NaN
-        df.replace([np.inf, -np.inf], np.nan, inplace=True)
+    # Replace infinite values with NaN
+    df.replace([np.inf, -np.inf], np.nan, inplace=True)
 
-        # Exclude target column and split into column groups
-        complete_cols: List[str] = df.columns[df.isna().sum() == 0].tolist()
-        target_excluded = [col for col in df.columns if col != target_column]
-        features: List[str] = [col for col in target_excluded if col not in complete_cols]
-        missing_percentage = df[features].isna().mean().sort_values()
+    # Store original data types
+    original_dtypes = df.dtypes
 
-        non_iterative_cols = missing_percentage[missing_percentage <= threshold / 100].index.tolist()
-        iterative_cols = missing_percentage[missing_percentage > threshold / 100].index.tolist()
+    # Identify features to impute
+    complete_cols = df.columns[df.isna().sum() == 0].tolist()
+    features = [col for col in df.columns if col not in complete_cols + [target_column]]
+    missing_percentage = df[features].isna().mean()
 
-        logger.info(f"Fully filled columns: {complete_cols}")
-        logger.info(f"Non-Iterative Columns (<= {threshold}% missing): {non_iterative_cols}")
-        logger.info(f"Iterative Columns (> {threshold}% missing): {iterative_cols}")
+    non_iterative_cols = missing_percentage[missing_percentage <= threshold / 100].index.tolist()
+    iterative_cols = missing_percentage[missing_percentage > threshold / 100].index.tolist()
 
-        # Prepare RobustScaler for numeric columns except the bool column
-        scaler = RobustScaler()
-        scale_cols = [col for col in features if col != bool_column]
-        df_scaled = df.copy()
-        df_scaled[scale_cols] = scaler.fit_transform(df[scale_cols])
+    logger.info(f"Non-Iterative Columns: {non_iterative_cols}")
+    logger.info(f"Iterative Columns: {iterative_cols}")
 
-        # Define FAISS Imputation Function
-        def faiss_impute(current_col: str, df_scaled: pd.DataFrame, iterative: bool = False):
-            """Impute missing values for the specified column using FAISS KNN."""
-            other_cols = [c for c in scale_cols if c != current_col]
+    # Scale numeric features, excluding boolean columns
+    scaler = RobustScaler()
+    scale_cols = [col for col in features if col != bool_column]
+    df_scaled = df.copy()
+    df_scaled[scale_cols] = scaler.fit_transform(df[scale_cols])
 
-            # Valid rows threshold
-            valid_rows = df_scaled[other_cols].notna().sum(axis=1) >= len(other_cols) * valid_row_threshold
-            valid_rows &= df_scaled[current_col].notna()
-            valid_data = df_scaled.loc[valid_rows, other_cols].to_numpy().astype(np.float32)
+    # Define FAISS Imputation Function
+    def faiss_impute(column: str, iterative: bool = False):
+        """Impute missing values for a single column using FAISS."""
+        other_cols = [c for c in scale_cols if c != column]
 
-            if len(valid_data) == 0:
-                logger.warning(f"No valid rows available for column '{current_col}'. Skipping...")
-                return
+        # Filter valid rows
+        valid_rows = df_scaled[other_cols].notna().sum(axis=1) >= len(other_cols) * valid_row_threshold
+        valid_rows &= df_scaled[column].notna()
+        valid_data = df_scaled.loc[valid_rows, other_cols].to_numpy().astype(np.float32)
 
-            row_norms = np.linalg.norm(valid_data, axis=1, keepdims=True)
-            normalized_data = valid_data / np.maximum(row_norms, 1e-8)
+        if valid_data.size == 0:
+            logger.warning(f"No valid rows found for column: {column}")
+            return
 
-            # Build FAISS Index
-            index = faiss.IndexFlatIP(normalized_data.shape[1])
-            index.add(normalized_data)
+        # Normalize data and build FAISS index
+        norms = np.linalg.norm(valid_data, axis=1, keepdims=True)
+        normalized_data = valid_data / np.maximum(norms, 1e-8)
+        index = faiss.IndexFlatIP(normalized_data.shape[1])
+        index.add(normalized_data)
 
-            rows_with_nan = df_scaled[other_cols].notna().sum(axis=1) >= len(other_cols) * valid_row_threshold
-            rows_with_nan &= df_scaled[current_col].isna()
-            rows_to_impute = df_scaled.loc[rows_with_nan, other_cols].to_numpy().astype(np.float32)
+        # Identify rows to impute
+        rows_to_impute = df_scaled.loc[
+            (df_scaled[other_cols].notna().sum(axis=1) >= len(other_cols) * valid_row_threshold)
+            & (df_scaled[column].isna()),
+            other_cols
+        ].to_numpy().astype(np.float32)
 
-            if len(rows_to_impute) == 0:
-                logger.warning(f"No rows to impute for column '{current_col}'.")
-                return
+        if rows_to_impute.size == 0:
+            logger.warning(f"No rows to impute for column: {column}")
+            return
 
-            row_norms = np.linalg.norm(rows_to_impute, axis=1, keepdims=True)
-            normalized_rows = rows_to_impute / np.maximum(row_norms, 1e-8)
+        # Normalize rows to impute
+        norms = np.linalg.norm(rows_to_impute, axis=1, keepdims=True)
+        normalized_rows = rows_to_impute / np.maximum(norms, 1e-8)
 
-            imputed_values = []
-            for start_idx in range(0, normalized_rows.shape[0], batch_size):
-                batch = normalized_rows[start_idx:start_idx + batch_size]
-                _, neighbors = index.search(batch, 50)  # Increase k to 50
-                for neighbor_idx in neighbors:
-                    neighbor_values = valid_data[neighbor_idx][:, 0]
-                    valid_neighbors = neighbor_values[~np.isnan(neighbor_values)]
-                    if len(valid_neighbors) == 0:  # Check if there are no valid neighbors
-                        logger.warning(f"No valid neighbors found for batch in column '{current_col}'")
-                        imputed_values.append(np.nan)
-                    else:
-                        imputed_values.append(np.median(valid_neighbors))
+        # Perform batched FAISS nearest-neighbor search
+        imputed_values = []
+        for start in range(0, len(normalized_rows), batch_size):
+            batch = normalized_rows[start:start + batch_size]
+            _, neighbors = index.search(batch, 50)  # Find 50 nearest neighbors
+            for neighbor_idx in neighbors:
+                neighbor_values = valid_data[neighbor_idx][:, 0]
+                valid_neighbors = neighbor_values[~np.isnan(neighbor_values)]
+                imputed_values.append(np.median(valid_neighbors) if valid_neighbors.size > 0 else np.nan)
 
-            df_scaled.loc[rows_with_nan, current_col] = imputed_values
+        # Update the DataFrame with imputed values
+        df_scaled.loc[rows_to_impute.index, column] = imputed_values
 
-        # Non-Iterative Imputation
-        for i, col in enumerate(non_iterative_cols):
-            logger.info(f"Non-Iterative FAISS --> {i+1}/{len(non_iterative_cols)} | {col}")
-            faiss_impute(col, df_scaled, iterative=False)
+    # Impute non-iterative columns
+    for col in non_iterative_cols:
+        logger.info(f"Imputing non-iterative column: {col}")
+        faiss_impute(col)
 
-        # Iterative Imputation
-        for i, col in enumerate(iterative_cols):
-            logger.info(f"Iterative FAISS --> {i+1}/{len(iterative_cols)} | {col}")
-            faiss_impute(col, df_scaled, iterative=True)
+    # Impute iterative columns
+    for col in iterative_cols:
+        logger.info(f"Imputing iterative column: {col}")
+        faiss_impute(col, iterative=True)
 
-        # Reverse scaling
-        df[scale_cols] = scaler.inverse_transform(df_scaled[scale_cols])
+    # Reverse scaling
+    df[scale_cols] = scaler.inverse_transform(df_scaled[scale_cols])
 
-        # Check for remaining NaN values and fill with median
-        remaining_nans = df[features].isna().sum()
-        remaining_cols = remaining_nans[remaining_nans > 0].index.tolist()
+    # Fill remaining NaNs with column medians
+    for col in features:
+        if df[col].isna().any():
+            median = df[col].median()
+            df[col].fillna(median, inplace=True)
+            logger.warning(f"Filled remaining NaNs in column '{col}' with median value: {median}")
 
-        if remaining_cols:
-            logger.warning("The following columns still contain NaN values after FAISS imputation:")
-            for col in remaining_cols:
-                percent_missing = (remaining_nans[col] / len(df)) * 100
-                logger.warning(f" - Column '{col}': {percent_missing:.5f}% missing ({remaining_nans[col]} rows)")
-                # Fill with median
-                df[col].fillna(df[col].median(), inplace=True)
-                logger.info(f"Filled column '{col}' with its median value.")
+    # Restore original data types
+    for col in features:
+        df[col] = df[col].astype(original_dtypes[col])
 
-        # Reapply original data types
-        for col in features:
-            df[col] = df[col].astype(original_dtypes[col])
-
-        logger.info("FAISS KNN imputation complete.")
-        return df[[target_column] + [col for col in df.columns if col != target_column]]
-
-    except Exception as e:
-        logger.exception(f"Error during FAISS KNN imputation: {e}")
-        raise
+    logger.success("FAISS KNN imputation completed successfully.")
+    return df[[target_column] + [col for col in df.columns if col != target_column]]
 
 
 
