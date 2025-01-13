@@ -1318,13 +1318,13 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 
 
     # =============================================== MLFLOW_LOG_MODEL =============================================== #
-    def mlflow_log_model(self, model: Any, x_train: pd.DataFrame, registered_model_name: Optional[str] = None) -> None:
+    def mlflow_log_model(self, model: Any, X_train: pd.DataFrame, registered_model_name: Optional[str] = None) -> None:
         """
         Logs a model as an artifact to the current MLflow run and optionally registers it in the MLflow Model Registry.
 
         Args:
             model (Any): The model to log.
-            x_train (pd.DataFrame): Training data for inferring input-output signatures.
+            X_train (pd.DataFrame): Training data for inferring input-output signatures.
             registered_model_name (Optional[str]): If provided, registers the model in the Model Registry under this name.
 
         Returns:
@@ -1336,9 +1336,9 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         # Infer input-output signature
         signature = None
         try:
-            if x_train is not None and hasattr(model, "predict"):
-                predictions = model.predict(x_train.sample(min(50, len(x_train)), random_state=self.random_state))
-                signature = infer_signature(x_train, predictions)
+            if X_train is not None and hasattr(model, "predict"):
+                predictions = model.predict(X_train.sample(min(50, len(X_train)), random_state=self.random_state))
+                signature = infer_signature(X_train, predictions)
         except Exception as e:
             logger.warning(f"Could not infer signature: {e}")
 
