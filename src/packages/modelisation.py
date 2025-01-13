@@ -1386,3 +1386,35 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             raise RuntimeError(f"Model '{model_name}' is not registered. Please check the registration process.") from e
 
 
+    @staticmethod
+    def load_model(model_path: Path) -> Any:
+        """
+        Loads a saved model from the specified file path.
+
+        Args:
+            model_path (Path): Path to the saved model file.
+
+        Returns:
+            Any: The loaded model object.
+        """
+        try:
+            # Load the model using joblib
+            model = joblib.load(model_path)
+            logger.info(f"Model loaded successfully from: {model_path}")
+
+            # Check if the model is LightGBM or XGBoost and re-wrap if needed
+            if isinstance(model, lgb.Booster):
+                logger.warning("Loaded a raw LightGBM Booster. Ensure the Python wrapper (LGBMClassifier/Regressor) is preserved.")
+            elif isinstance(model, xgb.Booster):
+                logger.warning("Loaded a raw XGBoost Booster. Ensure the Python wrapper (XGBClassifier/Regressor) is preserved.")
+
+            return model
+        except FileNotFoundError:
+            logger.error(f"File not found: {model_path}")
+            raise
+        except Exception as e:
+            logger.error(f"Failed to load model from {model_path}: {e}")
+            raise
+
+
+
