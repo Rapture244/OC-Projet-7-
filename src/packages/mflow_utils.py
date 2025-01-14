@@ -239,51 +239,44 @@ def list_all_registered_models_and_versions() -> None:
 # Usage Example:
 # list_all_registered_models_and_versions()
 
+
 def list_all_registered_models_and_versions_with_details() -> None:
     """
     Lists all registered models and all their versions in the MLflow Model Registry,
     including aliases and tags.
     """
     logger.info("=== LISTING ALL REGISTERED MODELS, VERSIONS, ALIASES, AND TAGS ===")
-    client: MlflowClient = MlflowClient()
+    client = MlflowClient()
     registered_models = client.search_registered_models()
 
     if not registered_models:
-        logger.success("No registered models found in the MLflow Model Registry\n")
+        logger.info("No registered models found in the MLflow Model Registry\n")
         return
 
     for model in registered_models:
-        logger.success(f"Model Name ---> '{model.name}'")
+        logger.info(f"Model Name ---> '{model.name}'")
 
-        # Fetch all versions of the current model
-        model_versions = client.search_model_versions(f"name='{model.name}'")
+        # Get a "summary" list of versions for this model
+        model_versions_summary = client.search_model_versions(f"name='{model.name}'")
 
-        for version in model_versions:
-            # Extract aliases from tags
-            aliases = [
-                key.replace("mlflow.alias.", "")
-                for key, value in version.tags.items()
-                if key.startswith("mlflow.alias.")
-                ]
+        for version_summary in model_versions_summary:
+            # Re-fetch each version individually, so aliases will be included
+            full_version_obj = client.get_model_version(
+                name=version_summary.name,
+                version=version_summary.version
+                )
 
-            # Get tags for the current version
-            tags = version.tags
+            # Extract aliases from the fully populated object
+            aliases = full_version_obj.aliases if hasattr(full_version_obj, "aliases") else []
+            tags = full_version_obj.tags
 
             logger.debug(
-                f" - Version {version.version:<3} | Stage: {version.current_stage:<10} | "
-                f"Run ID: {version.run_id:<35} | Description: {version.description or 'None'}"
+                f" - Version {full_version_obj.version:<3} | "
+                f"Run ID: {full_version_obj.run_id:<40} | "
+                f"Description: {full_version_obj.description or 'None'}"
                 )
             logger.debug(f"   - Aliases: {aliases or 'None'}")
             logger.debug(f"   - Tags: {tags or 'None'}")
-
-# mlflow_set_alias_and_tags(
-#     registered_model_name="LGBMClassifier - business",
-#     version=1,
-#     alias="candidate",
-#     tags={"environment": "staging", "custom_threshold": "0.46", "business_cost_std": "0.71"},
-#     description="Initial staging model with tuned hyperparameters."
-#     )
-#
 
 # ============================================= MLFLOW_SET_ALIAS_AND_TAGS ======================================== #
 def mlflow_set_alias_tags_and_description(registered_model_name: str, version: int, alias: str, tags: Dict[str, str], description: Optional[str] = None) -> None:
@@ -314,7 +307,9 @@ def mlflow_set_alias_tags_and_description(registered_model_name: str, version: i
         # Add tags to the specific version
         for key, value in tags.items():
             client.set_model_version_tag(registered_model_name, version, key, value)
-            logger.success(f"    - Added tag '{key}: {value}'")
+
+        # Log the full dictionary of tags
+        logger.success(f"    - Added tags: {tags}")
 
         # Add a description if provided
         if description:
@@ -327,6 +322,15 @@ def mlflow_set_alias_tags_and_description(registered_model_name: str, version: i
     except Exception as e:
         logger.error(f"Failed to set alias, tags, or description for model '{registered_model_name}' version '{version}': {e}")
         raise
+
+# mlflow_set_alias_tags_and_description(
+#     registered_model_name="LGBMClassifier - business",
+#     version=1,
+#     alias="candidate",
+#     tags={"environment": "staging", "custom_threshold": "0.46", "business_cost_std": "0.71"},
+#     description="Initial staging model with tuned hyperparameters."
+#     )
+#
 
 
 def hard_delete_registered_model(model_name: str) -> None:
