@@ -1,3 +1,13 @@
+"""
+- cd to 'api/' and 'python main.py'
+- the script starts by running the mlflow server so i can have access to the model and load it
+- the API code then starts
+- then i can test it using 'streamlit run streamlit_test.py' inside the 'api/'
+
+
+"""
+
+
 from flask import Flask, request, jsonify
 import joblib
 import pandas as pd
@@ -11,6 +21,9 @@ import mlflow.pyfunc
 from werkzeug.exceptions import BadRequest  # Import BadRequest exception
 from mlflow.lightgbm import load_model
 from mlflow import MlflowClient
+import subprocess
+import time  # To add a delay and ensure MLflow server starts before loading the model
+
 
 
 # ==================================================================================================================== #
@@ -18,6 +31,8 @@ from mlflow import MlflowClient
 # ==================================================================================================================== #
 # MLflow Tracking URI
 MLFLOW_TRACKING_URI = "http://127.0.0.1:5000"
+MLFLOW_BACKEND_STORE_URI = "sqlite:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/ml_flow.db"
+MLFLOW_ARTIFACT_ROOT = "file:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/artifacts"
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
 # Model Details
@@ -39,6 +54,36 @@ if not DATASET_PATH .exists():
 # Loguru Configuration
 LOG_PATH = Path(LOG_DIR / "api")
 logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
+
+
+# ==================================================================================================================== #
+#                                             START MLFLOW SERVER PROGRAMMATICALLY                                     #
+# ==================================================================================================================== #
+def start_mlflow_server():
+    """
+    Starts the MLflow server in a subprocess and waits for it to be ready.
+    """
+    logger.info("Starting MLflow Tracking Server...")
+    mlflow_process = subprocess.Popen(
+        [
+            "mlflow", "server",
+            "--backend-store-uri", MLFLOW_BACKEND_STORE_URI,
+            "--default-artifact-root", MLFLOW_ARTIFACT_ROOT,
+            "--host", "127.0.0.1",
+            "--port", "5000"
+            ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+        )
+
+    # Wait for MLflow server to initialize
+    time.sleep(5)
+    logger.info("MLflow server started successfully.")
+    return mlflow_process
+
+
+# Start MLflow server
+mlflow_process = start_mlflow_server()
 
 
 # ==================================================================================================================== #
@@ -207,5 +252,12 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    try:
+        app.run(debug=True)
+    finally:
+        # Ensure MLflow server is terminated when the Flask app exits
+        logger.info("Shutting down MLflow server...")
+        mlflow_process.terminate()
+        mlflow_process.wait()
+        logger.info("MLflow server stopped.")
 
