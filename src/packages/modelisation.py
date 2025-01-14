@@ -1599,7 +1599,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             threshold_to_use = threshold
             logger.info(f"Evaluating model '{model_name}' with custom threshold = {threshold_to_use}.")
             if self.mlflow_tracking and log_to_mlflow:
-                mlflow.log_param("custom_threshold", threshold_to_use)
+                mlflow.log_param("custom_threshold", round(threshold_to_use, 2))
 
         # Generate predictions using the determined threshold
         y_pred: pd.Series = (y_proba >= threshold_to_use).astype(int)
