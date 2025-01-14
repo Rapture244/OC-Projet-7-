@@ -34,12 +34,6 @@ LOG_PATH = Path(LOG_DIR / "api")
 logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
 
 
-
-# Scaler
-SCALER_NAME = "2025-01-11 - RobustScaler.joblib"
-SCALER_PATH = Path(MODEL_DIR / SCALER_NAME)
-
-
 # ==================================================================================================================== #
 #                                            LOADING RESOURCES FROM MLFLOW                                             #
 # ==================================================================================================================== #
@@ -52,18 +46,38 @@ try:
 
     model = mlflow.pyfunc.load_model(model_uri)
     logger.success(f"Model loaded successfully from MLflow Model Registry: {model_uri}")
+
+    # Retrieve the run ID associated with the loaded model
+    run_id = mlflow.get_run(model.metadata.run_id).info.run_id
+    logger.info(f"Retrieved run ID for the model: {run_id}")
 except Exception as e:
     logger.error(f"Error loading model from MLflow: {e}")
     raise RuntimeError("An error occurred while loading the model from MLflow. Please check the logs.")
 
+
 # Load Scaler from MLflow Artifacts
 try:
-    with mlflow.start_run() as run:
-        # Get the scaler artifact URI from the model's run
-        scaler_path = mlflow.artifacts.download_artifacts(artifact_path="scalers/2025-01-14 - RobustScaler.joblib", run_id=run.info.run_id)
+    # Retrieve the run ID from the loaded model
+    run_id = model.metadata.run_id
+    logger.info(f"Using run ID: {run_id} to fetch artifacts")
 
+    # List all artifacts under the "scalers" directory in the run
+    artifact_list = mlflow.artifacts.list_artifacts(run_id=run_id, path="scalers")
+    logger.debug(f"Artifacts found in 'scalers': {[artifact.path for artifact in artifact_list]}")
+
+    # Find the scaler artifact with 'RobustScaler.joblib' in its name
+    scaler_artifact = next(
+        artifact for artifact in artifact_list if "RobustScaler.joblib" in artifact.path
+        )
+    logger.info(f"Scaler artifact found: {scaler_artifact.path}")
+
+    # Download the scaler
+    scaler_path = mlflow.artifacts.download_artifacts(artifact_path=scaler_artifact.path, run_id=run_id)
     robust_scaler = joblib.load(scaler_path)
-    logger.success(f"Scaler loaded successfully from MLflow artifacts: {scaler_path}")
+    logger.success(f"Scaler loaded successfully from: {scaler_path}")
+except StopIteration:
+    logger.error("No scaler artifact found with 'RobustScaler.joblib' in its name.")
+    raise RuntimeError("Could not find the scaler artifact in the MLflow run artifacts.")
 except Exception as e:
     logger.error(f"Error loading scaler from MLflow: {e}")
     raise RuntimeError("An error occurred while loading the scaler from MLflow. Please check the logs.")
