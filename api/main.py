@@ -19,7 +19,7 @@ mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
 # Model Details
 MODEL_NAME = 'LGBMClassifier - business'
-MODEL_VERSION = None  # Use "None" for the latest version or specify an integer version
+MODEL_ALIAS = 'champion'
 
 # Dataset Path
 DATASET_NAME = "04_prediction_df.csv"
@@ -39,11 +39,8 @@ logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
 # ==================================================================================================================== #
 # Load Model from MLflow Model Registry
 try:
-    if MODEL_VERSION:
-        model_uri = f"models:/{MODEL_NAME}/{MODEL_VERSION}"
-    else:
-        model_uri = f"models:/{MODEL_NAME}/latest"
-
+    # Use the alias instead of stages
+    model_uri = f"models:/{MODEL_NAME}@{MODEL_ALIAS}"
     model = mlflow.pyfunc.load_model(model_uri)
     logger.success(f"Model loaded successfully from MLflow Model Registry: {model_uri}")
 
@@ -81,6 +78,19 @@ except StopIteration:
 except Exception as e:
     logger.error(f"Error loading scaler from MLflow: {e}")
     raise RuntimeError("An error occurred while loading the scaler from MLflow. Please check the logs.")
+
+
+# Fetch the custom threshold from the model's run
+try:
+    custom_threshold = float(mlflow.get_run(run_id).data.params["custom_threshold"])
+    logger.info(f"Retrieved custom threshold: {custom_threshold}")
+except KeyError:
+    logger.error("The parameter 'custom_threshold' was not found in the run's parameters.")
+    raise RuntimeError("The 'custom_threshold' parameter is missing from the MLflow run parameters.")
+except Exception as e:
+    logger.error(f"Error fetching custom threshold: {e}")
+    raise RuntimeError("An error occurred while retrieving the custom threshold. Please check the logs.")
+
 
 
 # ==================================================================================================================== #
@@ -123,22 +133,22 @@ except Exception as e:
 # ==================================================================================================================== #
 #                                                      DEBUG CHECK                                                     #
 # ==================================================================================================================== #
-# Log predicted probabilities for the first 1000 rows
+# Log predicted probabilities for the first 50 rows
 try:
     logger.info("Calculating predicted probabilities for the first 50 rows...")
     # Exclude "SK_ID_CURR" for predictions
     user_data_first_50 = dataset_scaled.drop(columns=["SK_ID_CURR"]).head(50)
 
-    # Predict probabilities for the first 1000 rows
-    proba_first_1000 = model.predict_proba(user_data_first_50)[:, 1]
+    # Predict probabilities for the first 50 rows
+    proba_first_50 = model.predict_proba(user_data_first_50)[:, 1]
 
     # Log the SK_ID_CURR with the probabilities
-    for idx, proba in zip(dataset_scaled["SK_ID_CURR"].head(1000), proba_first_1000):
+    for idx, proba in zip(dataset_scaled["SK_ID_CURR"].head(50), proba_first_50):
         logger.debug(f"SK_ID_CURR: {idx}, Predicted Proba: {round(proba, 2)}")
 
-    logger.info("Logged predicted probabilities for the first 1000 rows successfully.")
+    logger.info("Logged predicted probabilities for the first 50 rows successfully.")
 except Exception as e:
-    logger.error(f"Error logging predicted probabilities for the first 1000 rows: {e}")
+    logger.error(f"Error logging predicted probabilities for the first 50 rows: {e}")
     raise RuntimeError("An error occurred while logging predicted probabilities. Please check the logs for details.")
 
 
@@ -180,7 +190,7 @@ def predict():
 
         # Predict using the loaded model
         proba = model.predict(user_data).iloc[0]  # Predict method for MLflow model
-        prediction = 1 if proba >= 0.46 else 0  # Apply custom threshold
+        prediction = 1 if proba >= custom_threshold else 0  # Apply dynamic custom threshold
 
         # Define status based on prediction
         status = "Granted" if prediction == 0 else "Denied"
