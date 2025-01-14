@@ -7,6 +7,7 @@ from pathlib import Path
 from sklearn.preprocessing import RobustScaler
 from typing import Any
 from packages.constants.paths import MODEL_DIR, LOG_DIR, PROCESSED_DATA_DIR
+from werkzeug.exceptions import BadRequest  # Import BadRequest exception
 
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
@@ -14,32 +15,27 @@ from packages.constants.paths import MODEL_DIR, LOG_DIR, PROCESSED_DATA_DIR
 
 # Model Details
 MODEL_NAME = "2025-01-14 - LGBMClassifier - business.joblib"
-MODEL_PATH = Path(MODEL_DIR / MODEL_NAME)
+MODEL_PATH = Path(MODEL_DIR) / MODEL_NAME
 THRESHOLD = 0.43
 
 # Scaler Details
 SCALER_NAME = "2025-01-14 - RobustScaler.joblib"
-SCALER_PATH = Path(MODEL_DIR / SCALER_NAME)
+SCALER_PATH = Path(MODEL_DIR) / SCALER_NAME
 
 # Dataset Path
 DATASET_NAME = "04_prediction_df.csv"
-DATASET_PATH = Path(PROCESSED_DATA_DIR / DATASET_NAME)
-
+DATASET_PATH = Path(PROCESSED_DATA_DIR) / DATASET_NAME
 
 # Loguru Configuration
-LOG_PATH = Path(LOG_DIR / "api")
+LOG_PATH = Path(LOG_DIR) / "api"
 logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
 
-
-# ================================================ PYTEST HERE MAYBE ? =============================================== #
-# File details
-paths_to_check = {
-    "Model": Path(MODEL_DIR / "2025-01-14 - LGBMClassifier - business.joblib"),
-    "Scaler": Path(MODEL_DIR / "2025-01-14 - RobustScaler.joblib"),
-    "Dataset": Path(PROCESSED_DATA_DIR / "04_prediction_df.csv")
-    }
-
 # Path existence check
+paths_to_check = {
+    "Model": MODEL_PATH,
+    "Scaler": SCALER_PATH,
+    "Dataset": DATASET_PATH,
+    }
 for name, path in paths_to_check.items():
     if not path.exists():
         logger.error(f"{name} file not found at {path}")
@@ -75,7 +71,10 @@ except Exception as e:
     logger.error(f"Error loading dataset: {e}")
     raise RuntimeError("An error occurred while loading the dataset. Please check the logs for more details.")
 
-# =================================================== PREPROCESSING ================================================== #
+
+# ==================================================================================================================== #
+#                                                     PREPROCESSING                                                    #
+# ==================================================================================================================== #
 
 # Apply RobustScaler with PassThrough
 try:
@@ -90,16 +89,36 @@ try:
     numeric_scaled_df = pd.DataFrame(numeric_scaled, columns=numeric_features, index=dataset.index)
 
     # Combine scaled numeric features with passthrough columns
-    passthrough_data = dataset[passthrough_features]  # Keep passthrough columns untouched
+    passthrough_data = dataset[passthrough_features]        # Keep passthrough columns untouched
     dataset_scaled = pd.concat([numeric_scaled_df, passthrough_data], axis=1)
-
-    # Ensure columns are in the original order
-    dataset_scaled = dataset_scaled[dataset.columns]  # Reorder to match the original structure
+    dataset_scaled = dataset_scaled[dataset.columns]        # Reorder to match the original structure
 
     logger.success("Applied RobustScaler to numeric features successfully.")
 except Exception as e:
     logger.error(f"Error applying RobustScaler: {e}")
     raise RuntimeError("An error occurred while scaling the dataset. Please check the logs for more details.")
+
+# ==================================================================================================================== #
+#                                  LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                                   #
+# ==================================================================================================================== #
+try:
+    logger.info("Calculating predicted probabilities for the first 20 rows...")
+    # Exclude "SK_ID_CURR" for predictions
+    user_data_first_20 = dataset_scaled.drop(columns=["SK_ID_CURR"]).head(20)
+
+    # Predict probabilities for the first 20 rows
+    proba_first_20 = model.predict_proba(user_data_first_20)[:, 1]
+
+    # Log the SK_ID_CURR with the probabilities
+    for idx, proba in zip(dataset_scaled["SK_ID_CURR"].head(20), proba_first_20):
+        logger.debug(f"SK_ID_CURR: {idx}, Predicted Proba: {round(proba, 2)}")
+
+    logger.success("Logged predicted probabilities for the first 20 rows successfully.")
+except Exception as e:
+    logger.error(f"Error logging predicted probabilities for the first 20 rows: {e}")
+    raise RuntimeError("An error occurred while logging predicted probabilities. Please check the logs for details.")
+
+
 
 # ==================================================================================================================== #
 #                                                          API                                                         #
@@ -117,20 +136,28 @@ def predict():
     """
     try:
         # Parse JSON request
-        user_request = request.get_json(force=True)
+        try:
+            user_request = request.get_json(force=True)
+        except BadRequest:
+            return jsonify({"error": "Invalid JSON payload"}), 400
+
         user_id = str(user_request.get("id", None))
 
-        if not user_id:
+        # Validate input ID
+        if not user_id or user_id.strip() == "":
             return jsonify({"error": "Missing or invalid 'id' in request payload"}), 400
 
-        # Validate ID
+        # Check if ID exists in the dataset
         if user_id not in dataset_scaled["SK_ID_CURR"].astype(str).values:
             return jsonify({"error": f"ID {user_id} not found in the dataset"}), 404
 
         # Prepare data for prediction
         user_data = dataset_scaled.loc[dataset_scaled["SK_ID_CURR"] == user_id].drop(columns=["SK_ID_CURR"])
-        proba = model.predict_proba(user_data)[0][1]  # Predicted probability
-        prediction = int(proba >= 0.5)  # Default threshold of 0.5
+        if user_data.empty:
+            return jsonify({"error": "No valid data for prediction"}), 400
+
+        proba = model.predict_proba(user_data)[0][1]
+        prediction = int(proba >= THRESHOLD)
         status = "Granted" if prediction == 0 else "Denied"
 
         return jsonify({
