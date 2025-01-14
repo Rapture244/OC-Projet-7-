@@ -9,6 +9,9 @@ from sklearn.preprocessing import RobustScaler
 from typing import Tuple, Type, Any, Dict, Optional, List, Union
 import mlflow.pyfunc
 from werkzeug.exceptions import BadRequest  # Import BadRequest exception
+from mlflow.lightgbm import load_model
+from mlflow import MlflowClient
+
 
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
@@ -20,6 +23,10 @@ mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 # Model Details
 MODEL_NAME = 'LGBMClassifier - business'
 MODEL_ALIAS = 'champion'
+
+# Scaler Details
+SCALER_DIR = "scalers"
+SCALER_FILENAME = "2025-01-14 - RobustScaler.joblib"  # Example filename
 
 # Dataset Path
 DATASET_NAME = "04_prediction_df.csv"
@@ -37,44 +44,33 @@ logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
 # ==================================================================================================================== #
 #                                            LOADING RESOURCES FROM MLFLOW                                             #
 # ==================================================================================================================== #
-# Load Model from MLflow Model Registry
+# Load Model from MLflow Registry using alias
 try:
-    # Use the alias instead of stages
     model_uri = f"models:/{MODEL_NAME}@{MODEL_ALIAS}"
-    model = mlflow.pyfunc.load_model(model_uri)
-    logger.success(f"Model loaded successfully from MLflow Model Registry: {model_uri}")
+    model = load_model(model_uri)  # Load the model using the alias
+    logger.success(f"Model loaded successfully using alias: {model_uri}")
 
-    # Retrieve the run ID associated with the loaded model
-    run_id = mlflow.get_run(model.metadata.run_id).info.run_id
+    # Retrieve the run ID associated with the alias
+    client = MlflowClient()
+    alias_versions = client.get_model_version_by_alias(MODEL_NAME, MODEL_ALIAS)
+    run_id = alias_versions.run_id  # Get the run ID
     logger.info(f"Retrieved run ID for the model: {run_id}")
 except Exception as e:
-    logger.error(f"Error loading model from MLflow: {e}")
+    logger.error(f"Error loading model using alias: {e}")
     raise RuntimeError("An error occurred while loading the model from MLflow. Please check the logs.")
-
 
 # Load Scaler from MLflow Artifacts
 try:
-    # Retrieve the run ID from the loaded model
-    run_id = model.metadata.run_id
-    logger.info(f"Using run ID: {run_id} to fetch artifacts")
+    logger.info(f"Fetching scaler directly for run ID: {run_id}")
 
-    # List all artifacts under the "scalers" directory in the run
-    artifact_list = mlflow.artifacts.list_artifacts(run_id=run_id, path="scalers")
-    logger.debug(f"Artifacts found in 'scalers': {[artifact.path for artifact in artifact_list]}")
+    # Construct the full path to the scaler artifact
+    scaler_path = f"{SCALER_DIR}/{SCALER_FILENAME}"
+    logger.info(f"Expected scaler path: {scaler_path}")
 
-    # Find the scaler artifact with 'RobustScaler.joblib' in its name
-    scaler_artifact = next(
-        artifact for artifact in artifact_list if "RobustScaler.joblib" in artifact.path
-        )
-    logger.info(f"Scaler artifact found: {scaler_artifact.path}")
-
-    # Download the scaler
-    scaler_path = mlflow.artifacts.download_artifacts(artifact_path=scaler_artifact.path, run_id=run_id)
-    robust_scaler = joblib.load(scaler_path)
-    logger.success(f"Scaler loaded successfully from: {scaler_path}")
-except StopIteration:
-    logger.error("No scaler artifact found with 'RobustScaler.joblib' in its name.")
-    raise RuntimeError("Could not find the scaler artifact in the MLflow run artifacts.")
+    # Download and load the scaler directly
+    scaler_local_path = mlflow.artifacts.download_artifacts(artifact_path=scaler_path, run_id=run_id)
+    robust_scaler = joblib.load(scaler_local_path)
+    logger.success(f"Scaler loaded successfully from: {scaler_local_path}")
 except Exception as e:
     logger.error(f"Error loading scaler from MLflow: {e}")
     raise RuntimeError("An error occurred while loading the scaler from MLflow. Please check the logs.")
