@@ -4,7 +4,7 @@ from pathlib import Path
 import sqlite3
 
 # === Type Hints ===
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 # === MLflow Core ===
 import mlflow
@@ -239,52 +239,94 @@ def list_all_registered_models_and_versions() -> None:
 # Usage Example:
 # list_all_registered_models_and_versions()
 
-
-def transition_model_stage(model_name: str, version: int, stage: str, description: Optional[str] = None) -> None:
+def list_all_registered_models_and_versions_with_details() -> None:
     """
-    Transitions a model version to a specified stage in the MLflow Model Registry and optionally sets a description.
+    Lists all registered models and all their versions in the MLflow Model Registry,
+    including aliases and tags.
+    """
+    logger.info("=== LISTING ALL REGISTERED MODELS, VERSIONS, ALIASES, AND TAGS ===")
+    client: MlflowClient = MlflowClient()
+    registered_models = client.search_registered_models()
+
+    if not registered_models:
+        logger.success("No registered models found in the MLflow Model Registry\n")
+        return
+
+    for model in registered_models:
+        logger.success(f"Model Name ---> '{model.name}'")
+
+        # Fetch all versions of the current model
+        model_versions = client.search_model_versions(f"name='{model.name}'")
+
+        for version in model_versions:
+            # Extract aliases from tags
+            aliases = [
+                key.replace("mlflow.alias.", "")
+                for key, value in version.tags.items()
+                if key.startswith("mlflow.alias.")
+                ]
+
+            # Get tags for the current version
+            tags = version.tags
+
+            logger.debug(
+                f" - Version {version.version:<3} | Stage: {version.current_stage:<10} | "
+                f"Run ID: {version.run_id:<35} | Description: {version.description or 'None'}"
+                )
+            logger.debug(f"   - Aliases: {aliases or 'None'}")
+            logger.debug(f"   - Tags: {tags or 'None'}")
+
+# mlflow_set_alias_and_tags(
+#     registered_model_name="LGBMClassifier - business",
+#     version=1,
+#     alias="candidate",
+#     tags={"environment": "staging", "custom_threshold": "0.46", "business_cost_std": "0.71"},
+#     description="Initial staging model with tuned hyperparameters."
+#     )
+#
+
+# ============================================= MLFLOW_SET_ALIAS_AND_TAGS ======================================== #
+def mlflow_set_alias_tags_and_description(registered_model_name: str, version: int, alias: str, tags: Dict[str, str], description: Optional[str] = None) -> None:
+    """
+    Sets an alias, tags, and optionally a description for a specific version of a registered model
+    in the MLflow Model Registry.
 
     Args:
-        model_name (str): Name of the registered model.
-        version (int): Version number of the model to transition.
-        stage (str): Target stage (e.g., "Staging", "Production", "Archived").
-        description (Optional[str]): Description to associate with the model version.
+        registered_model_name (str): Name of the registered model.
+        version (int): Specific version of the model to target.
+        alias (str): Alias to assign to the model version.
+        tags (Dict[str, str]): Tags to associate with the model version.
+        description (Optional[str]): Description to associate with the model version. Default is None.
 
     Returns:
         None
     """
-    valid_stages = {"None", "Staging", "Production", "Archived"}
-    logger.info(f"=== TRANSITIONING MODEL STAGE ===")
-
-    if stage not in valid_stages:
-        logger.error(f"Invalid stage: {stage}. Must be one of {valid_stages}.")
-        return
+    client = MlflowClient()
 
     try:
-        client = MlflowClient()
+        # Log the header
+        logger.info(f"{registered_model_name:<15} | Version {version:<10}")
 
-        # Transition the model version to the specified stage
-        client.transition_model_version_stage(
-            name=model_name,
-            version=version,
-            stage=stage,
-            archive_existing_versions=False
-            )
-        logger.success(f"Model '{model_name}' version {version} transitioned to stage '{stage}'.")
+        # Assign alias to the specific version
+        client.set_registered_model_alias(name=registered_model_name, alias=alias, version=version)
+        logger.success(f"    - Assigned alias @'{alias}'")
 
-        # Optionally update the description
+        # Add tags to the specific version
+        for key, value in tags.items():
+            client.set_model_version_tag(registered_model_name, version, key, value)
+            logger.success(f"    - Added tag '{key}: {value}'")
+
+        # Add a description if provided
         if description:
             client.update_model_version(
-                name=model_name,
+                name=registered_model_name,
                 version=version,
                 description=description
                 )
-            logger.success(f"Description updated for model '{model_name}' version {version}: {description}")
+            logger.success(f"    - Added description: '{description}'")
     except Exception as e:
-        logger.error(f"Failed to transition stage for model '{model_name}' version {version}: {e}")
-
-# Usage Example:
-# transition_model_stage("MyModelName", version=1, stage="Production")
+        logger.error(f"Failed to set alias, tags, or description for model '{registered_model_name}' version '{version}': {e}")
+        raise
 
 
 def hard_delete_registered_model(model_name: str) -> None:

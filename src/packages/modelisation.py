@@ -1205,14 +1205,14 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 
 
     # =============================================== MLFLOW_LOG_MODEL =============================================== #
-    def mlflow_log_model(self, model: Any, X_train: pd.DataFrame, registered_model_name: Optional[str] = None) -> None:
+    def mlflow_register_model(self, model: Any, X_train: pd.DataFrame, registered_model_name: str) -> None:
         """
-        Logs a model as an artifact to the current MLflow run and optionally registers it in the MLflow Model Registry.
+        Logs a model as an artifact to the current MLflow run and registers it in the MLflow Model Registry.
 
         Args:
             model (Any): The model to log.
             X_train (pd.DataFrame): Training data for inferring input-output signatures.
-            registered_model_name (Optional[str]): If provided, registers the model in the Model Registry under this name.
+            registered_model_name (str): Registers the model in the Model Registry under this name.
 
         Returns:
             None
@@ -1260,7 +1260,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             if registered_model_name:
                 self._verify_model_registration(registered_model_name)
         except Exception as e:
-            logger.error(f"Failed to log model: {e}")
+            logger.error(f"Failed to log and register model: {e}")
             raise
 
     # ========================================== _VERIFY_MODEL_REGISTRATION ========================================== #
