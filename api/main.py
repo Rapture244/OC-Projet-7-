@@ -141,14 +141,14 @@ def predict():
         except BadRequest:
             return jsonify({"error": "Invalid JSON payload"}), 400
 
-        user_id = str(user_request.get("id", None))
+        user_id = user_request.get("id", None)
 
         # Validate input ID
-        if not user_id or user_id.strip() == "":
+        if user_id is None or not isinstance(user_id, int):
             return jsonify({"error": "Missing or invalid 'id' in request payload"}), 400
 
         # Check if ID exists in the dataset
-        if user_id not in dataset_scaled["SK_ID_CURR"].astype(str).values:
+        if user_id not in dataset_scaled["SK_ID_CURR"].values:
             return jsonify({"error": f"ID {user_id} not found in the dataset"}), 404
 
         # Prepare data for prediction
@@ -156,16 +156,19 @@ def predict():
         if user_data.empty:
             return jsonify({"error": "No valid data for prediction"}), 400
 
+        # Predict probability and target
         proba = model.predict_proba(user_data)[0][1]
         prediction = int(proba >= THRESHOLD)
         status = "Granted" if prediction == 0 else "Denied"
 
+        # Return response
         return jsonify({
             "SK_ID_CURR": user_id,
             "predicted_proba": round(proba, 2),
             "predicted_target": prediction,
             "status": status
             }), 200
+
     except Exception as e:
         logger.error(f"Error processing prediction: {e}")
         return jsonify({"error": "An internal error occurred"}), 500
