@@ -1578,7 +1578,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             threshold (Optional[float]): Custom threshold for classification. Default is None.
             scorer (str): Scoring method used ('roc_auc' or 'business').
             save_img (bool, optional): If True, saves visualizations (confusion matrix, cost matrix) locally. Default is False.
-            log_to_mlflow (bool, optional): If True, disables MLflow tracking for this function. Default is False.
+            log_to_mlflow (bool, optional): If True, logs metrics and parameters to MLflow. Default is False.
 
         Returns:
             None
@@ -1593,9 +1593,13 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         if threshold is None:
             threshold_to_use = 0.5
             logger.info(f"Evaluating model '{model_name}' with default threshold = {threshold_to_use}.")
+            if self.mlflow_tracking and log_to_mlflow:
+                mlflow.log_param("default_threshold", threshold_to_use)
         else:
             threshold_to_use = threshold
             logger.info(f"Evaluating model '{model_name}' with custom threshold = {threshold_to_use}.")
+            if self.mlflow_tracking and log_to_mlflow:
+                mlflow.log_param("custom_threshold", threshold_to_use)
 
         # Generate predictions using the determined threshold
         y_pred: pd.Series = (y_proba >= threshold_to_use).astype(int)
@@ -1644,7 +1648,6 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         self._update_results_dataframe(new_results, model_name)  # Update the results DataFrame
 
         if self.mlflow_tracking and log_to_mlflow:
-            mlflow.log_param("Threshold", results['Threshold'])
             mlflow.log_metric("Precision", round(results["Precision"], 4))
             mlflow.log_metric("Recall", round(results["Recall"], 4))
             mlflow.log_metric("FNR", round(results["FNR"], 4))
