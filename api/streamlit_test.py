@@ -1,6 +1,41 @@
+"""
+This Streamlit application provides a simple user interface for testing the Flask API's `/predict` endpoint.
+
+Key Features:
+1. Allows users to input an ID number for prediction.
+2. Sends a POST request to the Flask API with the provided ID.
+3. Displays the API's response, including predicted probability, target, and loan status.
+
+Functionality:
+- `st.title`: Displays the application title.
+- `st.text_input`: Captures user input for the ID.
+- `st.button`: Triggers the prediction request.
+- API Request Handling:
+  - Validates user input to ensure it is non-empty and numeric.
+  - Sends a POST request to the API with the ID as JSON payload.
+  - Handles various API response codes and displays the appropriate messages to the user.
+- Exception Handling:
+  - Catches and displays errors for network-related issues or invalid API responses.
+
+Dependencies:
+- Streamlit: For building the web application.
+- Requests: For making HTTP requests to the Flask API.
+
+Notes:
+- The API URL (`http://127.0.0.1:5000/predict`) assumes the Flask app is running locally on port 5000. Update this if the API is hosted elsewhere.
+- Ensure the Flask API is running and accessible before using this application.
+- The application assumes the API returns JSON responses for all valid and error scenarios.
+
+"""
+
+# ====================================================== IMPORTS ===================================================== #
 import streamlit as st
 import requests
 
+
+# ==================================================================================================================== #
+#                                                       STREAMLIT                                                      #
+# ==================================================================================================================== #
 # Streamlit app title
 st.title("Flask API Tester")
 
