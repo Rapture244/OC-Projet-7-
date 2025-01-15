@@ -24,6 +24,10 @@ ML_FLOW_DIR = Path(os.getenv("ML_FLOW_DIR", ROOT_DIR / "ml_flow"))
 MODEL_DIR = Path(os.getenv("MODEL_DIR", ROOT_DIR / "assets" / "models"))
 LOG_DIR = Path(os.getenv("LOG_DIR", ROOT_DIR / "logs"))
 
+# MLflow Tracking URI
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", f"sqlite:///{ML_FLOW_DIR / 'ml_flow.db'}")
+
+
 # Automatically create directories if they don't exist
 for path in [RAW_DATA_DIR, PROCESSED_DATA_DIR, ML_FLOW_DIR, MODEL_DIR, LOG_DIR]:
     if not path.exists():
@@ -36,6 +40,7 @@ def main():
     logger.debug(f"RAW_DATA_DIR : {RAW_DATA_DIR}")
     logger.debug(f"PROCESSED_DATA_DIR : {PROCESSED_DATA_DIR}")
     logger.debug(f"ML_FLOW_DIR : {ML_FLOW_DIR}")
+    logger.debug(f"MLFLOW_TRACKING_URI : {MLFLOW_TRACKING_URI}")
     logger.debug(f"MODEL_DIR : {MODEL_DIR}")
     logger.debug(f"LOG_DIR : {LOG_DIR}")
 
