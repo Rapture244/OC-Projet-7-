@@ -14,17 +14,18 @@ from mlflow.lightgbm import load_model  # Use the LightGBM-specific loader
 from mlflow.tracking import MlflowClient
 import mlflow
 from src.packages.mflow_utils import *
+from src.packages.constants.paths import MLFLOW_TRACKING_URI
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
 # ==================================================================================================================== #
 # Set the Ml Flow tracking uri & check registered models
-mlflow.set_tracking_uri("sqlite:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/ml_flow.db")
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+logger.debug(f"MLflow Tracking URI set to: {MLFLOW_TRACKING_URI}")
 list_all_registered_models_and_versions_with_details()
 
 # Model Details
 MODEL_NAME = "LGBMClassifier - business"
 MODEL_ALIAS = "champion"  # Specify the alias of the model to use
-THRESHOLD = 0.43
 
 # Scaler Details
 SCALER_NAME = "2025-01-14 - RobustScaler.joblib"
@@ -52,17 +53,8 @@ for name, path in paths_to_check.items():
 # ==================================================================================================================== #
 #                                            LOADING RESOURCES USING MLFLOW                                            #
 # ==================================================================================================================== #
-# ==================================================== LOAD MODEL ==================================================== #
-# Load Model from MLflow using alias
-try:
-    model_uri = f"models:/{MODEL_NAME}@{MODEL_ALIAS}"
-    model = load_model(model_uri)  # Use LightGBM-specific loader
-    logger.success(f"Model loaded successfully using alias: {model_uri}")
-except Exception as e:
-    logger.error(f"Error loading model from MLflow Registry: {e}")
-    raise RuntimeError("An error occurred while loading the model from MLflow Registry. Please check the logs.")
 
-# ==================================================== LOAD SCALER =================================================== #
+# ================================================== FETCHING RUN ID ================================================= #
 # Initialize MLflow Client
 client = MlflowClient()
 
@@ -75,7 +67,17 @@ except Exception as e:
     logger.error(f"Error fetching run_id for model '{MODEL_NAME}' with alias '{MODEL_ALIAS}': {e}")
     raise RuntimeError("Failed to retrieve run_id for the model. Check if the model and alias exist in the registry.")
 
+# ==================================================== LOAD MODEL ==================================================== #
+# Load Model from MLflow using alias
+try:
+    model_uri = f"models:/{MODEL_NAME}@{MODEL_ALIAS}"
+    model = load_model(model_uri)  # Use LightGBM-specific loader
+    logger.success(f"Model loaded successfully using alias: {model_uri}")
+except Exception as e:
+    logger.error(f"Error loading model from MLflow Registry: {e}")
+    raise RuntimeError("An error occurred while loading the model from MLflow Registry. Please check the logs.")
 
+# ==================================================== LOAD SCALER =================================================== #
 # Load Scaler dynamically from the same run as the model
 try:
     # Convert the artifact path to a string for MLflow
@@ -91,7 +93,24 @@ except Exception as e:
     logger.error(f"Error loading scaler from MLflow artifact: {e}")
     raise RuntimeError("An error occurred while loading the scaler from MLflow. Please check the logs.")
 
-# =================================================== LOAD DATASET =================================================== #
+# ================================================== LOAD THRESHOLD ================================================== #
+# Fetch the custom threshold parameter
+try:
+    run_data = client.get_run(run_id).data
+    # Ensure the custom_threshold parameter exists
+    if "custom_threshold" not in run_data.params:
+        raise ValueError(f"Parameter 'custom_threshold' not found in MLflow run '{run_id}'")
+
+    # Extract and set the custom threshold
+    THRESHOLD = float(run_data.params["custom_threshold"])
+    logger.success(f"Custom threshold '{THRESHOLD}' fetched from MLflow run '{run_id}'")
+except Exception as e:
+    logger.error(f"Error fetching custom threshold from MLflow run '{run_id}': {e}")
+    raise RuntimeError("Failed to fetch custom threshold from MLflow. Please check the logs.")
+
+# ==================================================================================================================== #
+#                                                     LOAD DATASET                                                     #
+# ==================================================================================================================== #
 try:
     dataset = pd.read_csv(DATASET_PATH)  # Load the CSV into a DataFrame
     logger.success(f"Dataset loaded successfully from {DATASET_PATH}")
