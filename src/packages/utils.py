@@ -97,6 +97,17 @@ def check_full_system_environment() -> None:
 
     logger.success("Comprehensive system and GPU environment checks completed successfully.")
 
+
+# ==================================================================================================================== #
+#                                                   TERMINAL HEADERS                                                   #
+# ==================================================================================================================== #
+def log_section_header(title: str):
+    """
+    Logs a visually distinct section header with the title capitalized.
+    """
+    capitalized_title = title.upper()
+    logger.info(f"\n{'=' * 120}\n{capitalized_title.center(80)}\n{'=' * 120}")
+
 # ==================================================================================================================== #
 #                                                       DATASETS                                                       #
 # ==================================================================================================================== #

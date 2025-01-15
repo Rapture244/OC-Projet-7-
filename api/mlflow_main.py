@@ -15,9 +15,12 @@ from mlflow.tracking import MlflowClient
 import mlflow
 from src.packages.mflow_utils import *
 from src.packages.constants.paths import MLFLOW_TRACKING_URI
+from src.packages.utils import log_section_header
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
 # ==================================================================================================================== #
+log_section_header(title = "Configuration")
+
 # Set the Ml Flow tracking uri & check registered models
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 logger.debug(f"MLflow Tracking URI set to: {MLFLOW_TRACKING_URI}")
@@ -54,6 +57,8 @@ for name, path in paths_to_check.items():
 #                                            LOADING RESOURCES USING MLFLOW                                            #
 # ==================================================================================================================== #
 
+log_section_header(title = "Loading ressources using MlFlow")
+
 # ================================================== FETCHING RUN ID ================================================= #
 # Initialize MLflow Client
 client = MlflowClient()
@@ -62,9 +67,9 @@ client = MlflowClient()
 try:
     model_version = client.get_model_version_by_alias(MODEL_NAME, MODEL_ALIAS)
     run_id = model_version.run_id
-    logger.success(f"Fetched run_id '{run_id}' for model '{MODEL_NAME}' with alias '{MODEL_ALIAS}'")
+    logger.success(f"{MODEL_NAME:<25} | Alias: @{MODEL_ALIAS:<15} | Fetched run_id '{run_id}")
 except Exception as e:
-    logger.error(f"Error fetching run_id for model '{MODEL_NAME}' with alias '{MODEL_ALIAS}': {e}")
+    logger.error(f"{MODEL_NAME:<25} | Alias: @{MODEL_ALIAS:<15} | Error fetching run_id: {e}")
     raise RuntimeError("Failed to retrieve run_id for the model. Check if the model and alias exist in the registry.")
 
 # ==================================================== LOAD MODEL ==================================================== #
@@ -72,7 +77,7 @@ except Exception as e:
 try:
     model_uri = f"models:/{MODEL_NAME}@{MODEL_ALIAS}"
     model = load_model(model_uri)  # Use LightGBM-specific loader
-    logger.success(f"Model loaded successfully using alias: {model_uri}")
+    logger.success(f"{MODEL_NAME:<25} | Alias: @{MODEL_ALIAS:<15} | Model loaded successfully using alias: {model_uri}")
 except Exception as e:
     logger.error(f"Error loading model from MLflow Registry: {e}")
     raise RuntimeError("An error occurred while loading the model from MLflow Registry. Please check the logs.")
@@ -103,7 +108,7 @@ try:
 
     # Extract and set the custom threshold
     THRESHOLD = float(run_data.params["custom_threshold"])
-    logger.success(f"Custom threshold '{THRESHOLD}' fetched from MLflow run '{run_id}'")
+    logger.success(f"ML FLOW run id: {run_id:<45} | Fetched custom threshold '{THRESHOLD}'")
 except Exception as e:
     logger.error(f"Error fetching custom threshold from MLflow run '{run_id}': {e}")
     raise RuntimeError("Failed to fetch custom threshold from MLflow. Please check the logs.")
@@ -111,6 +116,8 @@ except Exception as e:
 # ==================================================================================================================== #
 #                                                     LOAD DATASET                                                     #
 # ==================================================================================================================== #
+log_section_header(title = "Loading Dataset")
+
 try:
     dataset = pd.read_csv(DATASET_PATH)  # Load the CSV into a DataFrame
     logger.success(f"Dataset loaded successfully from {DATASET_PATH}")
@@ -121,6 +128,7 @@ except Exception as e:
 # ==================================================================================================================== #
 #                                                     PREPROCESSING                                                    #
 # ==================================================================================================================== #
+log_section_header(title = "Preprocessing")
 
 # Apply RobustScaler with PassThrough
 try:
@@ -147,6 +155,8 @@ except Exception as e:
 # ==================================================================================================================== #
 #                                  LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                                   #
 # ==================================================================================================================== #
+log_section_header(title = "Log predicted probabilities for the first 20 rows")
+
 try:
     logger.info("Calculating predicted probabilities for the first 20 rows...")
     # Exclude "SK_ID_CURR" for predictions
@@ -167,6 +177,7 @@ except Exception as e:
 # ==================================================================================================================== #
 #                                                          API                                                         #
 # ==================================================================================================================== #
+log_section_header(title = "API ")
 app = Flask(__name__)
 
 @app.route("/predict", methods=["POST"])
