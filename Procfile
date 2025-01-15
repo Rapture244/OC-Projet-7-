@@ -1,1 +1,1 @@
-web: gunicorn api.mlflow_main:app
+web: poetry run gunicorn api.local_main:app
