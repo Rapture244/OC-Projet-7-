@@ -34,11 +34,13 @@ from pathlib import Path
 from sklearn.preprocessing import RobustScaler
 from typing import Any
 from packages.constants.paths import MODEL_DIR, LOG_DIR, PROCESSED_DATA_DIR
+from packages.utils import log_section_header
 from werkzeug.exceptions import BadRequest  # Import BadRequest exception
 
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
 # ==================================================================================================================== #
+log_section_header(title = "Configuration")
 
 # Model Details
 MODEL_NAME = "2025-01-14 - LGBMClassifier - business.joblib"
@@ -71,8 +73,9 @@ for name, path in paths_to_check.items():
 
 
 # ==================================================================================================================== #
-#                                            LOADING RESOURCES LOCALLY                                                 #
+#                                            LOADING MODELS LOCALLY                                                    #
 # ==================================================================================================================== #
+log_section_header(title = "Loading ressources locally")
 
 # Load Model
 try:
@@ -90,6 +93,12 @@ except Exception as e:
     logger.error(f"Error loading scaler: {e}")
     raise RuntimeError("An error occurred while loading the scaler. Please check the logs.")
 
+
+# ==================================================================================================================== #
+#                                                     LOAD DATASET                                                     #
+# ==================================================================================================================== #
+log_section_header(title = "Loading Dataset")
+
 # Load Dataset
 try:
     dataset = pd.read_csv(DATASET_PATH)  # Load the CSV into a DataFrame
@@ -102,6 +111,7 @@ except Exception as e:
 # ==================================================================================================================== #
 #                                                     PREPROCESSING                                                    #
 # ==================================================================================================================== #
+log_section_header(title = "Preprocessing")
 
 # Apply RobustScaler with PassThrough
 try:
@@ -128,6 +138,8 @@ except Exception as e:
 # ==================================================================================================================== #
 #                                  LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                                   #
 # ==================================================================================================================== #
+log_section_header(title = "Log predicted probabilities for the first 20 rows")
+
 try:
     logger.info("Calculating predicted probabilities for the first 20 rows...")
     # Exclude "SK_ID_CURR" for predictions
@@ -150,6 +162,8 @@ except Exception as e:
 # ==================================================================================================================== #
 #                                                          API                                                         #
 # ==================================================================================================================== #
+log_section_header(title = "API ")
+
 app = Flask(__name__)
 
 @app.route("/predict", methods=["POST"])
