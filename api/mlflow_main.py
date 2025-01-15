@@ -11,6 +11,7 @@ from typing import Any
 from packages.constants.paths import LOG_DIR, PROCESSED_DATA_DIR, MODEL_DIR
 from werkzeug.exceptions import BadRequest  # Import BadRequest exception
 from mlflow.lightgbm import load_model  # Use the LightGBM-specific loader
+from mlflow.tracking import MlflowClient
 import mlflow
 from src.packages.mflow_utils import *
 # ==================================================================================================================== #
@@ -27,7 +28,8 @@ THRESHOLD = 0.43
 
 # Scaler Details
 SCALER_NAME = "2025-01-14 - RobustScaler.joblib"
-SCALER_PATH = Path(MODEL_DIR) / SCALER_NAME
+ARTIFACT_SCALER_PATH = Path("scalers") / SCALER_NAME  # Define the relative path within the artifact directory
+
 
 # Dataset Path
 DATASET_NAME = "04_prediction_df.csv"
@@ -39,7 +41,7 @@ logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
 
 # Path existence check
 paths_to_check = {
-    "Scaler": SCALER_PATH,
+    # "Scaler": SCALER_PATH,
     "Dataset": DATASET_PATH,
     }
 for name, path in paths_to_check.items():
@@ -50,7 +52,7 @@ for name, path in paths_to_check.items():
 # ==================================================================================================================== #
 #                                            LOADING RESOURCES USING MLFLOW                                            #
 # ==================================================================================================================== #
-
+# ==================================================== LOAD MODEL ==================================================== #
 # Load Model from MLflow using alias
 try:
     model_uri = f"models:/{MODEL_NAME}@{MODEL_ALIAS}"
@@ -60,15 +62,36 @@ except Exception as e:
     logger.error(f"Error loading model from MLflow Registry: {e}")
     raise RuntimeError("An error occurred while loading the model from MLflow Registry. Please check the logs.")
 
-# Load Scaler
-try:
-    robust_scaler = joblib.load(SCALER_PATH)
-    logger.success(f"Scaler loaded successfully from {SCALER_PATH}")
-except Exception as e:
-    logger.error(f"Error loading scaler: {e}")
-    raise RuntimeError("An error occurred while loading the scaler. Please check the logs.")
+# ==================================================== LOAD SCALER =================================================== #
+# Initialize MLflow Client
+client = MlflowClient()
 
-# Load Dataset
+# Fetch the model's run_id using the alias
+try:
+    model_version = client.get_model_version_by_alias(MODEL_NAME, MODEL_ALIAS)
+    run_id = model_version.run_id
+    logger.success(f"Fetched run_id '{run_id}' for model '{MODEL_NAME}' with alias '{MODEL_ALIAS}'")
+except Exception as e:
+    logger.error(f"Error fetching run_id for model '{MODEL_NAME}' with alias '{MODEL_ALIAS}': {e}")
+    raise RuntimeError("Failed to retrieve run_id for the model. Check if the model and alias exist in the registry.")
+
+
+# Load Scaler dynamically from the same run as the model
+try:
+    # Convert the artifact path to a string for MLflow
+    artifact_path = ARTIFACT_SCALER_PATH.as_posix()
+
+    # Download the artifact locally using the fetched run_id
+    local_path = mlflow.artifacts.download_artifacts(run_id=run_id, artifact_path=artifact_path)
+
+    # Load the scaler using joblib
+    robust_scaler = joblib.load(local_path)
+    logger.success(f"Scaler loaded successfully from MLflow artifact: {local_path}")
+except Exception as e:
+    logger.error(f"Error loading scaler from MLflow artifact: {e}")
+    raise RuntimeError("An error occurred while loading the scaler from MLflow. Please check the logs.")
+
+# =================================================== LOAD DATASET =================================================== #
 try:
     dataset = pd.read_csv(DATASET_PATH)  # Load the CSV into a DataFrame
     logger.success(f"Dataset loaded successfully from {DATASET_PATH}")
