@@ -1,3 +1,42 @@
+"""
+This Flask application integrates with MLflow to provide a prediction API for a pre-trained LightGBM model.
+
+Key Features:
+1. **MLflow Integration**:
+   - Sets up the MLflow tracking URI to fetch registered models and artifacts.
+   - Dynamically loads the model, scaler, and custom threshold using MLflow's artifact and registry services.
+   - Provides logging of key configuration and loading steps for traceability.
+
+2. **Dataset Handling**:
+   - Loads a preprocessed dataset from a specified path.
+   - Applies preprocessing using a RobustScaler downloaded as an MLflow artifact.
+
+3. **Prediction API**:
+   - `/predict`: A POST endpoint that accepts an `SK_ID_CURR` ID and returns the predicted probability, target, and status.
+   - Validates input data and ensures that the requested ID exists in the dataset.
+   - Computes predictions using the LightGBM model and compares them against a custom threshold fetched from MLflow.
+
+4. **Error Handling and Logging**:
+   - Provides robust error handling for missing files, invalid input data, and API requests.
+   - Uses Loguru for detailed logging of processes and exceptions.
+
+5. **Development-Friendly**:
+   - Includes endpoints for testing, and logs predicted probabilities for the first 20 rows of the dataset.
+
+Dependencies:
+- **Flask**: Framework for the API.
+- **MLflow**: For model and artifact management.
+- **Loguru**: For structured and detailed logging.
+- **LightGBM**: Predictive model.
+- **Pandas, NumPy**: For data handling and preprocessing.
+- **Joblib**: For deserializing the scaler artifact.
+
+Notes:
+- Ensure `MLFLOW_TRACKING_URI` is configured correctly in the constants file.
+- The dataset, model, and scaler must exist and be properly configured in the MLflow registry for the API to function.
+- Use the `list_all_registered_models_and_versions_with_details` utility to debug model configurations and versions.
+
+"""
 
 # ====================================================== IMPORTS ===================================================== #
 from flask import Flask, request, jsonify
