@@ -8,16 +8,21 @@ from loguru import logger
 from pathlib import Path
 from sklearn.preprocessing import RobustScaler
 from typing import Any
-from packages.constants.paths import MODEL_DIR, LOG_DIR, PROCESSED_DATA_DIR
+from packages.constants.paths import LOG_DIR, PROCESSED_DATA_DIR, MODEL_DIR
 from werkzeug.exceptions import BadRequest  # Import BadRequest exception
-
+from mlflow.lightgbm import load_model  # Use the LightGBM-specific loader
+import mlflow
+from src.packages.mflow_utils import *
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
 # ==================================================================================================================== #
+# Set the Ml Flow tracking uri & check registered models
+mlflow.set_tracking_uri("sqlite:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/ml_flow.db")
+list_all_registered_models_and_versions_with_details()
 
 # Model Details
-MODEL_NAME = "2025-01-14 - LGBMClassifier - business.joblib"
-MODEL_PATH = Path(MODEL_DIR) / MODEL_NAME
+MODEL_NAME = "LGBMClassifier - business"
+MODEL_ALIAS = "champion"  # Specify the alias of the model to use
 THRESHOLD = 0.43
 
 # Scaler Details
@@ -34,7 +39,6 @@ logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
 
 # Path existence check
 paths_to_check = {
-    "Model": MODEL_PATH,
     "Scaler": SCALER_PATH,
     "Dataset": DATASET_PATH,
     }
@@ -43,19 +47,18 @@ for name, path in paths_to_check.items():
         logger.error(f"{name} file not found at {path}")
         raise FileNotFoundError(f"{name} file not found at {path}")
 
-
-
 # ==================================================================================================================== #
-#                                            LOADING RESOURCES LOCALLY                                                 #
+#                                            LOADING RESOURCES USING MLFLOW                                            #
 # ==================================================================================================================== #
 
-# Load Model
+# Load Model from MLflow using alias
 try:
-    model = joblib.load(MODEL_PATH)
-    logger.success(f"Model loaded successfully from {MODEL_PATH}")
+    model_uri = f"models:/{MODEL_NAME}@{MODEL_ALIAS}"
+    model = load_model(model_uri)  # Use LightGBM-specific loader
+    logger.success(f"Model loaded successfully using alias: {model_uri}")
 except Exception as e:
-    logger.error(f"Error loading model: {e}")
-    raise RuntimeError("An error occurred while loading the model. Please check the logs.")
+    logger.error(f"Error loading model from MLflow Registry: {e}")
+    raise RuntimeError("An error occurred while loading the model from MLflow Registry. Please check the logs.")
 
 # Load Scaler
 try:
@@ -72,7 +75,6 @@ try:
 except Exception as e:
     logger.error(f"Error loading dataset: {e}")
     raise RuntimeError("An error occurred while loading the dataset. Please check the logs for more details.")
-
 
 # ==================================================================================================================== #
 #                                                     PREPROCESSING                                                    #
@@ -109,7 +111,7 @@ try:
     user_data_first_20 = dataset_scaled.drop(columns=["SK_ID_CURR"]).head(20)
 
     # Predict probabilities for the first 20 rows
-    proba_first_20 = model.predict_proba(user_data_first_20)[:, 1]
+    proba_first_20 = model.predict_proba(user_data_first_20)[:, 1]  # LightGBM's predict_proba
 
     # Log the SK_ID_CURR with the probabilities
     for idx, proba in zip(dataset_scaled["SK_ID_CURR"].head(20), proba_first_20):
@@ -120,8 +122,6 @@ except Exception as e:
     logger.error(f"Error logging predicted probabilities for the first 20 rows: {e}")
     raise RuntimeError("An error occurred while logging predicted probabilities. Please check the logs for details.")
 
-
-
 # ==================================================================================================================== #
 #                                                          API                                                         #
 # ==================================================================================================================== #
@@ -130,7 +130,7 @@ app = Flask(__name__)
 @app.route("/predict", methods=["POST"])
 def predict():
     """
-    Endpoint to predict using the locally loaded model for a given SK_ID_CURR.
+    Endpoint to predict using the model loaded from MLflow Registry for a given SK_ID_CURR.
     Request Body Example:
     {
         "id": 100001
@@ -159,7 +159,7 @@ def predict():
             return jsonify({"error": "No valid data for prediction"}), 400
 
         # Predict probability and target
-        proba = model.predict_proba(user_data)[0][1]
+        proba = model.predict_proba(user_data)[0][1]  # Get the probability of the positive class
         prediction = int(proba >= THRESHOLD)
         status = "Granted" if prediction == 0 else "Denied"
 
