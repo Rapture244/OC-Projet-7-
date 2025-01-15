@@ -1,3 +1,60 @@
+# ==================================================================================================================== #
+#                                                 SCRIPT OVERVIEW                                                     #
+# ==================================================================================================================== #
+"""
+This module defines the `ModelPipeline` class to streamline machine learning workflows, integrating utilities for data preprocessing,
+model training, hyperparameter tuning, evaluation, and visualization. The class is designed to handle diverse tasks while maintaining
+scalability, interpretability, and alignment with business goals.
+
+Key Features:
+1. **Pipeline Management**:
+   - Centralized handling of data splitting, preprocessing, model training, and evaluation.
+   - Seamless integration with MLflow for tracking experiments and managing artifacts.
+   - Supports hyperparameter optimization via Optuna.
+
+2. **Data Preprocessing**:
+   - Feature scaling using `RobustScaler`.
+   - Resampling for imbalanced datasets with `SMOTETomek`, `SMOTE`, and `TomekLinks`.
+   - Supports custom preprocessing configurations for flexibility.
+
+3. **Hyperparameter Tuning**:
+   - Provides parameter tuning for various models (`LogisticRegression`, `RandomForest`, `XGBoost`, `LightGBM`, `DummyClassifier`).
+   - Integrates Optuna for efficient hyperparameter search with pruning for faster convergence.
+
+4. **Evaluation**:
+   - Evaluates models on standard metrics (precision, recall, F2 score, ROC-AUC).
+   - Implements business-specific metrics, including standardized cost calculations and custom profit analysis.
+   - Supports threshold analysis to optimize classification decisions.
+
+5. **Visualization**:
+   - Plots confusion matrices, cost matrices, parameter importance, and optimization history.
+   - Supports saving visualizations locally and logging to MLflow.
+
+6. **Model Persistence**:
+   - Utilities for saving/loading models and scalers locally or logging to MLflow.
+   - Supports framework detection for streamlined integration with `scikit-learn`, `LightGBM`, and `XGBoost`.
+
+Dependencies:
+- **pandas**: For data manipulation.
+- **numpy**: Numerical computations.
+- **scikit-learn**: Core machine learning tools.
+- **imbalanced-learn**: Handling imbalanced datasets.
+- **Optuna**: Hyperparameter tuning.
+- **MLflow**: Experiment tracking and model management.
+- **loguru**: Logging for structured diagnostics.
+- **GPUtil**: GPU monitoring and resource allocation.
+- **matplotlib**: Visualization.
+- **joblib**: Serialization and persistence.
+- **xgboost**, **lightgbm**: Gradient boosting libraries.
+
+Notes:
+- GPU support requires compatible versions of `xgboost`, `lightgbm`, and CUDA-enabled devices.
+- Error handling and logging are included throughout to enhance robustness and debugging.
+- Emphasizes scalability and reusability for diverse machine learning tasks.
+"""
+
+
+# ====================================================== IMPORTS ===================================================== #
 # ---- Standard Library Imports ----
 from datetime import datetime
 from functools import partial

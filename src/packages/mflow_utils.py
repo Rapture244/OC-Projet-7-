@@ -1,3 +1,34 @@
+"""
+This module provides a suite of utility functions for managing MLflow experiments and model registry operations.
+
+Key Features:
+1. **Experiment Management**:
+   - `list_all_experiments`: Logs details of all active and deleted experiments.
+   - `create_experiment`: Creates or retrieves an MLflow experiment, restoring and clearing deleted ones as needed.
+   - `erase_deleted_experiments`: Permanently deletes all experiments in the 'deleted' lifecycle stage from the SQLite database.
+   - `delete_active_experiment`: Deletes active experiments by their name or ID.
+
+2. **Model Registry Management**:
+   - `list_all_registered_models_and_versions`: Lists all registered models and their versions in the MLflow Model Registry.
+   - `list_all_registered_models_and_versions_with_details`: Extends the listing to include aliases and tags for each version.
+   - `mlflow_set_alias_tags_and_description`: Sets aliases, tags, and optional descriptions for specific model versions.
+   - `hard_delete_registered_model`: Permanently deletes a registered model and all its versions.
+   - `hard_delete_model_version`: Permanently deletes a specific version of a registered model.
+
+Dependencies:
+- **loguru**: For structured and informative logging.
+- **sqlite3**: For database interactions, particularly with MLflow's SQLite-backed metadata store.
+- **mlflow**: Core library for experiment tracking and model registry operations.
+- **typing**: Provides type hints for improved code clarity and maintainability.
+
+Notes:
+- Robust error handling and logging are integrated to ensure reliability and ease of debugging.
+- Functions are designed for compatibility with MLflow's tracking and model registry APIs.
+- Designed to streamline experiment and model lifecycle management in MLflow-based workflows.
+"""
+
+
+# ====================================================== IMPORTS ===================================================== #
 # === Logging and Utilities ===
 from loguru import logger
 from pathlib import Path

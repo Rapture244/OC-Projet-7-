@@ -1,3 +1,39 @@
+"""
+This module provides utility functions for visualizing data distributions in a pandas DataFrame. The focus is on both categorical
+and numerical features, including their relationship with a target variable, to aid in exploratory data analysis (EDA).
+
+Key Features:
+1. **Data Type Distribution**:
+   - `plot_dtype_distribution`: Visualizes the distribution of data types in the DataFrame with pie and bar charts.
+
+2. **Target Variable Analysis**:
+   - `plot_target_distribution`: Displays the distribution of the target variable using pie and bar charts.
+   - `plot_variable_and_target_distribution`: Analyzes the distribution of a categorical variable, both overall and grouped by the target variable.
+
+3. **Numerical Feature Analysis**:
+   - `plot_numerical_distribution_boxplot`: Generates histograms and boxplots for a list of numerical columns to visualize their distributions and outliers.
+
+Dependencies:
+- **matplotlib**: For creating visualizations.
+- **seaborn**: Provides advanced statistical data visualizations.
+- **pandas, numpy**: For data manipulation and numerical computations.
+- **loguru**: Used for structured logging to track function execution and errors.
+
+Notes:
+- Ensure the input DataFrame is clean and contains the required columns for each function to work correctly.
+- Functions handle common issues like empty DataFrames, missing columns, and non-numeric data gracefully with appropriate error messages.
+- All visualizations are styled consistently for better readability using Seaborn's color palettes and custom annotations.
+
+Example Usage:
+- `plot_dtype_distribution(df=my_dataframe)`: Visualizes data type distribution for `my_dataframe`.
+- `plot_target_distribution(df=my_dataframe)`: Displays target variable distribution in `my_dataframe`.
+- `plot_variable_and_target_distribution(df=my_dataframe, target_col='TARGET', category_col='NAME_CONTRACT_TYPE')`: Shows distribution of loan types by target variable.
+- `plot_numerical_distribution_boxplot(df=my_dataframe, columns=['AGE', 'INCOME'])`: Creates histograms and boxplots for numerical columns.
+
+"""
+
+
+# ====================================================== IMPORTS ===================================================== #
 # Standard Library Imports
 import gc
 
@@ -17,6 +53,8 @@ from typing import Any, List, Union
 # ==================================================================================================================== #
 #                                                        GENERAL                                                       #
 # ==================================================================================================================== #
+
+# ============================================== PLOT_DTYPE_DISTRIBUTION ============================================= #
 def plot_dtype_distribution(df: pd.DataFrame, main_title: str = "Data Type Distribution") -> None:
     """
     Generates a pie chart visualizing the distribution of data types in the given dataframe
@@ -110,6 +148,8 @@ def plot_dtype_distribution(df: pd.DataFrame, main_title: str = "Data Type Distr
 # ==================================================================================================================== #
 #                                                     DISTRIBUTION                                                     #
 # ==================================================================================================================== #
+
+# ============================================= PLOT_TARGET_DISTRIBUTION ============================================= #
 def plot_target_distribution(df: pd.DataFrame) -> None:
     """
     Plots the distribution of the TARGET variable as a pie chart and a bar chart,
@@ -189,6 +229,7 @@ def plot_target_distribution(df: pd.DataFrame) -> None:
     logger.debug("TARGET distribution plots displayed successfully.")
 
 
+# ======================================= PLOT_VARIABLE_AND_TARGET_DISTRIBUTION ====================================== #
 def plot_variable_and_target_distribution(df: pd.DataFrame, target_col: str = 'TARGET', category_col: str = None, title: str = 'Insert_title') -> None:
     """
     Plots the distribution of a specified categorical variable by target variable
@@ -290,6 +331,7 @@ def plot_variable_and_target_distribution(df: pd.DataFrame, target_col: str = 'T
 # plot_distribution(df= df, target_col = 'TARGET', category_col = 'NAME_CONTRACT_TYPE', title= 'Loan Type')
 
 
+# ======================================== PLOT_NUMERICAL_DISTRIBUTION_BOXPLOT ======================================= #
 @logger.catch
 def plot_numerical_distribution_boxplot(df: pd.DataFrame, columns: List[str]) -> None:
     """

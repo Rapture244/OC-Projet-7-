@@ -1,3 +1,44 @@
+"""
+This module provides utility functions for system environment checks, dataset loading, and DataFrame operations.
+
+Key Features:
+1. **System Environment Checks**:
+   - `check_full_system_environment`: Logs detailed system information, including Python version, OS details, GPU capabilities,
+     and OpenCL platforms/devices.
+
+2. **Dataset Handling**:
+   - `load_csv`: Loads a CSV file into a pandas DataFrame after detecting its encoding. Handles common issues such as
+     missing files, encoding errors, and empty files.
+   - `concat_dataframes`: Concatenates two DataFrames while ensuring column alignment. Adds missing columns with NaN values.
+   - `merge_dataframes`: Merges two DataFrames based on a specified key. Supports different types of joins (`left`, `right`, `inner`, `outer`).
+
+3. **Utilities**:
+   - `log_section_header`: Logs a visually distinct section header for better log readability.
+
+Dependencies:
+- **pandas**: For data manipulation.
+- **chardet**: Detects encoding of CSV files.
+- **loguru**: Provides structured logging.
+- **pyopencl**: Enumerates OpenCL platforms and devices.
+- **GPUtil**: Retrieves GPU information.
+
+Notes:
+- GPU checks use `nvidia-smi` and `nvcc`. Ensure these tools are installed and accessible in your system PATH for GPU-related checks.
+- All functions include robust error handling and logging to assist in debugging and tracking operations.
+- Designed to handle common edge cases such as empty DataFrames, missing files, and inconsistent DataFrame columns.
+
+Example Usage:
+- **System Checks**:
+  - `check_full_system_environment()`: Logs system and GPU details.
+- **DataFrame Operations**:
+  - `load_csv(file_name="data.csv", parent_path=Path("datasets/"))`: Loads a CSV file from the specified path.
+  - `concat_dataframes(base_df=df1, concat_df=df2)`: Concatenates `df1` and `df2` with column alignment.
+  - `merge_dataframes(base_df=df1, merge_df=df2, merge_key="id")`: Merges `df1` and `df2` on the `id` column.
+
+"""
+
+
+# ====================================================== IMPORTS ===================================================== #
 # Standard Library Imports
 import os
 import sys

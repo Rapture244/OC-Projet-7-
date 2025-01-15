@@ -1,3 +1,40 @@
+"""
+This module provides advanced data transformation, modeling, and imputation utilities for machine learning workflows.
+
+Key Features:
+1. **Data Transformation**:
+   - `one_hot_encoder`: One-hot encodes categorical features with optional treatment for NaN values.
+
+2. **Modeling and Evaluation**:
+   - `kfold_lightgbm`: Implements LightGBM training with K-Fold or Stratified K-Fold cross-validation, supporting GPU acceleration.
+   - `display_importances`: Visualizes feature importances averaged over all folds in the LightGBM model.
+
+3. **Imputation with FAISS**:
+   - `faiss_knn_imputation`: Performs hybrid KNN-based imputation using FAISS, with non-iterative and iterative strategies for columns based on missing value thresholds.
+
+Dependencies:
+- **Core Libraries**:
+  - `gc`: For garbage collection to manage memory usage.
+  - `numpy`, `pandas`: Essential libraries for data manipulation and computation.
+
+- **Third-Party Libraries**:
+  - `faiss`: Accelerates KNN-based imputation with efficient GPU/CPU nearest-neighbor search.
+  - `matplotlib`, `seaborn`: Visualization of feature importance distributions.
+  - `loguru`: Enhanced logging for debugging and information tracking.
+  - `lightgbm`: For gradient boosting with efficient GPU/CPU-based tree learning.
+  - `scipy`, `scikit-learn`: Statistical transformations and model evaluation utilities.
+
+- **Typing**:
+  - Type hints (`List`, `Tuple`, `Union`, etc.) for better readability and maintainability.
+
+Notes:
+- This script is optimized for handling large datasets with GPU acceleration, particularly in imputation and modeling tasks.
+- Implements robust logging and error handling for reliable execution.
+- Functions are modular, enabling seamless integration into data science pipelines.
+"""
+
+
+# ====================================================== IMPORTS ===================================================== #
 # Standard Library Imports
 import gc
 

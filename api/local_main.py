@@ -24,6 +24,7 @@ Note:
 
 """
 
+
 # ====================================================== IMPORTS ===================================================== #
 from flask import Flask, request, jsonify
 import joblib
@@ -34,7 +35,7 @@ from pathlib import Path
 from sklearn.preprocessing import RobustScaler
 from typing import Any
 from packages.constants.paths import MODEL_DIR, LOG_DIR, PROCESSED_DATA_DIR
-from packages.utils import log_section_header
+from packages.utils import log_section_header, load_csv
 from werkzeug.exceptions import BadRequest  # Import BadRequest exception
 
 # ==================================================================================================================== #
@@ -51,9 +52,9 @@ THRESHOLD = 0.43
 SCALER_NAME = "2025-01-14 - RobustScaler.joblib"
 SCALER_PATH = Path(MODEL_DIR) / SCALER_NAME
 
-# Dataset Path
+# Dataset Details
 DATASET_NAME = "04_prediction_df.csv"
-DATASET_PATH = Path(PROCESSED_DATA_DIR) / DATASET_NAME
+
 
 # Loguru Configuration
 LOG_PATH = Path(LOG_DIR) / "api"
@@ -63,7 +64,6 @@ logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
 paths_to_check = {
     "Model": MODEL_PATH,
     "Scaler": SCALER_PATH,
-    "Dataset": DATASET_PATH,
     }
 for name, path in paths_to_check.items():
     if not path.exists():
@@ -99,14 +99,7 @@ except Exception as e:
 # ==================================================================================================================== #
 log_section_header(title = "Loading Dataset")
 
-# Load Dataset
-try:
-    dataset = pd.read_csv(DATASET_PATH)  # Load the CSV into a DataFrame
-    logger.success(f"Dataset loaded successfully from {DATASET_PATH}")
-except Exception as e:
-    logger.error(f"Error loading dataset: {e}")
-    raise RuntimeError("An error occurred while loading the dataset. Please check the logs for more details.")
-
+dataset = load_csv(file_name = DATASET_NAME, parent_path = PROCESSED_DATA_DIR)
 
 # ==================================================================================================================== #
 #                                                     PREPROCESSING                                                    #

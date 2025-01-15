@@ -1,7 +1,40 @@
 """
-This module contains configuration constants for the project.
-Paths can be overridden using environment variables.
+This module defines and initializes configuration constants for the project.
+
+Features:
+1. **Dynamic Path Configuration**:
+   - Paths are derived from environment variables, allowing for customization without modifying the codebase.
+   - Default paths are project-relative, ensuring consistent directory structure.
+
+2. **Key Paths**:
+   - `ROOT_DIR`: Root directory of the project, defaulting to three levels above the script location.
+   - `RAW_DATA_DIR`: Directory for raw datasets.
+   - `PROCESSED_DATA_DIR`: Directory for processed datasets.
+   - `MODEL_DIR`: Directory to store trained models and artifacts.
+   - `LOG_DIR`: Directory for logging output.
+   - `ML_FLOW_DIR`: Directory for MLflow tracking and artifacts.
+   - `MLFLOW_TRACKING_URI`: URI for MLflow tracking, defaulting to a local SQLite database.
+
+3. **Automatic Directory Creation**:
+   - Ensures that all specified directories exist, creating them recursively if necessary.
+
+4. **Logging Configuration**:
+   - Logs the configured paths for debugging and validation purposes.
+
+Dependencies:
+- **Core Libraries**:
+  - `os`, `pathlib`: For handling file system paths and environment variables.
+
+- **Third-Party Libraries**:
+  - `loguru`: Enhanced logging capabilities.
+
+Usage:
+- Import this module to access pre-configured paths for consistent file management across the project.
+- Customize paths by setting corresponding environment variables before running the script.
 """
+
+
+# ====================================================== IMPORTS ===================================================== #
 # Standard Library Imports
 import os
 from pathlib import Path
