@@ -20,11 +20,11 @@ ROOT_DIR = Path(os.getenv("ROOT_DIR", Path(__file__).resolve().parents[3]))
 # Paths derived from ROOT_DIR
 RAW_DATA_DIR: Path = Path(os.getenv("RAW_DATA_DIR", ROOT_DIR / "data" / "raw"))
 PROCESSED_DATA_DIR = Path(os.getenv("PROCESSED_DATA_DIR", ROOT_DIR / "data" / "processed"))
-ML_FLOW_DIR = Path(os.getenv("ML_FLOW_DIR", ROOT_DIR / "ml_flow"))
 MODEL_DIR = Path(os.getenv("MODEL_DIR", ROOT_DIR / "assets" / "models"))
 LOG_DIR = Path(os.getenv("LOG_DIR", ROOT_DIR / "logs"))
 
 # MLflow Tracking URI
+ML_FLOW_DIR = Path(os.getenv("ML_FLOW_DIR", ROOT_DIR / "ml_flow"))
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", f"sqlite:///{ML_FLOW_DIR / 'ml_flow.db'}")
 
 
