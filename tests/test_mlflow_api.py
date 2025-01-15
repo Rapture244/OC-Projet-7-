@@ -44,7 +44,7 @@ import pytest
 import mlflow
 from mlflow.tracking import MlflowClient
 from api.mlflow_main import app
-from src.packages.constants.paths import MLFLOW_TRACKING_URI
+from packages.constants.paths import MLFLOW_TRACKING_URI
 
 
 # ==================================================================================================================== #

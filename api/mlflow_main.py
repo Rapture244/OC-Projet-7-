@@ -13,9 +13,9 @@ from werkzeug.exceptions import BadRequest  # Import BadRequest exception
 from mlflow.lightgbm import load_model  # Use the LightGBM-specific loader
 from mlflow.tracking import MlflowClient
 import mlflow
-from src.packages.mflow_utils import *
-from src.packages.constants.paths import MLFLOW_TRACKING_URI
-from src.packages.utils import log_section_header
+from packages.mflow_utils import *
+from packages.constants.paths import MLFLOW_TRACKING_URI
+from packages.utils import log_section_header
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
 # ==================================================================================================================== #
