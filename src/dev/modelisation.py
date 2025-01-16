@@ -105,7 +105,7 @@ from imblearn.under_sampling import TomekLinks
 from imblearn.pipeline import Pipeline as ImbPipeline
 
 # ---- Local Imports ----
-from src.packages.constants.paths import ROOT_DIR
+from prod.paths import ROOT_DIR
 
 
 # ==================================================================================================================== #

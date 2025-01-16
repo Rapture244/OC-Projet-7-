@@ -50,7 +50,6 @@ from pathlib import Path
 import pandas as pd
 import chardet
 from loguru import logger
-import GPUtil
 import pyopencl as cl
 
 # Typing Imports
