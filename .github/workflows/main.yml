@@ -1,0 +1,165 @@
+# ==================================================================================================================== #
+#                                                 MISTAKES ENCOUNTERED                                                 #
+# ==================================================================================================================== #
+# [WARNING] Please note: While creating a new project on Heroku, do not enable the option for Automatic Deployments as this would result in an error when the GitHub Action is triggered.
+
+
+# ======================================================= ERROR ====================================================== #
+# Error 1: Inside poetry .yaml, in [tool.poetry], I forgot to add { include = "api"} so it can be treated as a module even tho I add __init__.py
+
+# ======================================================= ERROR ====================================================== #
+# Error 2: 'distutils' removed in python 3.12, to correct it --> "poetry add setuptools" which include 'distutils' for Python 3.12
+
+# ======================================================= ERROR ====================================================== #
+# Error 3: Wrong akhileshns/heroku-deploy@ tag, latest is --> 'AkhileshNS/heroku-deploy@v3.13.15'
+
+# ======================================================= ERROR ====================================================== #
+# Error 4: Multiples errors
+#    - The CI/CD file inside ".github/workflows" need to be named 'main.yml' and not 'ci-cd.yml' like i did
+#    - `ubuntu-latest` does not support `heroku-cli`, be sure to install it through the main.yml file
+
+# ======================================================= ERROR ====================================================== #
+# Error 5: Shap for feature importance require numba which requires llvmlite which is a "lightweight wrapper around basic LLVM functionality "
+#    - The issue is that since it is run on Ubuntu, llvmlite requires llvm-config, a system wide LLVM toolchain present at build time
+#    - Heroku’s default Python buildpack does not provide LLVM/clang or llvm-config. This is causing the build to fail and the deployment
+# SOLUTION:
+#    - Use a Aptfile with llvm-14 to be run before the Python build pack !
+#    - Then 2 solution: through the local Heroku CLI or the Heroku Dashboard !
+# CLI:
+# 1) Clear existing buildpacks (optional, if you already have them)
+# heroku buildpacks:clear --app credit-score-attribution
+# 2) Add the apt buildpack first
+# heroku buildpacks:add --index 1 heroku-community/apt --app credit-score-attribution
+# 3) Add the Python buildpack second
+# heroku buildpacks:add --index 2 heroku/python --app credit-score-attribution
+
+# Heroku Dashboard:
+#    - Go to ur app "credit-score-attribution"
+#    - Click Settings → Buildpacks → Add buildpack.
+#    - Select heroku-community/apt, make sure it’s the top buildpack in the list.
+#    - Then add the heroku/python buildpack below it.
+#    - Save the changes.
+
+# ======================================================= ERROR ====================================================== #
+# Error 6: Aptfile and multi-buildpack approach is being recognized but Heroku is running on the "Heroku-24" stack which doesnt have llvm-14
+#    - Switch to a more standard release: "Heroku-22"
+#
+# CLi:
+# heroku stack --app credit-score-attribution
+# heroku stack:set heroku-22 --app credit-score-attribution
+
+# ======================================================= ERROR ====================================================== #
+# Error 7: “Push failed … The same version of this code has already been built” message.
+#    - Heroku thinks you’re redeploying exactly the same commit SHA without any code changes, so it’s refusing to rebuild.
+#    - This can happen if you force-push or re-run your GitHub Actions with no actual code difference.
+#
+#CLi: make new empty commit for new hash but it did not work
+# git commit --allow-empty -m "Change for Heroku build"
+#
+# NO SOLUTION : Deleted old app on Heroku and remade it with all changes until now and same name
+
+# ======================================================= ERROR ====================================================== #
+# Error 8: Not setting the exact python version and some weird stuff with poetry
+# SOLUTION: Setting the exact version with .python-version. Dont forget to 'poetry lock'
+
+# ======================================================= ERROR ====================================================== #
+# Error 9: Slug size exceed the 500Mb limit = final app + dependencies is too big
+#
+# SOLUTION 1: Add unused libraries for the production and the app to [tool.poetry.group.dev.dependencies] inside poetry
+# SOLUTION 2: Create a .slugignore in ur repo root to  exclude certain files from the slug (similar to .gitignore)
+
+# ======================================================= SUCCESS then ERROR ! ======================================== #
+# Error 10: wrong Procfile line
+# So the app was launched but from the logs my Procfile says "web: poetry run gunicorn api.local_main:app" so Heroku tries to run poetry in production but it isn't on the PATH
+#
+# Solution: use "web: gunicorn api.local_main:app" in Procfile, that's the standard approach
+
+# ======================================================= ERROR  ===================================================== #
+# Error 11 to 13: issues with packages and poetry. Created a 'prod' and 'dev' packages
+#
+# 'prod' is added though the [tool.poetry]
+# 'dev' is to be ignored and thus its libraries were sent to [tool.poetry.group.dev.dependencies]
+#
+# After this, i still had an issue during Heroku deployment after CI/CD validation ---> siphash24  & lightgbm were required
+
+
+
+# ==================================================================================================================== #
+#                                                         CI/CD                                                        #
+# ==================================================================================================================== #
+name: CI/CD Heroku Deployment
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"  # or whatever Python version you plan to use
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "2.0.0" # My poetry version at the time
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run tests
+        run: poetry run pytest tests/test_local_api.py --maxfail=1 --disable-warnings
+
+  deploy:
+    # Only run this after build-and-test passes
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    # Only deploy if we pushed to main
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "2.0.0" # My poetry version at the time
+
+      # Install only main dependencies, skipping dev group
+      - name : Install dependencies (only main)
+        run: poetry install --only main
+
+#      # Install everything, including dev group
+#      - name: Install dependencies (including dev)
+#        run: poetry install
+
+      # NEW STEP: Install the Heroku CLI
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      # Remove 'strategy' because it doesn't exist in v3.x
+      - name: Deploy to Heroku
+        uses: AkhileshNS/heroku-deploy@v3.13.15
+        with:
+          # We'll use the Heroku API key you saved as a secret in GitHub
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          # This must match your Heroku App name exactly
+          heroku_app_name: "credit-score-attribution"
+          # The email associated with your Heroku account
+          heroku_email: "pascal.ovidiuu@gmail.com"

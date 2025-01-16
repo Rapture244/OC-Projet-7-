@@ -1,0 +1,12 @@
+# Ignore the notebooks folder and its contents
+notebooks/
+
+# Ignore scripts content
+scripts/
+
+# Ignore log files
+*.logs
+
+# Ignore Python cache directories and compiled bytecode files
+__pycache__/
+*.pyc

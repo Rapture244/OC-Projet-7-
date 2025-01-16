@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [project]
 name = "p7-package"
 version = "0.1.0"
-description = ""
+description = "A Flask API for predicting credit status using a pre-trained LightGBM Classifier."
 readme = "README.md"
 authors = [
     { name = "ovidiu.pascal", email = "ovidiu.pascal@orange.com" }
@@ -14,38 +14,53 @@ requires-python = ">=3.12,<3.13"
 
 # --- Use an array of strings for dependencies ---
 dependencies = [
-    "mlflow (>=2.19.0,<3.0.0)",
-    "numpy (>=1.22.0,<2.1)",
-    "pandas (>=2.2.3,<3.0.0)",
-    "loguru (>=0.7.3,<0.8.0)",
-    "chardet (>=5.2.0,<6.0.0)",
-    "pyopencl (>=2024.3,<2025.0)",
-    "gputil (>=1.4.0,<2.0.0)",
-    "matplotlib (>=3.10.0,<4.0.0)",
-    "seaborn (>=0.13.2,<0.14.0)",
-    "faiss-cpu (>=1.9.0.post1,<2.0.0)",
-    "lightgbm (>=4.5.0,<5.0.0)",
-    "scipy (>=1.15.1,<2.0.0)",
-    "scikit-learn (>=1.0.1,<1.6.0)",
-    "optuna (>=4.1.0,<5.0.0)",
-    "xgboost (>=2.1.3,<3.0.0)",
-    "imbalanced-learn (>=0.13.0,<0.14.0)",
-    "missingno (>=0.5.2,<0.6.0)",
-    "evidently (>=0.5.1,<0.6.0)",
-    "shap (>=0.46.0,<0.47.0)",
-    "ipywidgets (>=8.1.5,<9.0.0)",
-    "streamlit (>=1.41.1,<2.0.0)",
-    "pytest (>=8.3.4,<9.0.0)",
-    "siphash24 (>=1.7,<2.0)",
-    "gunicorn (>=23.0.0,<24.0.0)",
+    # Core & API dependencies
+    "numpy (>=1.22.0,<2.1)",            # Numerical computations
+    "pandas (>=2.2.3,<3.0.0)",          # Data manipulation
+    "matplotlib (>=3.10.0,<4.0.0)",     # Plotting and data visualization
+    "seaborn (>=0.13.2,<0.14.0)",       # Statistical data visualization
+    "loguru (>=0.7.3,<0.8.0)",          # Logging
+    "chardet (>=5.2.0,<6.0.0)",         # Character encoding detection
+    "setuptools (>=75.8.0,<76.0.0)",    # Required for packaging; Python 3.12 removed distutils
+    "pyopencl (>=2024.3,<2025.0)",      # GPU computation
 
+    # API
+    "flask (>=3.1.0,<4.0.0)",           # API framework
+    "joblib (>=1.4.2,<2.0.0)",          # Model/scaler loading
+    "scikit-learn (>=1.0.1,<1.6.0)",    # Preprocessing and machine learning tools
+    "werkzeug (>=3.1.3,<4.0.0)",        # For HTTP exceptions
+
+    # Frontend with streamlit
+    "streamlit (>=1.41.1,<2.0.0)",      # Web app UI
+    "requests (>=2.32.3,<3.0.0)",       # HTTP requests in Streamlit
+
+    # Unit testing
+    "pytest (>=8.3.4,<9.0.0)",          # Testing framework
+
+    # Heroku
+    "gunicorn (>=23.0.0,<24.0.0)",      # WSGI server for production
+
+    # Additional ones based on trial & error
+    "siphash24 (>=1.7,<2.0)",                  # Secure hash function
+    "lightgbm (>=4.5.0,<5.0.0)"               # Gradient boosting framework
 ]
 
 [tool.poetry]
 packages = [
-    { include = "packages", from = "src" }
+    { include = "prod", from = "src" },
+    { include = "api"}
 ]
 
 [tool.poetry.group.dev.dependencies]
+mlflow = ">=2.19.0,<3.0.0"                # Experiment tracking and model management
+faiss-cpu = ">=1.9.0.post1,<2.0.0"        # Efficient similarity search and clustering
+scipy = ">=1.15.1,<2.0.0"                 # Scientific computations
+optuna = ">=4.1.0,<5.0.0"                 # Hyperparameter optimization
+xgboost = ">=2.1.3,<3.0.0"                # Gradient boosting library
+imbalanced-learn = ">=0.13.0,<0.14.0"     # Handling imbalanced datasets
+missingno = ">=0.5.2,<0.6.0"              # Visualization for missing data
+evidently = ">=0.5.1,<0.6.0"              # Model performance monitoring and reporting
+shap = ">=0.46.0,<0.47.0"                 # Model explainability
+ipywidgets = ">=8.1.5,<9.0.0"             # Interactive widgets for Jupyter
 
-
+gputil = ">=1.4.0,<2.0.0"                 # GPU utility functions
