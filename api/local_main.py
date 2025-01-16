@@ -26,17 +26,23 @@ Note:
 
 
 # ====================================================== IMPORTS ===================================================== #
-from flask import Flask, request, jsonify
-import joblib
-import pandas as pd
-import numpy as np
-from loguru import logger
+# Standard library imports
 from pathlib import Path
-from sklearn.preprocessing import RobustScaler
 from typing import Any
-from packages.constants.paths import MODEL_DIR, LOG_DIR, PROCESSED_DATA_DIR
-from packages.utils import log_section_header, load_csv
-from werkzeug.exceptions import BadRequest  # Import BadRequest exception
+
+# Third-party library imports
+import numpy as np
+import pandas as pd
+import joblib
+from loguru import logger
+from flask import Flask, request, jsonify
+from sklearn.preprocessing import RobustScaler
+from werkzeug.exceptions import BadRequest  # Import BadRequest exception (inside flask)
+
+# Local application imports
+from prod.paths import MODEL_DIR, LOG_DIR, PROCESSED_DATA_DIR
+from prod.utils import log_section_header, load_csv
+
 
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
