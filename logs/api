@@ -1,0 +1,1242 @@
+2025-01-11 15:12:22.805 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:12:23.081 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:12:23.186 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:12:25.003 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:12:25.283 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:12:25.386 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:15:52.242 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:15:52.510 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:15:52.596 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:15:54.313 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:15:54.586 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:15:54.679 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:19:05.363 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:19:05.651 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:19:05.746 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:20:57.208 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:20:57.477 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:20:57.564 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:31:39.810 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:31:40.087 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:31:40.180 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:34:17.020 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:34:17.297 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:34:17.390 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:34:51.603 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:34:51.885 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:34:51.998 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:36:59.506 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:36:59.779 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:36:59.872 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:38:51.151 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:38:51.448 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:38:51.552 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 15:51:25.408 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 15:51:25.720 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 15:51:25.848 | SUCCESS  | __main__:<module>:74 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:17:43.142 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:17:43.416 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:17:43.508 | ERROR    | __main__:<module>:82 - Error applying RobustScaler: "['PAYMENT_RATE', 'EXT_SOURCE_1', 'EXT_SOURCE_3', 'EXT_SOURCE_2', 'DAYS_SINCE_BIRTH', 'AMT_ANNUITY', 'DAYS_EMPLOYED', 'APPROVED_CNT_PAYMENT_MEAN', 'DAYS_SINCE_ID_PUBLISHED', 'INSTAL_DAYS_ENTRY_PAYMENT_MAX', 'ACTIVE_DAYS_CREDIT_MAX', 'INSTAL_DPD_MEAN', 'ANNUITY_INCOME_PERC', 'ACTIVE_DAYS_CREDIT_ENDDATE_MIN', 'DAYS_SINCE_REGISTRATION', 'INSTAL_AMT_PAYMENT_SUM', 'INSTAL_DBD_SUM', 'REGION_POPULATION_RELATIVE', 'CLOSED_DAYS_CREDIT_MAX', 'BURO_AMT_CREDIT_MAX_OVERDUE_MEAN', 'DAYS_SINCE_LAST_PHONE_CHANGE', 'CLOSED_DAYS_CREDIT_ENDDATE_MAX', 'ACTIVE_DAYS_CREDIT_UPDATE_MEAN', 'POS_MONTHS_BALANCE_SIZE', 'BURO_DAYS_CREDIT_ENDDATE_MAX', 'ACTIVE_AMT_CREDIT_SUM_SUM', 'INSTAL_AMT_PAYMENT_MIN', 'INCOME_CREDIT_PERC', 'CLOSED_AMT_CREDIT_SUM_MEAN', 'INSTAL_DBD_MAX', 'POS_NAME_CONTRACT_STATUS_Active_MEAN', 'BURO_AMT_CREDIT_SUM_DEBT_MEAN', 'POS_MONTHS_BALANCE_MEAN', 'PREV_AMT_ANNUITY_MEAN', 'INSTAL_DBD_MEAN', 'CLOSED_DAYS_CREDIT_VAR', 'INSTAL_DAYS_ENTRY_PAYMENT_SUM', 'INSTAL_PAYMENT_DIFF_MAX', 'BURO_DAYS_CREDIT_MEAN', 'PREV_APP_CREDIT_PERC_VAR', 'PREV_APP_CREDIT_PERC_MEAN', 'INSTAL_AMT_PAYMENT_MEAN', 'CLOSED_DAYS_CREDIT_UPDATE_MEAN', 'INSTAL_PAYMENT_DIFF_MEAN', 'PREV_NAME_YIELD_GROUP_high_MEAN', 'INCOME_PER_PERSON', 'INSTAL_PAYMENT_PERC_MEAN', 'ACTIVE_DAYS_CREDIT_VAR', 'PREV_HOUR_APPR_PROCESS_START_MEAN', 'APPROVED_AMT_DOWN_PAYMENT_MAX'] not in index"
+2025-01-11 16:20:17.727 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:20:18.001 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:20:18.006 | ERROR    | __main__:<module>:90 - Error applying RobustScaler: list.remove(x): x not in list
+2025-01-11 16:20:38.158 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:20:38.427 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:20:38.544 | ERROR    | __main__:<module>:86 - Error applying RobustScaler: "['PAYMENT_RATE', 'EXT_SOURCE_1', 'EXT_SOURCE_3', 'EXT_SOURCE_2', 'DAYS_SINCE_BIRTH', 'AMT_ANNUITY', 'DAYS_EMPLOYED', 'APPROVED_CNT_PAYMENT_MEAN', 'DAYS_SINCE_ID_PUBLISHED', 'INSTAL_DAYS_ENTRY_PAYMENT_MAX', 'ACTIVE_DAYS_CREDIT_MAX', 'INSTAL_DPD_MEAN', 'ANNUITY_INCOME_PERC', 'ACTIVE_DAYS_CREDIT_ENDDATE_MIN', 'DAYS_SINCE_REGISTRATION', 'INSTAL_AMT_PAYMENT_SUM', 'INSTAL_DBD_SUM', 'REGION_POPULATION_RELATIVE', 'CLOSED_DAYS_CREDIT_MAX', 'BURO_AMT_CREDIT_MAX_OVERDUE_MEAN', 'DAYS_SINCE_LAST_PHONE_CHANGE', 'CLOSED_DAYS_CREDIT_ENDDATE_MAX', 'ACTIVE_DAYS_CREDIT_UPDATE_MEAN', 'POS_MONTHS_BALANCE_SIZE', 'BURO_DAYS_CREDIT_ENDDATE_MAX', 'ACTIVE_AMT_CREDIT_SUM_SUM', 'INSTAL_AMT_PAYMENT_MIN', 'INCOME_CREDIT_PERC', 'CLOSED_AMT_CREDIT_SUM_MEAN', 'INSTAL_DBD_MAX', 'POS_NAME_CONTRACT_STATUS_Active_MEAN', 'BURO_AMT_CREDIT_SUM_DEBT_MEAN', 'POS_MONTHS_BALANCE_MEAN', 'PREV_AMT_ANNUITY_MEAN', 'INSTAL_DBD_MEAN', 'CLOSED_DAYS_CREDIT_VAR', 'INSTAL_DAYS_ENTRY_PAYMENT_SUM', 'INSTAL_PAYMENT_DIFF_MAX', 'BURO_DAYS_CREDIT_MEAN', 'PREV_APP_CREDIT_PERC_VAR', 'PREV_APP_CREDIT_PERC_MEAN', 'INSTAL_AMT_PAYMENT_MEAN', 'CLOSED_DAYS_CREDIT_UPDATE_MEAN', 'INSTAL_PAYMENT_DIFF_MEAN', 'PREV_NAME_YIELD_GROUP_high_MEAN', 'INCOME_PER_PERSON', 'INSTAL_PAYMENT_PERC_MEAN', 'ACTIVE_DAYS_CREDIT_VAR', 'PREV_HOUR_APPR_PROCESS_START_MEAN', 'APPROVED_AMT_DOWN_PAYMENT_MAX'] not in index"
+2025-01-11 16:23:04.175 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:23:04.470 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:23:04.598 | ERROR    | __main__:<module>:86 - Error applying RobustScaler: "['PAYMENT_RATE', 'EXT_SOURCE_1', 'EXT_SOURCE_3', 'EXT_SOURCE_2', 'DAYS_SINCE_BIRTH', 'AMT_ANNUITY', 'DAYS_EMPLOYED', 'APPROVED_CNT_PAYMENT_MEAN', 'DAYS_SINCE_ID_PUBLISHED', 'INSTAL_DAYS_ENTRY_PAYMENT_MAX', 'ACTIVE_DAYS_CREDIT_MAX', 'INSTAL_DPD_MEAN', 'ANNUITY_INCOME_PERC', 'ACTIVE_DAYS_CREDIT_ENDDATE_MIN', 'DAYS_SINCE_REGISTRATION', 'INSTAL_AMT_PAYMENT_SUM', 'INSTAL_DBD_SUM', 'REGION_POPULATION_RELATIVE', 'CLOSED_DAYS_CREDIT_MAX', 'BURO_AMT_CREDIT_MAX_OVERDUE_MEAN', 'DAYS_SINCE_LAST_PHONE_CHANGE', 'CLOSED_DAYS_CREDIT_ENDDATE_MAX', 'ACTIVE_DAYS_CREDIT_UPDATE_MEAN', 'POS_MONTHS_BALANCE_SIZE', 'BURO_DAYS_CREDIT_ENDDATE_MAX', 'ACTIVE_AMT_CREDIT_SUM_SUM', 'INSTAL_AMT_PAYMENT_MIN', 'INCOME_CREDIT_PERC', 'CLOSED_AMT_CREDIT_SUM_MEAN', 'INSTAL_DBD_MAX', 'POS_NAME_CONTRACT_STATUS_Active_MEAN', 'BURO_AMT_CREDIT_SUM_DEBT_MEAN', 'POS_MONTHS_BALANCE_MEAN', 'PREV_AMT_ANNUITY_MEAN', 'INSTAL_DBD_MEAN', 'CLOSED_DAYS_CREDIT_VAR', 'INSTAL_DAYS_ENTRY_PAYMENT_SUM', 'INSTAL_PAYMENT_DIFF_MAX', 'BURO_DAYS_CREDIT_MEAN', 'PREV_APP_CREDIT_PERC_VAR', 'PREV_APP_CREDIT_PERC_MEAN', 'INSTAL_AMT_PAYMENT_MEAN', 'CLOSED_DAYS_CREDIT_UPDATE_MEAN', 'INSTAL_PAYMENT_DIFF_MEAN', 'PREV_NAME_YIELD_GROUP_high_MEAN', 'INCOME_PER_PERSON', 'INSTAL_PAYMENT_PERC_MEAN', 'ACTIVE_DAYS_CREDIT_VAR', 'PREV_HOUR_APPR_PROCESS_START_MEAN', 'APPROVED_AMT_DOWN_PAYMENT_MAX'] not in index"
+2025-01-11 16:25:11.188 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:25:11.464 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:25:11.576 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:25:13.410 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:25:13.690 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:25:13.812 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:36:05.339 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:36:05.617 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:36:05.736 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:38:19.307 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:38:19.601 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:38:19.725 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:39:05.489 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:39:05.774 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:39:05.881 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:42:19.129 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:42:19.557 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:42:19.746 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:43:25.411 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:43:25.853 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:43:26.045 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:46:04.006 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:46:04.305 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:46:04.433 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:47:13.909 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:47:14.196 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:47:14.312 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:49:03.808 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:49:04.088 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:49:04.204 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:50:04.593 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:50:05.039 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:50:05.240 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:53:15.785 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:53:16.071 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:53:16.182 | SUCCESS  | __main__:<module>:83 - Applied RobustScaler to numeric features successfully.
+2025-01-11 16:59:41.057 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 16:59:41.328 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 16:59:41.422 | SUCCESS  | __main__:<module>:76 - Applied RobustScaler to numeric features successfully.
+2025-01-11 17:00:15.325 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 17:00:15.598 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 17:00:15.689 | SUCCESS  | __main__:<module>:76 - Applied RobustScaler to numeric features successfully.
+2025-01-11 17:00:17.416 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 17:00:47.245 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 17:00:47.514 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 17:00:47.607 | SUCCESS  | __main__:<module>:76 - Applied RobustScaler to numeric features successfully.
+2025-01-11 17:00:49.301 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 17:00:49.577 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 17:00:49.673 | SUCCESS  | __main__:<module>:76 - Applied RobustScaler to numeric features successfully.
+2025-01-11 17:01:22.392 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 17:01:22.663 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 17:01:22.757 | SUCCESS  | __main__:<module>:76 - Applied RobustScaler to numeric features successfully.
+2025-01-11 17:02:50.052 | SUCCESS  | __main__:<module>:41 - Model loaded successfully.
+2025-01-11 17:02:50.328 | SUCCESS  | __main__:<module>:49 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 17:02:50.428 | SUCCESS  | __main__:<module>:76 - Applied RobustScaler to numeric features successfully.
+2025-01-11 17:10:00.759 | SUCCESS  | __main__:<module>:40 - Model loaded successfully.
+2025-01-11 17:10:01.047 | SUCCESS  | __main__:<module>:48 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 17:10:01.153 | SUCCESS  | __main__:<module>:75 - Applied RobustScaler to numeric features successfully.
+2025-01-11 17:12:45.064 | SUCCESS  | __main__:<module>:40 - Model loaded successfully.
+2025-01-11 17:12:45.336 | SUCCESS  | __main__:<module>:48 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 17:12:45.435 | SUCCESS  | __main__:<module>:75 - Applied RobustScaler to numeric features successfully.
+2025-01-11 17:13:05.430 | SUCCESS  | __main__:<module>:40 - Model loaded successfully.
+2025-01-11 17:13:05.701 | SUCCESS  | __main__:<module>:48 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 17:13:05.797 | SUCCESS  | __main__:<module>:75 - Applied RobustScaler to numeric features successfully.
+2025-01-11 17:13:41.917 | SUCCESS  | __main__:<module>:40 - Model loaded successfully.
+2025-01-11 17:13:42.198 | SUCCESS  | __main__:<module>:48 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 17:13:42.303 | SUCCESS  | __main__:<module>:75 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:05:18.555 | SUCCESS  | __main__:<module>:46 - Model loaded successfully.
+2025-01-11 18:05:18.569 | SUCCESS  | __main__:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:05:18.843 | SUCCESS  | __main__:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:05:18.874 | SUCCESS  | __main__:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:05:20.608 | SUCCESS  | __main__:<module>:46 - Model loaded successfully.
+2025-01-11 18:05:20.610 | SUCCESS  | __main__:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:05:20.884 | SUCCESS  | __main__:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:05:20.915 | SUCCESS  | __main__:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:06:50.919 | SUCCESS  | __main__:<module>:46 - Model loaded successfully.
+2025-01-11 18:06:50.921 | SUCCESS  | __main__:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:06:51.190 | SUCCESS  | __main__:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:06:51.223 | SUCCESS  | __main__:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:07:03.027 | SUCCESS  | __main__:<module>:46 - Model loaded successfully.
+2025-01-11 18:07:03.030 | SUCCESS  | __main__:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:07:03.330 | SUCCESS  | __main__:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:07:03.365 | SUCCESS  | __main__:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:09:20.414 | SUCCESS  | __main__:<module>:46 - Model loaded successfully.
+2025-01-11 18:09:20.416 | SUCCESS  | __main__:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:09:20.688 | SUCCESS  | __main__:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:09:20.720 | SUCCESS  | __main__:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:09:20.721 | INFO     | __main__:<module>:97 - Calculating predicted probabilities for the first 1000 rows...
+2025-01-11 18:09:21.128 | INFO     | __main__:<module>:108 - Logged predicted probabilities for the first 1000 rows successfully.
+2025-01-11 18:10:13.067 | SUCCESS  | __main__:<module>:46 - Model loaded successfully.
+2025-01-11 18:10:13.069 | SUCCESS  | __main__:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:10:13.343 | SUCCESS  | __main__:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:10:13.377 | SUCCESS  | __main__:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:10:13.378 | INFO     | __main__:<module>:97 - Calculating predicted probabilities for the first 1000 rows...
+2025-01-11 18:10:13.457 | INFO     | __main__:<module>:108 - Logged predicted probabilities for the first 1000 rows successfully.
+2025-01-11 18:11:05.194 | SUCCESS  | __main__:<module>:46 - Model loaded successfully.
+2025-01-11 18:11:05.196 | SUCCESS  | __main__:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:11:05.498 | SUCCESS  | __main__:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:11:05.533 | SUCCESS  | __main__:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:11:05.534 | INFO     | __main__:<module>:97 - Calculating predicted probabilities for the first 50 rows...
+2025-01-11 18:11:05.612 | INFO     | __main__:<module>:108 - Logged predicted probabilities for the first 1000 rows successfully.
+2025-01-11 18:11:33.028 | SUCCESS  | __main__:<module>:46 - Model loaded successfully.
+2025-01-11 18:11:33.030 | SUCCESS  | __main__:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:11:33.297 | SUCCESS  | __main__:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:11:33.330 | SUCCESS  | __main__:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:11:33.331 | INFO     | __main__:<module>:97 - Calculating predicted probabilities for the first 50 rows...
+2025-01-11 18:11:33.405 | INFO     | __main__:<module>:108 - Logged predicted probabilities for the first 1000 rows successfully.
+2025-01-11 18:29:28.966 | SUCCESS  | api.main:<module>:46 - Model loaded successfully.
+2025-01-11 18:29:28.988 | SUCCESS  | api.main:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:29:29.270 | SUCCESS  | api.main:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:29:29.305 | SUCCESS  | api.main:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:29:29.305 | INFO     | api.main:<module>:97 - Calculating predicted probabilities for the first 50 rows...
+2025-01-11 18:29:29.386 | INFO     | api.main:<module>:108 - Logged predicted probabilities for the first 1000 rows successfully.
+2025-01-11 18:29:29.799 | ERROR    | api.main:predict:163 - Error processing prediction: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+2025-01-11 18:32:12.884 | SUCCESS  | api.main:<module>:46 - Model loaded successfully.
+2025-01-11 18:32:12.887 | SUCCESS  | api.main:<module>:56 - Scaler loaded successfully.
+2025-01-11 18:32:13.187 | SUCCESS  | api.main:<module>:65 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:32:13.222 | SUCCESS  | api.main:<module>:89 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:32:13.222 | INFO     | api.main:<module>:97 - Calculating predicted probabilities for the first 50 rows...
+2025-01-11 18:32:13.300 | INFO     | api.main:<module>:108 - Logged predicted probabilities for the first 1000 rows successfully.
+2025-01-11 18:32:13.469 | ERROR    | api.main:predict:163 - Error processing prediction: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+2025-01-11 18:33:41.314 | SUCCESS  | api.main:<module>:47 - Model loaded successfully.
+2025-01-11 18:33:41.317 | SUCCESS  | api.main:<module>:57 - Scaler loaded successfully.
+2025-01-11 18:33:41.619 | SUCCESS  | api.main:<module>:66 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-11 18:33:41.656 | SUCCESS  | api.main:<module>:90 - Applied RobustScaler to numeric features successfully.
+2025-01-11 18:33:41.656 | INFO     | api.main:<module>:98 - Calculating predicted probabilities for the first 50 rows...
+2025-01-11 18:33:41.730 | INFO     | api.main:<module>:109 - Logged predicted probabilities for the first 1000 rows successfully.
+2025-01-14 15:32:35.889 | SUCCESS  | __main__:<module>:48 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business/latest
+2025-01-14 15:32:35.916 | INFO     | __main__:<module>:52 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:32:35.916 | INFO     | __main__:<module>:62 - Using run ID: 6574f1556be94f16b078c11a54468d28 to fetch artifacts
+2025-01-14 15:32:35.916 | ERROR    | __main__:<module>:82 - Error loading scaler from MLflow: list_artifacts() got an unexpected keyword argument 'path'
+2025-01-14 15:35:24.561 | SUCCESS  | __main__:<module>:45 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 15:35:24.590 | INFO     | __main__:<module>:49 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:35:24.590 | INFO     | __main__:<module>:59 - Using run ID: 6574f1556be94f16b078c11a54468d28 to fetch artifacts
+2025-01-14 15:35:24.590 | ERROR    | __main__:<module>:79 - Error loading scaler from MLflow: list_artifacts() got an unexpected keyword argument 'path'
+2025-01-14 15:38:00.623 | SUCCESS  | __main__:<module>:45 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 15:38:00.664 | INFO     | __main__:<module>:49 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:38:00.665 | INFO     | __main__:<module>:59 - Using run ID: 6574f1556be94f16b078c11a54468d28 to fetch artifacts
+2025-01-14 15:38:00.699 | ERROR    | __main__:<module>:76 - No scaler artifact found with 'RobustScaler.joblib' in its name.
+2025-01-14 15:40:33.260 | SUCCESS  | __main__:<module>:45 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 15:40:33.291 | INFO     | __main__:<module>:49 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:40:33.291 | INFO     | __main__:<module>:59 - Using run ID: 6574f1556be94f16b078c11a54468d28 to fetch artifacts
+2025-01-14 15:40:33.318 | ERROR    | __main__:<module>:76 - No scaler artifact found with 'RobustScaler' in its name.
+2025-01-14 15:51:11.471 | SUCCESS  | __main__:<module>:49 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 15:51:11.500 | INFO     | __main__:<module>:53 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:51:11.501 | INFO     | __main__:<module>:62 - Fetching artifacts from the 'scalers' directory for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:51:11.501 | ERROR    | __main__:<module>:82 - Error loading scaler from MLflow: list_artifacts() got an unexpected keyword argument 'path'
+2025-01-14 15:52:56.241 | SUCCESS  | __main__:<module>:49 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 15:52:56.273 | INFO     | __main__:<module>:53 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:52:56.273 | INFO     | __main__:<module>:61 - Fetching artifacts for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:52:56.293 | INFO     | __main__:<module>:71 - Found 'scalers' directory: scalers
+2025-01-14 15:52:56.293 | ERROR    | __main__:<module>:91 - Error loading scaler from MLflow: list_artifacts() got an unexpected keyword argument 'path'
+2025-01-14 15:58:06.954 | SUCCESS  | __main__:<module>:49 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 15:58:06.985 | INFO     | __main__:<module>:53 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:58:06.985 | INFO     | __main__:<module>:61 - Fetching artifacts for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:58:06.985 | ERROR    | __main__:<module>:81 - Error loading scaler from MLflow: list_artifacts() got an unexpected keyword argument 'path'
+2025-01-14 15:59:03.380 | SUCCESS  | __main__:<module>:49 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 15:59:03.410 | INFO     | __main__:<module>:53 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:59:03.410 | INFO     | __main__:<module>:61 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 15:59:03.410 | INFO     | __main__:<module>:65 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 15:59:03.499 | SUCCESS  | __main__:<module>:70 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 15:59:03.527 | INFO     | __main__:<module>:79 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 15:59:04.008 | SUCCESS  | __main__:<module>:94 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 15:59:04.079 | SUCCESS  | __main__:<module>:119 - Applied RobustScaler to numeric features successfully.
+2025-01-14 15:59:04.079 | INFO     | __main__:<module>:131 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 15:59:04.089 | ERROR    | __main__:<module>:144 - Error logging predicted probabilities for the first 50 rows: 'PyFuncModel' object has no attribute 'predict_proba'
+2025-01-14 16:01:50.157 | SUCCESS  | __main__:<module>:49 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 16:01:50.184 | INFO     | __main__:<module>:53 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:01:50.184 | INFO     | __main__:<module>:61 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:01:50.184 | INFO     | __main__:<module>:65 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 16:01:50.206 | SUCCESS  | __main__:<module>:70 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 16:01:50.225 | INFO     | __main__:<module>:79 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 16:01:50.588 | SUCCESS  | __main__:<module>:94 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 16:01:50.636 | SUCCESS  | __main__:<module>:119 - Applied RobustScaler to numeric features successfully.
+2025-01-14 16:01:50.636 | INFO     | __main__:<module>:131 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 16:01:50.874 | ERROR    | __main__:<module>:148 - Error logging predicted probabilities for the first 50 rows: too many indices for array: array is 1-dimensional, but 2 were indexed
+2025-01-14 16:03:09.098 | SUCCESS  | __main__:<module>:49 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 16:03:09.128 | INFO     | __main__:<module>:53 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:03:09.129 | INFO     | __main__:<module>:61 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:03:09.129 | INFO     | __main__:<module>:65 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 16:03:09.158 | SUCCESS  | __main__:<module>:70 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 16:03:09.179 | INFO     | __main__:<module>:79 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 16:03:09.551 | SUCCESS  | __main__:<module>:94 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 16:03:09.598 | SUCCESS  | __main__:<module>:119 - Applied RobustScaler to numeric features successfully.
+2025-01-14 16:03:09.598 | INFO     | __main__:<module>:131 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 16:03:09.820 | INFO     | __main__:<module>:145 - Logged predicted values for the first 50 rows successfully.
+2025-01-14 16:03:18.454 | SUCCESS  | __main__:<module>:49 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 16:03:18.482 | INFO     | __main__:<module>:53 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:03:18.482 | INFO     | __main__:<module>:61 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:03:18.482 | INFO     | __main__:<module>:65 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 16:03:18.508 | SUCCESS  | __main__:<module>:70 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 16:03:18.529 | INFO     | __main__:<module>:79 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 16:03:18.890 | SUCCESS  | __main__:<module>:94 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 16:03:18.950 | SUCCESS  | __main__:<module>:119 - Applied RobustScaler to numeric features successfully.
+2025-01-14 16:03:18.950 | INFO     | __main__:<module>:131 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 16:03:19.189 | INFO     | __main__:<module>:145 - Logged predicted values for the first 50 rows successfully.
+2025-01-14 16:11:49.864 | SUCCESS  | __main__:<module>:50 - Model loaded successfully from MLflow Model Registry: models:/LGBMClassifier - business@champion
+2025-01-14 16:11:49.894 | ERROR    | __main__:<module>:57 - Error loading model from MLflow: INVALID_PARAMETER_VALUE: Invalid Model Version stage: champion. Value must be one of None, Staging, Production, Archived.
+2025-01-14 16:15:45.582 | SUCCESS  | __main__:<module>:50 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 16:15:45.587 | ERROR    | __main__:<module>:69 - Error loading scaler from MLflow: name 'run_id' is not defined
+2025-01-14 16:18:11.511 | SUCCESS  | __main__:<module>:51 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 16:18:11.534 | INFO     | __main__:<module>:57 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:18:11.534 | INFO     | __main__:<module>:64 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:18:11.534 | INFO     | __main__:<module>:68 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 16:18:11.602 | SUCCESS  | __main__:<module>:73 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 16:18:11.620 | INFO     | __main__:<module>:82 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 16:18:12.000 | SUCCESS  | __main__:<module>:97 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 16:18:12.062 | SUCCESS  | __main__:<module>:122 - Applied RobustScaler to numeric features successfully.
+2025-01-14 16:18:12.062 | INFO     | __main__:<module>:134 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 16:18:12.204 | INFO     | __main__:<module>:145 - Logged predicted probabilities for the first 50 rows successfully.
+2025-01-14 16:18:18.374 | SUCCESS  | __main__:<module>:51 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 16:18:18.391 | INFO     | __main__:<module>:57 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:18:18.391 | INFO     | __main__:<module>:64 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 16:18:18.391 | INFO     | __main__:<module>:68 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 16:18:18.426 | SUCCESS  | __main__:<module>:73 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 16:18:18.454 | INFO     | __main__:<module>:82 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 16:18:18.840 | SUCCESS  | __main__:<module>:97 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 16:18:18.916 | SUCCESS  | __main__:<module>:122 - Applied RobustScaler to numeric features successfully.
+2025-01-14 16:18:18.916 | INFO     | __main__:<module>:134 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 16:18:19.061 | INFO     | __main__:<module>:145 - Logged predicted probabilities for the first 50 rows successfully.
+2025-01-14 16:53:43.714 | ERROR    | __main__:<module>:59 - Error loading model using alias: API request to http://127.0.0.1:5000/api/2.0/mlflow/registered-models/alias failed with exception HTTPConnectionPool(host='127.0.0.1', port=5000): Max retries exceeded with url: /api/2.0/mlflow/registered-models/alias?name=LGBMClassifier+-+business&alias=champion (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001C18FEB3920>: Failed to establish a new connection: [WinError 10061] Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée'))
+2025-01-14 17:00:36.826 | INFO     | __main__:start_mlflow_server:61 - Starting MLflow Tracking Server...
+2025-01-14 17:00:42.532 | INFO     | __main__:start_mlflow_server:76 - MLflow server started successfully.
+2025-01-14 17:00:55.468 | SUCCESS  | __main__:<module>:91 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 17:00:55.493 | INFO     | __main__:<module>:97 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:00:55.493 | INFO     | __main__:<module>:104 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:00:55.493 | INFO     | __main__:<module>:108 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 17:00:55.744 | SUCCESS  | __main__:<module>:113 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 17:00:55.768 | INFO     | __main__:<module>:122 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 17:00:56.342 | SUCCESS  | __main__:<module>:137 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 17:00:56.423 | SUCCESS  | __main__:<module>:162 - Applied RobustScaler to numeric features successfully.
+2025-01-14 17:00:56.423 | INFO     | __main__:<module>:174 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 17:00:56.572 | INFO     | __main__:<module>:185 - Logged predicted probabilities for the first 50 rows successfully.
+2025-01-14 17:01:04.853 | INFO     | __main__:start_mlflow_server:61 - Starting MLflow Tracking Server...
+2025-01-14 17:01:09.871 | INFO     | __main__:start_mlflow_server:76 - MLflow server started successfully.
+2025-01-14 17:01:11.373 | SUCCESS  | __main__:<module>:91 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 17:01:11.404 | INFO     | __main__:<module>:97 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:01:11.404 | INFO     | __main__:<module>:104 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:01:11.404 | INFO     | __main__:<module>:108 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 17:01:11.453 | SUCCESS  | __main__:<module>:113 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 17:01:11.490 | INFO     | __main__:<module>:122 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 17:01:11.983 | SUCCESS  | __main__:<module>:137 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 17:01:12.053 | SUCCESS  | __main__:<module>:162 - Applied RobustScaler to numeric features successfully.
+2025-01-14 17:01:12.053 | INFO     | __main__:<module>:174 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 17:01:12.227 | INFO     | __main__:<module>:185 - Logged predicted probabilities for the first 50 rows successfully.
+2025-01-14 17:03:10.252 | INFO     | __main__:<module>:254 - Shutting down MLflow server...
+2025-01-14 17:03:10.438 | INFO     | __main__:<module>:257 - MLflow server stopped.
+2025-01-14 17:03:19.365 | INFO     | __main__:start_mlflow_server:65 - Starting MLflow Tracking Server...
+2025-01-14 17:03:24.403 | INFO     | __main__:start_mlflow_server:80 - MLflow server started successfully.
+2025-01-14 17:03:26.977 | SUCCESS  | __main__:<module>:95 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 17:03:27.016 | INFO     | __main__:<module>:101 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:03:27.016 | INFO     | __main__:<module>:108 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:03:27.016 | INFO     | __main__:<module>:112 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 17:03:27.065 | SUCCESS  | __main__:<module>:117 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 17:03:27.104 | INFO     | __main__:<module>:126 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 17:03:28.111 | SUCCESS  | __main__:<module>:141 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 17:03:28.300 | SUCCESS  | __main__:<module>:166 - Applied RobustScaler to numeric features successfully.
+2025-01-14 17:03:28.343 | INFO     | __main__:<module>:178 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 17:03:28.813 | INFO     | __main__:<module>:189 - Logged predicted probabilities for the first 50 rows successfully.
+2025-01-14 17:03:58.771 | INFO     | __main__:<module>:258 - Shutting down MLflow server...
+2025-01-14 17:03:58.774 | INFO     | __main__:<module>:261 - MLflow server stopped.
+2025-01-14 17:04:07.695 | INFO     | __main__:start_mlflow_server:66 - Starting MLflow Tracking Server...
+2025-01-14 17:04:12.720 | INFO     | __main__:start_mlflow_server:81 - MLflow server started successfully.
+2025-01-14 17:04:14.728 | SUCCESS  | __main__:<module>:96 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 17:04:14.768 | INFO     | __main__:<module>:102 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:04:14.770 | INFO     | __main__:<module>:109 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:04:14.770 | INFO     | __main__:<module>:113 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 17:04:14.799 | SUCCESS  | __main__:<module>:118 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 17:04:14.829 | INFO     | __main__:<module>:127 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 17:04:15.564 | SUCCESS  | __main__:<module>:142 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 17:04:15.647 | SUCCESS  | __main__:<module>:167 - Applied RobustScaler to numeric features successfully.
+2025-01-14 17:04:15.647 | INFO     | __main__:<module>:179 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 17:04:15.825 | INFO     | __main__:<module>:190 - Logged predicted probabilities for the first 50 rows successfully.
+2025-01-14 17:07:29.236 | INFO     | api.main:start_mlflow_server:66 - Starting MLflow Tracking Server...
+2025-01-14 17:09:06.385 | INFO     | __main__:<module>:259 - Shutting down MLflow server...
+2025-01-14 17:09:06.388 | INFO     | __main__:<module>:262 - MLflow server stopped.
+2025-01-14 17:09:13.996 | INFO     | __main__:start_mlflow_server:66 - Starting MLflow Tracking Server...
+2025-01-14 17:09:19.033 | INFO     | __main__:start_mlflow_server:81 - MLflow server started successfully.
+2025-01-14 17:09:21.407 | SUCCESS  | __main__:<module>:96 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 17:09:21.485 | INFO     | __main__:<module>:102 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:09:21.485 | INFO     | __main__:<module>:109 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:09:21.485 | INFO     | __main__:<module>:113 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 17:09:21.557 | SUCCESS  | __main__:<module>:118 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 17:09:21.586 | INFO     | __main__:<module>:127 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 17:09:22.298 | SUCCESS  | __main__:<module>:142 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 17:09:22.369 | SUCCESS  | __main__:<module>:167 - Applied RobustScaler to numeric features successfully.
+2025-01-14 17:09:22.369 | INFO     | __main__:<module>:179 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 17:09:22.553 | INFO     | __main__:<module>:190 - Logged predicted probabilities for the first 50 rows successfully.
+2025-01-14 17:13:18.411 | INFO     | __main__:<module>:259 - Shutting down MLflow server...
+2025-01-14 17:13:18.411 | INFO     | __main__:<module>:262 - MLflow server stopped.
+2025-01-14 17:13:28.039 | INFO     | __main__:start_mlflow_server:67 - Starting MLflow Tracking Server...
+2025-01-14 17:13:33.066 | INFO     | __main__:start_mlflow_server:82 - MLflow server started successfully.
+2025-01-14 17:13:35.218 | SUCCESS  | __main__:<module>:97 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 17:13:35.240 | INFO     | __main__:<module>:103 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:13:35.240 | INFO     | __main__:<module>:110 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:13:35.246 | INFO     | __main__:<module>:114 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 17:13:35.281 | SUCCESS  | __main__:<module>:119 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 17:13:35.312 | INFO     | __main__:<module>:128 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 17:13:36.048 | SUCCESS  | __main__:<module>:143 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 17:13:36.141 | SUCCESS  | __main__:<module>:168 - Applied RobustScaler to numeric features successfully.
+2025-01-14 17:13:36.141 | INFO     | __main__:<module>:180 - Calculating predicted probabilities for the first 50 rows...
+2025-01-14 17:13:36.329 | INFO     | __main__:<module>:191 - Logged predicted probabilities for the first 50 rows successfully.
+2025-01-14 17:17:34.257 | INFO     | __main__:<module>:260 - Shutting down MLflow server...
+2025-01-14 17:17:34.258 | INFO     | __main__:<module>:263 - MLflow server stopped.
+2025-01-14 17:17:43.677 | INFO     | __main__:<module>:254 - Shutting down MLflow server...
+2025-01-14 17:17:43.691 | INFO     | __main__:<module>:257 - MLflow server stopped.
+2025-01-14 17:17:57.129 | INFO     | __main__:start_mlflow_server:62 - Starting MLflow Tracking Server...
+2025-01-14 17:18:13.630 | INFO     | __main__:start_mlflow_server:79 - MLflow server is ready.
+2025-01-14 17:18:16.477 | SUCCESS  | __main__:<module>:97 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 17:18:16.503 | INFO     | __main__:<module>:103 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:18:16.503 | INFO     | __main__:<module>:110 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:18:16.503 | INFO     | __main__:<module>:114 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 17:18:16.688 | SUCCESS  | __main__:<module>:119 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 17:18:16.710 | INFO     | __main__:<module>:127 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 17:18:17.260 | SUCCESS  | __main__:<module>:141 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 17:18:17.349 | SUCCESS  | __main__:<module>:166 - Applied RobustScaler to numeric features successfully.
+2025-01-14 17:18:25.998 | INFO     | __main__:start_mlflow_server:62 - Starting MLflow Tracking Server...
+2025-01-14 17:18:26.032 | INFO     | __main__:start_mlflow_server:79 - MLflow server is ready.
+2025-01-14 17:18:28.091 | SUCCESS  | __main__:<module>:97 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-14 17:18:28.174 | INFO     | __main__:<module>:103 - Retrieved run ID for the model: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:18:28.174 | INFO     | __main__:<module>:110 - Fetching scaler directly for run ID: 6574f1556be94f16b078c11a54468d28
+2025-01-14 17:18:28.179 | INFO     | __main__:<module>:114 - Expected scaler path: scalers/2025-01-14 - RobustScaler.joblib
+2025-01-14 17:18:28.224 | SUCCESS  | __main__:<module>:119 - Scaler loaded successfully from: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-14 17:18:28.274 | INFO     | __main__:<module>:127 - Retrieved custom threshold: 0.41000000000000003
+2025-01-14 17:18:29.191 | SUCCESS  | __main__:<module>:141 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 17:18:29.333 | SUCCESS  | __main__:<module>:166 - Applied RobustScaler to numeric features successfully.
+2025-01-14 17:23:31.170 | INFO     | api.main:start_mlflow_server:62 - Starting MLflow Tracking Server...
+2025-01-14 17:24:12.671 | INFO     | __main__:<module>:220 - Shutting down MLflow server...
+2025-01-14 17:24:12.676 | INFO     | __main__:<module>:223 - MLflow server stopped.
+2025-01-14 17:24:13.384 | INFO     | __main__:<module>:220 - Shutting down MLflow server...
+2025-01-14 17:24:13.389 | INFO     | __main__:<module>:223 - MLflow server stopped.
+2025-01-14 17:24:41.384 | INFO     | api.main:start_mlflow_server:62 - Starting MLflow Tracking Server...
+2025-01-14 17:25:29.474 | INFO     | api.main:start_mlflow_server:62 - Starting MLflow Tracking Server...
+2025-01-14 18:08:41.636 | SUCCESS  | api.main:<module>:52 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:08:41.692 | SUCCESS  | api.main:<module>:60 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:08:42.243 | SUCCESS  | api.main:<module>:68 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:08:42.296 | SUCCESS  | api.main:<module>:95 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:08:43.502 | ERROR    | api.main:predict:139 - Error processing prediction: Input data must be 2 dimensional and non empty.
+2025-01-14 18:08:44.384 | ERROR    | api.main:predict:139 - Error processing prediction: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+2025-01-14 18:13:13.494 | SUCCESS  | api.main:<module>:52 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:13:13.499 | SUCCESS  | api.main:<module>:60 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:13:14.018 | SUCCESS  | api.main:<module>:68 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:13:14.074 | SUCCESS  | api.main:<module>:95 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:17:09.464 | SUCCESS  | __main__:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:17:09.468 | SUCCESS  | __main__:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:17:10.021 | SUCCESS  | __main__:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:17:10.077 | SUCCESS  | __main__:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:17:10.077 | INFO     | __main__:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:17:10.221 | INFO     | __main__:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:17:15.006 | SUCCESS  | __main__:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:17:15.010 | SUCCESS  | __main__:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:17:15.485 | SUCCESS  | __main__:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:17:15.552 | SUCCESS  | __main__:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:17:15.553 | INFO     | __main__:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:17:15.677 | INFO     | __main__:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:21:13.004 | SUCCESS  | __main__:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:21:13.065 | SUCCESS  | __main__:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:21:13.704 | SUCCESS  | __main__:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:21:13.779 | SUCCESS  | __main__:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:21:13.782 | INFO     | __main__:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:21:13.933 | INFO     | __main__:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:21:17.588 | SUCCESS  | __main__:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:21:17.596 | SUCCESS  | __main__:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:21:18.084 | SUCCESS  | __main__:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:21:18.144 | SUCCESS  | __main__:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:21:18.145 | INFO     | __main__:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:21:18.296 | INFO     | __main__:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:21:44.813 | SUCCESS  | __main__:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:21:44.818 | SUCCESS  | __main__:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:21:45.355 | SUCCESS  | __main__:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:21:45.466 | SUCCESS  | __main__:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:21:45.466 | INFO     | __main__:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:21:45.605 | SUCCESS  | __main__:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:25:49.517 | SUCCESS  | __main__:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:25:49.525 | SUCCESS  | __main__:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:25:50.145 | SUCCESS  | __main__:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:25:50.237 | SUCCESS  | __main__:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:25:50.238 | INFO     | __main__:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:25:50.366 | SUCCESS  | __main__:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:30:38.739 | SUCCESS  | __main__:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:30:38.829 | SUCCESS  | __main__:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:30:39.590 | SUCCESS  | __main__:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:30:39.660 | SUCCESS  | __main__:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:30:39.660 | INFO     | __main__:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:30:39.840 | SUCCESS  | __main__:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:36:25.482 | SUCCESS  | __main__:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:36:25.525 | SUCCESS  | __main__:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:36:26.041 | SUCCESS  | __main__:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:36:26.103 | SUCCESS  | __main__:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:36:26.103 | INFO     | __main__:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:36:26.262 | SUCCESS  | __main__:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:36:29.612 | SUCCESS  | __main__:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:36:29.612 | SUCCESS  | __main__:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:36:30.121 | SUCCESS  | __main__:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:36:30.222 | SUCCESS  | __main__:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:36:30.222 | INFO     | __main__:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:36:30.371 | SUCCESS  | __main__:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:39:31.458 | SUCCESS  | api.main:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:39:31.463 | SUCCESS  | api.main:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:39:31.938 | SUCCESS  | api.main:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:39:31.994 | SUCCESS  | api.main:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:39:31.995 | INFO     | api.main:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:39:32.134 | SUCCESS  | api.main:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-14 18:40:46.652 | SUCCESS  | api.main:<module>:53 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-14 18:40:46.657 | SUCCESS  | api.main:<module>:61 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-14 18:40:47.123 | SUCCESS  | api.main:<module>:69 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-14 18:40:47.186 | SUCCESS  | api.main:<module>:96 - Applied RobustScaler to numeric features successfully.
+2025-01-14 18:40:47.186 | INFO     | api.main:<module>:105 - Calculating predicted probabilities for the first 20 rows...
+2025-01-14 18:40:47.300 | SUCCESS  | api.main:<module>:116 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 08:01:40.192 | ERROR    | __main__:<module>:56 - Error loading model from MLflow Registry: Registered Model with name=LGBMClassifier - business not found
+2025-01-15 08:04:46.346 | ERROR    | __main__:<module>:60 - Error loading model from MLflow Registry: Registered Model with name=LGBMClassifier - business not found
+2025-01-15 08:18:18.973 | ERROR    | __main__:<module>:60 - Error loading model from MLflow Registry: Registered Model with name=LGBMClassifier - business not found
+2025-01-15 08:21:26.171 | SUCCESS  | __main__:<module>:62 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 08:21:26.222 | SUCCESS  | __main__:<module>:70 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 08:21:26.715 | SUCCESS  | __main__:<module>:78 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 08:21:26.775 | SUCCESS  | __main__:<module>:104 - Applied RobustScaler to numeric features successfully.
+2025-01-15 08:21:26.775 | INFO     | __main__:<module>:113 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 08:21:26.889 | SUCCESS  | __main__:<module>:124 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 08:21:33.777 | SUCCESS  | __main__:<module>:62 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 08:21:33.782 | SUCCESS  | __main__:<module>:70 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 08:21:34.203 | SUCCESS  | __main__:<module>:78 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 08:21:34.244 | SUCCESS  | __main__:<module>:104 - Applied RobustScaler to numeric features successfully.
+2025-01-15 08:21:34.245 | INFO     | __main__:<module>:113 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 08:21:34.345 | SUCCESS  | __main__:<module>:124 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 08:25:41.170 | SUCCESS  | __main__:<module>:58 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 08:25:41.176 | SUCCESS  | __main__:<module>:66 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 08:25:41.627 | SUCCESS  | __main__:<module>:74 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 08:25:41.691 | SUCCESS  | __main__:<module>:100 - Applied RobustScaler to numeric features successfully.
+2025-01-15 08:25:41.692 | INFO     | __main__:<module>:109 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 08:25:41.839 | SUCCESS  | __main__:<module>:120 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 08:38:05.849 | SUCCESS  | __main__:<module>:59 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 08:38:05.860 | SUCCESS  | __main__:<module>:72 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 08:38:05.931 | SUCCESS  | __main__:<module>:88 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 08:38:06.327 | SUCCESS  | __main__:<module>:96 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 08:38:06.376 | SUCCESS  | __main__:<module>:122 - Applied RobustScaler to numeric features successfully.
+2025-01-15 08:38:06.376 | INFO     | __main__:<module>:131 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 08:38:06.504 | SUCCESS  | __main__:<module>:142 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 08:38:13.380 | SUCCESS  | __main__:<module>:59 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 08:38:13.388 | SUCCESS  | __main__:<module>:72 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 08:38:13.413 | SUCCESS  | __main__:<module>:88 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 08:38:13.810 | SUCCESS  | __main__:<module>:96 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 08:38:13.849 | SUCCESS  | __main__:<module>:122 - Applied RobustScaler to numeric features successfully.
+2025-01-15 08:38:13.849 | INFO     | __main__:<module>:131 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 08:38:13.944 | SUCCESS  | __main__:<module>:142 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 08:43:10.931 | SUCCESS  | __main__:<module>:60 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 08:43:10.941 | SUCCESS  | __main__:<module>:73 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 08:43:10.971 | SUCCESS  | __main__:<module>:89 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 08:43:11.423 | SUCCESS  | __main__:<module>:97 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 08:43:11.466 | SUCCESS  | __main__:<module>:123 - Applied RobustScaler to numeric features successfully.
+2025-01-15 08:43:11.467 | INFO     | __main__:<module>:132 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 08:43:11.572 | SUCCESS  | __main__:<module>:143 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 08:43:18.534 | SUCCESS  | __main__:<module>:60 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 08:43:18.544 | SUCCESS  | __main__:<module>:73 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 08:43:18.573 | SUCCESS  | __main__:<module>:89 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 08:43:19.003 | SUCCESS  | __main__:<module>:97 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 08:43:19.041 | SUCCESS  | __main__:<module>:123 - Applied RobustScaler to numeric features successfully.
+2025-01-15 08:43:19.041 | INFO     | __main__:<module>:132 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 08:43:19.144 | SUCCESS  | __main__:<module>:143 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 08:57:35.964 | SUCCESS  | __main__:<module>:65 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 08:57:36.136 | SUCCESS  | __main__:<module>:75 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 08:57:36.162 | SUCCESS  | __main__:<module>:91 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 08:57:36.173 | SUCCESS  | __main__:<module>:106 - Custom threshold '0.41000000000000003' fetched from MLflow run '6574f1556be94f16b078c11a54468d28'
+2025-01-15 08:57:36.553 | SUCCESS  | __main__:<module>:118 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 08:57:36.596 | SUCCESS  | __main__:<module>:144 - Applied RobustScaler to numeric features successfully.
+2025-01-15 08:57:36.597 | INFO     | __main__:<module>:153 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 08:57:36.715 | SUCCESS  | __main__:<module>:164 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 08:57:43.480 | SUCCESS  | __main__:<module>:65 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 08:57:43.641 | SUCCESS  | __main__:<module>:75 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 08:57:43.666 | SUCCESS  | __main__:<module>:91 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 08:57:43.676 | SUCCESS  | __main__:<module>:106 - Custom threshold '0.41000000000000003' fetched from MLflow run '6574f1556be94f16b078c11a54468d28'
+2025-01-15 08:57:44.048 | SUCCESS  | __main__:<module>:118 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 08:57:44.088 | SUCCESS  | __main__:<module>:144 - Applied RobustScaler to numeric features successfully.
+2025-01-15 08:57:44.088 | INFO     | __main__:<module>:153 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 08:57:44.188 | SUCCESS  | __main__:<module>:164 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:24:39.190 | INFO     | src.packages.utils:log_section_header:109 - 
+================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+================================================================================
+2025-01-15 09:24:39.197 | SUCCESS  | __main__:<module>:68 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 09:24:39.693 | SUCCESS  | __main__:<module>:78 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 09:24:39.756 | SUCCESS  | __main__:<module>:94 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 09:24:39.766 | SUCCESS  | __main__:<module>:109 - Custom threshold '0.41000000000000003' fetched from MLflow run '6574f1556be94f16b078c11a54468d28'
+2025-01-15 09:24:39.766 | INFO     | src.packages.utils:log_section_header:109 - 
+================================================================================
+                                LOADING DATASET                                 
+================================================================================
+2025-01-15 09:24:40.206 | SUCCESS  | __main__:<module>:121 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 09:24:40.207 | INFO     | src.packages.utils:log_section_header:109 - 
+================================================================================
+                                 PREPROCESSING                                  
+================================================================================
+2025-01-15 09:24:40.260 | SUCCESS  | __main__:<module>:148 - Applied RobustScaler to numeric features successfully.
+2025-01-15 09:24:40.261 | INFO     | src.packages.utils:log_section_header:109 - 
+================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+================================================================================
+2025-01-15 09:24:40.261 | INFO     | __main__:<module>:159 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 09:24:40.378 | SUCCESS  | __main__:<module>:170 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:24:47.925 | INFO     | src.packages.utils:log_section_header:109 - 
+================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+================================================================================
+2025-01-15 09:24:47.937 | SUCCESS  | __main__:<module>:68 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 09:24:48.304 | SUCCESS  | __main__:<module>:78 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 09:24:48.330 | SUCCESS  | __main__:<module>:94 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 09:24:48.338 | SUCCESS  | __main__:<module>:109 - Custom threshold '0.41000000000000003' fetched from MLflow run '6574f1556be94f16b078c11a54468d28'
+2025-01-15 09:24:48.338 | INFO     | src.packages.utils:log_section_header:109 - 
+================================================================================
+                                LOADING DATASET                                 
+================================================================================
+2025-01-15 09:24:48.698 | SUCCESS  | __main__:<module>:121 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 09:24:48.698 | INFO     | src.packages.utils:log_section_header:109 - 
+================================================================================
+                                 PREPROCESSING                                  
+================================================================================
+2025-01-15 09:24:48.746 | SUCCESS  | __main__:<module>:148 - Applied RobustScaler to numeric features successfully.
+2025-01-15 09:24:48.746 | INFO     | src.packages.utils:log_section_header:109 - 
+================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+================================================================================
+2025-01-15 09:24:48.746 | INFO     | __main__:<module>:159 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 09:24:48.857 | SUCCESS  | __main__:<module>:170 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:28:25.639 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 09:28:25.648 | SUCCESS  | __main__:<module>:70 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 09:28:26.070 | SUCCESS  | __main__:<module>:80 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 09:28:26.098 | SUCCESS  | __main__:<module>:96 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 09:28:26.108 | SUCCESS  | __main__:<module>:111 - Custom threshold '0.41000000000000003' fetched from MLflow run '6574f1556be94f16b078c11a54468d28'
+2025-01-15 09:28:26.108 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 09:28:26.541 | SUCCESS  | __main__:<module>:123 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 09:28:26.541 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 09:28:26.598 | SUCCESS  | __main__:<module>:150 - Applied RobustScaler to numeric features successfully.
+2025-01-15 09:28:26.598 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 09:28:26.598 | INFO     | __main__:<module>:161 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 09:28:26.710 | SUCCESS  | __main__:<module>:172 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:28:26.710 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 09:28:34.937 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 09:28:34.946 | SUCCESS  | __main__:<module>:70 - Fetched run_id '6574f1556be94f16b078c11a54468d28' for model 'LGBMClassifier - business' with alias 'champion'
+2025-01-15 09:28:35.333 | SUCCESS  | __main__:<module>:80 - Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 09:28:35.363 | SUCCESS  | __main__:<module>:96 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 09:28:35.373 | SUCCESS  | __main__:<module>:111 - Custom threshold '0.41000000000000003' fetched from MLflow run '6574f1556be94f16b078c11a54468d28'
+2025-01-15 09:28:35.373 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 09:28:35.932 | SUCCESS  | __main__:<module>:123 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 09:28:35.932 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 09:28:35.992 | SUCCESS  | __main__:<module>:150 - Applied RobustScaler to numeric features successfully.
+2025-01-15 09:28:35.992 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 09:28:35.992 | INFO     | __main__:<module>:161 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 09:28:36.104 | SUCCESS  | __main__:<module>:172 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:28:36.104 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 09:32:51.184 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 09:32:51.190 | SUCCESS  | __main__:<module>:70 - LGBMClassifier - business | Alias: @champion        | Fetched run_id '6574f1556be94f16b078c11a54468d28
+2025-01-15 09:32:51.472 | SUCCESS  | __main__:<module>:80 - LGBMClassifier - business | Alias: @champion        | Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 09:32:51.498 | SUCCESS  | __main__:<module>:96 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 09:32:51.507 | SUCCESS  | __main__:<module>:111 - ML FLOW run id: 6574f1556be94f16b078c11a54468d28              | Fetched custom threshold '0.41000000000000003'
+2025-01-15 09:32:51.507 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 09:32:51.889 | SUCCESS  | __main__:<module>:123 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 09:32:51.889 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 09:32:51.927 | SUCCESS  | __main__:<module>:150 - Applied RobustScaler to numeric features successfully.
+2025-01-15 09:32:51.928 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 09:32:51.928 | INFO     | __main__:<module>:161 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 09:32:52.035 | SUCCESS  | __main__:<module>:172 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:32:52.035 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 09:32:59.512 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 09:32:59.519 | SUCCESS  | __main__:<module>:70 - LGBMClassifier - business | Alias: @champion        | Fetched run_id '6574f1556be94f16b078c11a54468d28
+2025-01-15 09:32:59.797 | SUCCESS  | __main__:<module>:80 - LGBMClassifier - business | Alias: @champion        | Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 09:32:59.823 | SUCCESS  | __main__:<module>:96 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 09:32:59.831 | SUCCESS  | __main__:<module>:111 - ML FLOW run id: 6574f1556be94f16b078c11a54468d28              | Fetched custom threshold '0.41000000000000003'
+2025-01-15 09:32:59.831 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 09:33:00.196 | SUCCESS  | __main__:<module>:123 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 09:33:00.197 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 09:33:00.236 | SUCCESS  | __main__:<module>:150 - Applied RobustScaler to numeric features successfully.
+2025-01-15 09:33:00.237 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 09:33:00.237 | INFO     | __main__:<module>:161 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 09:33:00.340 | SUCCESS  | __main__:<module>:172 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:33:00.341 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 09:51:20.696 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 09:51:20.701 | SUCCESS  | api.mlflow_main:<module>:70 - LGBMClassifier - business | Alias: @champion        | Fetched run_id '6574f1556be94f16b078c11a54468d28
+2025-01-15 09:51:20.908 | SUCCESS  | api.mlflow_main:<module>:80 - LGBMClassifier - business | Alias: @champion        | Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 09:51:20.936 | SUCCESS  | api.mlflow_main:<module>:96 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 09:51:20.944 | SUCCESS  | api.mlflow_main:<module>:111 - ML FLOW run id: 6574f1556be94f16b078c11a54468d28              | Fetched custom threshold '0.41000000000000003'
+2025-01-15 09:51:20.945 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 09:51:21.328 | SUCCESS  | api.mlflow_main:<module>:123 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 09:51:21.328 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 09:51:21.371 | SUCCESS  | api.mlflow_main:<module>:150 - Applied RobustScaler to numeric features successfully.
+2025-01-15 09:51:21.372 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 09:51:21.372 | INFO     | api.mlflow_main:<module>:161 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 09:51:21.494 | SUCCESS  | api.mlflow_main:<module>:172 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:51:21.494 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 09:54:53.565 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 09:54:53.571 | SUCCESS  | api.mlflow_main:<module>:70 - LGBMClassifier - business | Alias: @champion        | Fetched run_id '6574f1556be94f16b078c11a54468d28
+2025-01-15 09:54:53.804 | SUCCESS  | api.mlflow_main:<module>:80 - LGBMClassifier - business | Alias: @champion        | Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 09:54:53.874 | SUCCESS  | api.mlflow_main:<module>:96 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 09:54:53.884 | SUCCESS  | api.mlflow_main:<module>:111 - ML FLOW run id: 6574f1556be94f16b078c11a54468d28              | Fetched custom threshold '0.41000000000000003'
+2025-01-15 09:54:53.884 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 09:54:54.260 | SUCCESS  | api.mlflow_main:<module>:123 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 09:54:54.261 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 09:54:54.310 | SUCCESS  | api.mlflow_main:<module>:150 - Applied RobustScaler to numeric features successfully.
+2025-01-15 09:54:54.311 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 09:54:54.311 | INFO     | api.mlflow_main:<module>:161 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 09:54:54.425 | SUCCESS  | api.mlflow_main:<module>:172 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:54:54.425 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 09:59:47.435 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 09:59:47.445 | SUCCESS  | api.mlflow_main:<module>:70 - LGBMClassifier - business | Alias: @champion        | Fetched run_id '6574f1556be94f16b078c11a54468d28
+2025-01-15 09:59:47.671 | SUCCESS  | api.mlflow_main:<module>:80 - LGBMClassifier - business | Alias: @champion        | Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 09:59:47.701 | SUCCESS  | api.mlflow_main:<module>:96 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 09:59:47.710 | SUCCESS  | api.mlflow_main:<module>:111 - ML FLOW run id: 6574f1556be94f16b078c11a54468d28              | Fetched custom threshold '0.41000000000000003'
+2025-01-15 09:59:47.710 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 09:59:48.150 | SUCCESS  | api.mlflow_main:<module>:123 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 09:59:48.150 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 09:59:48.208 | SUCCESS  | api.mlflow_main:<module>:150 - Applied RobustScaler to numeric features successfully.
+2025-01-15 09:59:48.208 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 09:59:48.208 | INFO     | api.mlflow_main:<module>:161 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 09:59:48.333 | SUCCESS  | api.mlflow_main:<module>:172 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 09:59:48.333 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 10:05:00.666 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 10:05:00.672 | SUCCESS  | __main__:<module>:109 - LGBMClassifier - business | Alias: @champion        | Fetched run_id '6574f1556be94f16b078c11a54468d28
+2025-01-15 10:05:00.970 | SUCCESS  | __main__:<module>:119 - LGBMClassifier - business | Alias: @champion        | Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 10:05:00.996 | SUCCESS  | __main__:<module>:135 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 10:05:01.004 | SUCCESS  | __main__:<module>:150 - ML FLOW run id: 6574f1556be94f16b078c11a54468d28              | Fetched custom threshold '0.41000000000000003'
+2025-01-15 10:05:01.004 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 10:05:01.391 | SUCCESS  | __main__:<module>:162 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 10:05:01.391 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 10:05:01.450 | SUCCESS  | __main__:<module>:189 - Applied RobustScaler to numeric features successfully.
+2025-01-15 10:05:01.451 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 10:05:01.451 | INFO     | __main__:<module>:200 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 10:05:01.567 | SUCCESS  | __main__:<module>:211 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 10:05:01.568 | INFO     | src.packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 10:06:03.199 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 10:06:03.200 | SUCCESS  | __main__:<module>:109 - LGBMClassifier - business | Alias: @champion        | Fetched run_id '6574f1556be94f16b078c11a54468d28
+2025-01-15 10:06:03.558 | SUCCESS  | __main__:<module>:119 - LGBMClassifier - business | Alias: @champion        | Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 10:06:03.579 | SUCCESS  | __main__:<module>:135 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 10:06:03.595 | SUCCESS  | __main__:<module>:150 - ML FLOW run id: 6574f1556be94f16b078c11a54468d28              | Fetched custom threshold '0.41000000000000003'
+2025-01-15 10:06:03.595 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 10:06:03.980 | SUCCESS  | __main__:<module>:162 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 10:06:03.983 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 10:06:04.031 | SUCCESS  | __main__:<module>:189 - Applied RobustScaler to numeric features successfully.
+2025-01-15 10:06:04.038 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 10:06:04.039 | INFO     | __main__:<module>:200 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 10:06:04.162 | SUCCESS  | __main__:<module>:211 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 10:06:04.162 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 10:06:11.611 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 10:06:11.620 | SUCCESS  | __main__:<module>:109 - LGBMClassifier - business | Alias: @champion        | Fetched run_id '6574f1556be94f16b078c11a54468d28
+2025-01-15 10:06:12.030 | SUCCESS  | __main__:<module>:119 - LGBMClassifier - business | Alias: @champion        | Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 10:06:12.062 | SUCCESS  | __main__:<module>:135 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 10:06:12.070 | SUCCESS  | __main__:<module>:150 - ML FLOW run id: 6574f1556be94f16b078c11a54468d28              | Fetched custom threshold '0.41000000000000003'
+2025-01-15 10:06:12.070 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 10:06:12.491 | SUCCESS  | __main__:<module>:162 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 10:06:12.491 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 10:06:12.559 | SUCCESS  | __main__:<module>:189 - Applied RobustScaler to numeric features successfully.
+2025-01-15 10:06:12.559 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 10:06:12.559 | INFO     | __main__:<module>:200 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 10:06:12.670 | SUCCESS  | __main__:<module>:211 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 10:06:12.670 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 10:06:24.908 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                        LOADING RESSOURCES USING MLFLOW                         
+========================================================================================================================
+2025-01-15 10:06:24.918 | SUCCESS  | api.mlflow_main:<module>:109 - LGBMClassifier - business | Alias: @champion        | Fetched run_id '6574f1556be94f16b078c11a54468d28
+2025-01-15 10:06:25.125 | SUCCESS  | api.mlflow_main:<module>:119 - LGBMClassifier - business | Alias: @champion        | Model loaded successfully using alias: models:/LGBMClassifier - business@champion
+2025-01-15 10:06:25.151 | SUCCESS  | api.mlflow_main:<module>:135 - Scaler loaded successfully from MLflow artifact: C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\ml_flow\artifacts\6574f1556be94f16b078c11a54468d28\artifacts\scalers\2025-01-14 - RobustScaler.joblib
+2025-01-15 10:06:25.161 | SUCCESS  | api.mlflow_main:<module>:150 - ML FLOW run id: 6574f1556be94f16b078c11a54468d28              | Fetched custom threshold '0.41000000000000003'
+2025-01-15 10:06:25.161 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 10:06:25.551 | SUCCESS  | api.mlflow_main:<module>:162 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 10:06:25.551 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 10:06:25.608 | SUCCESS  | api.mlflow_main:<module>:189 - Applied RobustScaler to numeric features successfully.
+2025-01-15 10:06:25.609 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 10:06:25.609 | INFO     | api.mlflow_main:<module>:200 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 10:06:25.721 | SUCCESS  | api.mlflow_main:<module>:211 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 10:06:25.721 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 11:27:05.947 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-15 11:27:06.303 | SUCCESS  | __main__:<module>:83 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-15 11:27:06.349 | SUCCESS  | __main__:<module>:91 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 11:27:06.349 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 11:27:06.851 | SUCCESS  | __main__:<module>:105 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 11:27:06.851 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 11:27:06.917 | SUCCESS  | __main__:<module>:133 - Applied RobustScaler to numeric features successfully.
+2025-01-15 11:27:06.917 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 11:27:06.917 | INFO     | __main__:<module>:144 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 11:27:07.052 | SUCCESS  | __main__:<module>:155 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 11:27:07.052 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 11:27:11.101 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-15 11:27:11.278 | SUCCESS  | __main__:<module>:83 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-15 11:27:11.285 | SUCCESS  | __main__:<module>:91 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 11:27:11.285 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 11:27:11.687 | SUCCESS  | __main__:<module>:105 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 11:27:11.687 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 11:27:11.735 | SUCCESS  | __main__:<module>:133 - Applied RobustScaler to numeric features successfully.
+2025-01-15 11:27:11.736 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 11:27:11.736 | INFO     | __main__:<module>:144 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 11:27:11.849 | SUCCESS  | __main__:<module>:155 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 11:27:11.849 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 11:29:16.436 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-15 11:29:16.608 | SUCCESS  | api.local_main:<module>:83 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-15 11:29:16.611 | SUCCESS  | api.local_main:<module>:91 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 11:29:16.612 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 11:29:16.997 | SUCCESS  | api.local_main:<module>:105 - Dataset loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\data\processed\04_prediction_df.csv
+2025-01-15 11:29:16.997 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 11:29:17.046 | SUCCESS  | api.local_main:<module>:133 - Applied RobustScaler to numeric features successfully.
+2025-01-15 11:29:17.046 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 11:29:17.047 | INFO     | api.local_main:<module>:144 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 11:29:17.162 | SUCCESS  | api.local_main:<module>:155 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 11:29:17.162 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 14:36:40.994 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-15 14:36:41.224 | SUCCESS  | __main__:<module>:82 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-15 14:36:41.268 | SUCCESS  | __main__:<module>:90 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 14:36:41.268 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 14:36:41.648 | INFO     | packages.utils:load_csv:141 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-15 14:36:41.648 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 14:36:41.706 | SUCCESS  | __main__:<module>:125 - Applied RobustScaler to numeric features successfully.
+2025-01-15 14:36:41.707 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 14:36:41.707 | INFO     | __main__:<module>:136 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 14:36:41.850 | SUCCESS  | __main__:<module>:147 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 14:36:41.851 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 14:36:46.059 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-15 14:36:46.221 | SUCCESS  | __main__:<module>:82 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-15 14:36:46.226 | SUCCESS  | __main__:<module>:90 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 14:36:46.226 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 14:36:46.643 | INFO     | packages.utils:load_csv:141 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-15 14:36:46.643 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 14:36:46.699 | SUCCESS  | __main__:<module>:125 - Applied RobustScaler to numeric features successfully.
+2025-01-15 14:36:46.699 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 14:36:46.699 | INFO     | __main__:<module>:136 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 14:36:46.823 | SUCCESS  | __main__:<module>:147 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 14:36:46.823 | INFO     | packages.utils:log_section_header:109 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 14:55:30.177 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-15 14:55:30.742 | SUCCESS  | __main__:<module>:83 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-15 14:55:30.794 | SUCCESS  | __main__:<module>:91 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 14:55:30.794 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 14:55:31.324 | INFO     | packages.utils:load_csv:182 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-15 14:55:31.324 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 14:55:31.375 | SUCCESS  | __main__:<module>:126 - Applied RobustScaler to numeric features successfully.
+2025-01-15 14:55:31.375 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 14:55:31.375 | INFO     | __main__:<module>:137 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 14:55:31.542 | SUCCESS  | __main__:<module>:148 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 14:55:31.542 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 14:55:35.192 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-15 14:55:35.525 | SUCCESS  | __main__:<module>:83 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-15 14:55:35.548 | SUCCESS  | __main__:<module>:91 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 14:55:35.548 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 14:55:35.992 | INFO     | packages.utils:load_csv:182 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-15 14:55:35.992 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 14:55:36.059 | SUCCESS  | __main__:<module>:126 - Applied RobustScaler to numeric features successfully.
+2025-01-15 14:55:36.059 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 14:55:36.059 | INFO     | __main__:<module>:137 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 14:55:36.191 | SUCCESS  | __main__:<module>:148 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 14:55:36.191 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-15 14:58:01.056 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-15 14:58:01.336 | SUCCESS  | api.local_main:<module>:83 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-15 14:58:01.381 | SUCCESS  | api.local_main:<module>:91 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-15 14:58:01.381 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-15 14:58:01.889 | INFO     | packages.utils:load_csv:182 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-15 14:58:01.889 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-15 14:58:01.948 | SUCCESS  | api.local_main:<module>:126 - Applied RobustScaler to numeric features successfully.
+2025-01-15 14:58:01.949 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-15 14:58:01.949 | INFO     | api.local_main:<module>:137 - Calculating predicted probabilities for the first 20 rows...
+2025-01-15 14:58:02.097 | SUCCESS  | api.local_main:<module>:148 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-15 14:58:02.097 | INFO     | packages.utils:log_section_header:150 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-16 16:38:34.605 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-16 16:38:34.923 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-16 16:38:34.961 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-16 16:38:34.961 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-16 16:38:35.546 | INFO     | packages.prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-16 16:38:35.546 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-16 16:38:35.631 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-16 16:38:35.631 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-16 16:38:35.631 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-16 16:38:35.822 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-16 16:38:35.822 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-16 16:38:40.466 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-16 16:38:40.612 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-16 16:38:40.615 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-16 16:38:40.615 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-16 16:38:41.042 | INFO     | packages.prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-16 16:38:41.043 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-16 16:38:41.103 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-16 16:38:41.103 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-16 16:38:41.103 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-16 16:38:41.302 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-16 16:38:41.302 | INFO     | packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-16 16:39:13.486 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-16 16:39:13.633 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-16 16:39:13.635 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-16 16:39:13.636 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-16 16:39:13.995 | INFO     | src.packages.prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-16 16:39:13.995 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-16 16:39:14.072 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-16 16:39:14.072 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-16 16:39:14.072 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-16 16:39:14.202 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-16 16:39:14.202 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-16 16:40:31.447 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-16 16:40:31.599 | SUCCESS  | api.local_main:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - LGBMClassifier - business.joblib
+2025-01-16 16:40:31.601 | SUCCESS  | api.local_main:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-14 - RobustScaler.joblib
+2025-01-16 16:40:31.602 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-16 16:40:31.947 | INFO     | src.packages.prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-16 16:40:31.947 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-16 16:40:31.994 | SUCCESS  | api.local_main:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-16 16:40:31.994 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-16 16:40:31.994 | INFO     | api.local_main:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-16 16:40:32.137 | SUCCESS  | api.local_main:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-16 16:40:32.137 | INFO     | src.packages.prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-17 08:31:51.669 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 08:31:51.929 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 08:31:51.953 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-17 - RobustScaler.joblib
+2025-01-17 08:31:51.953 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 08:31:52.324 | INFO     | prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-17 08:31:52.324 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-17 08:31:52.377 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-17 08:31:52.377 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-17 08:31:52.377 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-17 08:31:52.536 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-17 08:31:52.536 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-17 08:31:56.069 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 08:31:56.195 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 08:31:56.197 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-17 - RobustScaler.joblib
+2025-01-17 08:31:56.197 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 08:31:56.530 | INFO     | prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-17 08:31:56.530 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-17 08:31:56.573 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-17 08:31:56.574 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-17 08:31:56.574 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-17 08:31:56.719 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-17 08:31:56.719 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
