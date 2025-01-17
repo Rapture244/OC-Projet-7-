@@ -1,11 +1,13 @@
 # Projet 7: Implémentez un modèle de scoring 
 
+## Context 
+
 Vous êtes Data Scientist au sein d'une société financière, nommée **"Prêt à dépenser"**, qui propose des crédits à la consommation pour des personnes ayant peu ou pas du tout d'historique de prêt.
 
 L’entreprise souhaite **mettre en œuvre un outil de “scoring crédit” pour calculer la probabilité** qu’un client rembourse son crédit, puis classifie la demande en crédit accordé ou refusé. Elle souhaite donc développer un **algorithme de classification** en s’appuyant sur des sources de données variées (données comportementales, données provenant d'autres institutions financières, etc.)
 
 >[!NOTE]  
->Voici [les données](https://www.kaggle.com/c/home-credit-default-risk/data) dont vous aurez besoin pour réaliser l’algorithme de classification. Pour plus de simplicité, vous pouvez les télécharger à [cette adresse](https://s3-eu-west-1.amazonaws.com/static.oc-static.com/prod/courses/files/Parcours_data_scientist/Projet+-+Impl%C3%A9menter+un+mod%C3%A8le+de+scoring/Projet+Mise+en+prod+-+home-credit-default-risk.zip).
+>Voici [les données](https://www.kaggle.com/c/home-credit-default-risk/data) dont vous aurez besoin pour réaliser l’algorithme de classification. Pour plus de simplicité, vous pouvez les télécharger à [cette adresse](https://s3-eu-west-1.amazonaws.com/static.oc-static.com/prod/courses/files/Parcours_data_scientist/Projet+-+Impl%C3%A9menter+un+mod%C3%A8le+de+scoring/Projet+Mise+en+prod+-+home-credit-default-risk.zip).
 >
 >:bulb: Vous aurez besoin de joindre les différentes tables entre elles.
 
@@ -29,12 +31,67 @@ Michaël, votre manager, vous incite à sélectionner un ou des kernels Kaggle p
 >
 >C’est optionnel, mais nous vous encourageons à le faire afin de vous permettre de vous focaliser sur l’élaboration du modèle, son optimisation et sa compréhension.
 
-## Work 
+## Key Files
 
-Notebooks:
-- [EDA & Feature Engineering](./notebooks/01.%20Preprocessing.ipynb) &xrarr; Explore the dataset, applied the kaggle to the dataset 
+- [(notebook) EDA & Feature Engineering](./notebooks/01.%20Preprocessing.ipynb) &xrarr; Datasets exploration, merging, feature engineering & filling missing values
+- [(notebook) Modelisation of the models](notebooks/02.%20Modelisation.ipynb) &xrarr; Models finetuning, refined tuning for chosen model, global & local feature importance, datadrift of the features 
+- [The Data Drift report (html)](assets/html/data_drift_report_raw.html)
+- [The API](api/local_main.py) 
+  - [Streamlit test of the API in local](scripts/streamlit_local.py)
+  - [Streamlit test of the API in the cloud](scripts/streamlit_cloud.py)
+  - [Python Scrip test of the API (no UI)](scripts/api_test_no_ui.py)
+  - [Unit testing of the API](tests/test_local_api.py)
+
+These are some markdown documents that could be helpful to the reader: 
+- [Quick API summary](assets/notes/api_summary) 
+- [A quick introductory note on ML Flow](assets/notes/mlflow_doc.md)
 
 
+## Arborescence 
+
+```text
+├── .gitignore             # Specifies files and folders to be ignored by Git
+├── .python-version        # HEROKU: Specifies the Python version to use
+├── .slugignore            # HEROKU: Specifies files and folders to ignore due to 500MB limit
+│
+├── api                    # API-related files
+│   ├── local_main.py      
+│   └── __init__.py        
+│
+├── Aptfile                # HEROKU: Lists Ubuntu packages to install before Python
+│
+├── assets                 # Static assets for the project
+│   ├── html               
+│   ├── images             
+│   ├── models             # Saved machine learning models
+│   ├── notes              # Markdown documentation and notes
+│   └── plots              # Generated plot images
+│
+├── data                   # Datasets storage        
+│   ├── processed          
+│   ├── raw                
+│   └── zip               
+│
+├── logs                   # Log files for monitoring
+│
+├── ml_flow                # MLflow-related files
+│   ├── artifacts              
+│   └── ml_flow.db             
+│
+├── notebooks              # Jupyter Notebooks for exploration and analysis
+│
+├── poetry.lock            # Poetry lock file for dependency management
+├── Procfile               # HEROKU: Defines the process types to run the API
+├── pyproject.toml         # Poetry configuration with library requirements
+├── README.md              # Project overview and documentation
+├── scripts                # Utility Python scripts
+│
+├── src                    # Source code packages developed for the project
+│   ├── dev                    # Development utilities and modules
+│   └── prod                   # Production-ready modules for HEROKU deployment
+│
+└── tests                  # Unit and integration tests
+```
 
 
 
