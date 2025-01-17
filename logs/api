@@ -1240,3 +1240,179 @@
 ========================================================================================================================
                                       API                                       
 ========================================================================================================================
+2025-01-17 12:16:55.553 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 12:16:55.999 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 12:16:56.031 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-17 - RobustScaler.joblib
+2025-01-17 12:16:56.031 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 12:16:56.597 | INFO     | prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-17 12:16:56.597 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-17 12:16:56.666 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-17 12:16:56.666 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-17 12:16:56.666 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-17 12:16:56.879 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-17 12:16:56.880 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-17 12:17:00.608 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 12:17:00.786 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 12:17:00.788 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\assets\models\2025-01-17 - RobustScaler.joblib
+2025-01-17 12:17:00.788 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 12:17:01.222 | INFO     | prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-17 12:17:01.222 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-17 12:17:01.331 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-17 12:17:01.332 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-17 12:17:01.332 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-17 12:17:01.564 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-17 12:17:01.564 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-17 12:34:21.216 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 12:34:21.347 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 12:34:21.349 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - RobustScaler.joblib
+2025-01-17 12:34:21.349 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 12:35:13.176 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 12:35:13.326 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 12:35:13.328 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - RobustScaler.joblib
+2025-01-17 12:35:13.328 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 12:35:13.633 | INFO     | prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-17 12:35:13.633 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-17 12:35:13.684 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-17 12:35:13.684 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-17 12:35:13.684 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-17 12:35:13.841 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-17 12:35:13.841 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-17 12:35:17.710 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 12:35:17.873 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 12:35:17.876 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - RobustScaler.joblib
+2025-01-17 12:35:17.876 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 12:35:25.796 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 12:35:25.916 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 12:35:25.918 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - RobustScaler.joblib
+2025-01-17 12:35:25.918 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 12:35:26.269 | INFO     | prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-17 12:35:26.269 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-17 12:35:26.320 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-17 12:35:26.320 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-17 12:35:26.320 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-17 12:35:26.469 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-17 12:35:26.469 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-17 12:35:29.900 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 12:35:30.014 | SUCCESS  | __main__:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 12:35:30.017 | SUCCESS  | __main__:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - RobustScaler.joblib
+2025-01-17 12:35:30.017 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 12:35:30.365 | INFO     | prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-17 12:35:30.365 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-17 12:35:30.419 | SUCCESS  | __main__:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-17 12:35:30.419 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-17 12:35:30.419 | INFO     | __main__:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-17 12:35:30.562 | SUCCESS  | __main__:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-17 12:35:30.562 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================
+2025-01-17 12:35:50.875 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                           LOADING RESSOURCES LOCALLY                           
+========================================================================================================================
+2025-01-17 12:35:51.039 | SUCCESS  | api.local_main:<module>:89 - Model loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - LGBMClassifier - business.joblib
+2025-01-17 12:35:51.041 | SUCCESS  | api.local_main:<module>:97 - Scaler loaded successfully from C:\Users\KDTB0620\Documents\Study\Open Classrooms\Git Repository\projet7\api\2025-01-17 - RobustScaler.joblib
+2025-01-17 12:35:51.041 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                LOADING DATASET                                 
+========================================================================================================================
+2025-01-17 12:35:51.400 | INFO     | prod.utils:load_csv:181 - Loaded     04_prediction_df.csv                     Shape:     (48744, 51)          Encoding:  ascii
+2025-01-17 12:35:51.401 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                 PREPROCESSING                                  
+========================================================================================================================
+2025-01-17 12:35:51.450 | SUCCESS  | api.local_main:<module>:132 - Applied RobustScaler to numeric features successfully.
+2025-01-17 12:35:51.450 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+               LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                
+========================================================================================================================
+2025-01-17 12:35:51.450 | INFO     | api.local_main:<module>:143 - Calculating predicted probabilities for the first 20 rows...
+2025-01-17 12:35:51.614 | SUCCESS  | api.local_main:<module>:154 - Logged predicted probabilities for the first 20 rows successfully.
+2025-01-17 12:35:51.614 | INFO     | prod.utils:log_section_header:149 - 
+========================================================================================================================
+                                      API                                       
+========================================================================================================================

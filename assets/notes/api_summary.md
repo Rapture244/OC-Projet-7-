@@ -1,5 +1,53 @@
 # API 
 
+## Useful CLI Commands 
+
+```shell
+# ==================================================================================================================== #
+#                                                        MLFLOW                                                        #
+# ==================================================================================================================== #
+# Open Ml Flow ui
+mlflow ui --backend-store-uri "sqlite:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/ml_flow.db" --default-artifact-root "file:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/artifacts"
+
+# ==================================================================================================================== #
+#                                                          API                                                         #
+# ==================================================================================================================== #
+# ======================================================= LOCAL ====================================================== #
+# Run the API
+cd api/
+python local_main.py
+
+# [Optional] Testing the API with Streamlit 
+cd scripts/
+streamlit run streamlit_local.py
+
+# ============================================= API DEPLOYED IN THE CLOUD ============================================ #
+cd scripts/
+
+# [Optional]
+streamlit run streamlit_cloud.py
+
+# [Optional] No UI test 
+python api_test_no_ui.py
+
+# ==================================================================================================================== #
+#                                                        HEROKU                                                        #
+# ==================================================================================================================== #
+# Download Heroku CLI & connect to ur Heroku account 
+heroku login 
+
+# View the last log of the App 
+heroku logs --tail --app credit-score-attribution
+
+
+
+```
+
+
+ML FLOW &xrarr; `mlflow ui --backend-store-uri "sqlite:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/ml_flow.db" --default-artifact-root "file:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/artifacts"`
+
+## Context 
+
 The goal of this API is to offer a classifier model that will allow the financial company called **“Prêt à dépenser”** to know whether to offer consumer credit to people with little or no loan history. As of today, the API ask you for the consumer ID and returns the predicted probability by the model, the predicted classifiacation and a status "Granted" or "Denied". 
 
 From the [Poetry toml file](../../pyproject.toml) you can find the required libaries for the deployment of the API to Heroku which are :  

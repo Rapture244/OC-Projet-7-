@@ -1,20 +1,19 @@
 # ======================================================= INFO ======================================================= #
-# In .slugignore file does not support pattern matching such as *.logs.
-# In .slugignore, you must explicitly list file or directory paths to exclude them
+# In .slugignore, you must explicitly list file or directory paths to exclude them.
+# Negated patterns (like !) are not supported.
 
 
 # ==================================================== SLUGIGNORE ==================================================== #
 # Ignore all files from the asset folder except our model and scaler
 assets/
-!assets/models/2025-01-17 - LGBMClassifier - business.joblib
-!assets/models/2025-01-17 - RobustScaler.joblib
 
 # Ignore data file
 data/
-!data/processed/04_prediction_df.csv
 
 # Ignore log files
 logs/
+*.log
+
 
 # Ignore mlflow
 ml_flow/

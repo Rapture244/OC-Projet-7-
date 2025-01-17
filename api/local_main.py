@@ -19,7 +19,7 @@ Dependencies:
 
 Note:
 - The module is configured to fail gracefully if any required files (model, scaler, dataset) are missing.
-- Ensure that all paths specified in `MODEL_DIR`, `LOG_DIR`, and `PROCESSED_DATA_DIR` are valid before execution.
+- Ensure that all paths specified in `API_DIR` and `LOG_DIR` are valid before execution.
 - Update the `MODEL_NAME`, `SCALER_NAME`, and `DATASET_NAME` as per the required versions of the files.
 
 """
@@ -40,7 +40,7 @@ from sklearn.preprocessing import RobustScaler
 from werkzeug.exceptions import BadRequest  # Import BadRequest exception (inside flask)
 
 # Local application imports
-from prod.paths import MODEL_DIR, LOG_DIR, PROCESSED_DATA_DIR
+from prod.paths import API_DIR, LOG_DIR 
 from prod.utils import log_section_header, load_csv
 
 
@@ -51,12 +51,12 @@ log_section_header(title = "Configuration")
 
 # Model Details
 MODEL_NAME = "2025-01-17 - LGBMClassifier - business.joblib"
-MODEL_PATH = Path(MODEL_DIR) / MODEL_NAME
+MODEL_PATH = Path(API_DIR) / MODEL_NAME
 THRESHOLD = 0.48
 
 # Scaler Details
 SCALER_NAME = "2025-01-17 - RobustScaler.joblib"
-SCALER_PATH = Path(MODEL_DIR) / SCALER_NAME
+SCALER_PATH = Path(API_DIR) / SCALER_NAME
 
 # Dataset Details
 DATASET_NAME = "04_prediction_df.csv"
@@ -105,7 +105,7 @@ except Exception as e:
 # ==================================================================================================================== #
 log_section_header(title = "Loading Dataset")
 
-dataset = load_csv(file_name = DATASET_NAME, parent_path = PROCESSED_DATA_DIR)
+dataset = load_csv(file_name = DATASET_NAME, parent_path = API_DIR)
 
 # ==================================================================================================================== #
 #                                                     PREPROCESSING                                                    #
