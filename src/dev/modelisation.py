@@ -1305,7 +1305,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
                     )
             elif framework == "xgboost":
                 mlflow.xgboost.log_model(
-                    booster=model,
+                    xgb_model=model,
                     artifact_path=artifact_path,
                     signature=signature,
                     registered_model_name=registered_model_name
@@ -1820,6 +1820,10 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         """
         logger.info("Starting threshold evaluation.")
 
+        # Dynamically retrieve the model's class name for logging and display
+        model_name: str = type(fitted_model).__name__
+        logger.info(f"Evaluating thresholds for model: {model_name}")
+
         # Generate probabilities for the positive class
         y_proba = fitted_model.predict_proba(X_test_processed)[:, 1]
         thresholds = np.linspace(0, 0.7, 71)  # Thresholds from 0 to 0.7 with 71 points
@@ -1853,6 +1857,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 
         # Plotting
         fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+        fig.suptitle(f"{model_name}: Threshold evaluation through cost", fontsize=16, fontweight="bold")  # Add main title
 
         # Plot Errors
         ax[0].plot(thresholds, FP + FN, color="indigo", label="Total Errors")
@@ -1876,7 +1881,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         ax[1].legend()
         ax[1].grid()
 
-        plt.tight_layout()
+        plt.tight_layout(rect=[0, 0, 1, 0.95])  # Adjust layout to accommodate the main title
         plt.show()
 
         return best_threshold
@@ -1897,6 +1902,10 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
             float: The best threshold value that maximizes profit.
         """
         logger.info("Starting threshold evaluation.")
+
+        # Dynamically retrieve the model's class name for logging and display
+        model_name: str = type(fitted_model).__name__
+        logger.info(f"Evaluating thresholds for model: {model_name}")
 
         # Generate probabilities for the positive class
         y_proba = fitted_model.predict_proba(X_test_processed)[:, 1]
@@ -1945,6 +1954,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
 
         # Plotting
         fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+        fig.suptitle(f"{model_name}: Threshold evaluation through profit", fontsize=16, fontweight="bold")  # Add main title
 
         # Plot Errors
         ax[0].plot(thresholds, FP + FN, color="indigo", label="Total Errors")
@@ -1968,7 +1978,7 @@ class ModelPipeline(BaseEstimator, ClassifierMixin):
         ax[1].legend()
         ax[1].grid()
 
-        plt.tight_layout()
+        plt.tight_layout(rect=[0, 0, 1, 0.95])  # Adjust layout to accommodate the main title
         plt.show()
 
         return best_threshold
