@@ -50,12 +50,12 @@ from prod.utils import log_section_header, load_csv
 log_section_header(title = "Configuration")
 
 # Model Details
-MODEL_NAME = "2025-01-14 - LGBMClassifier - business.joblib"
+MODEL_NAME = "2025-01-17 - LGBMClassifier - business.joblib"
 MODEL_PATH = Path(MODEL_DIR) / MODEL_NAME
-THRESHOLD = 0.43
+THRESHOLD = 0.48
 
 # Scaler Details
-SCALER_NAME = "2025-01-14 - RobustScaler.joblib"
+SCALER_NAME = "2025-01-17 - RobustScaler.joblib"
 SCALER_PATH = Path(MODEL_DIR) / SCALER_NAME
 
 # Dataset Details

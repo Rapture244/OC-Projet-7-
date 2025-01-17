@@ -1,3 +1,39 @@
+"""
+This Streamlit application provides a user-friendly interface for predicting credit scores using an external API.
+
+Key Features:
+1. Accepts a user-provided Credit ID (SK_ID_CURR) for prediction.
+2. Sends a POST request to a Heroku-hosted API endpoint with the Credit ID.
+3. Displays the API's response, including:
+   - Predicted probability.
+   - Predicted target classification.
+   - Loan status.
+4. Validates user input to ensure the Credit ID is numeric and non-empty.
+5. Handles API responses, including successful predictions, errors, and exceptions.
+6. Uses `loguru` for detailed logging and debugging.
+
+Functionality:
+- `st.title`: Displays the application title.
+- `st.text_input`: Captures user input for the Credit ID.
+- `st.button`: Triggers the prediction request upon user interaction.
+- API Request Handling:
+  - Validates input and sends the Credit ID as a JSON payload.
+  - Processes the API's JSON response and handles HTTP errors gracefully.
+- Exception Handling:
+  - Logs network errors, invalid API responses, and unexpected scenarios.
+
+Dependencies:
+- Streamlit: For building the web-based application interface.
+- Requests: For making HTTP POST requests to the external API.
+- Loguru: For advanced logging and monitoring.
+
+Notes:
+- The API URL (`https://credit-score-attribution-003464da4de3.herokuapp.com/predict`) assumes the service is hosted on Heroku. Update this URL if the API endpoint changes.
+- Ensure the external API is accessible and functional before using this application.
+- The application assumes the API returns well-structured JSON responses for all cases.
+"""
+
+
 # ====================================================== IMPORTS ===================================================== #
 # Third-party library imports
 import requests
