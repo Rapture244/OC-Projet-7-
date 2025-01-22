@@ -137,31 +137,31 @@ except Exception as e:
 # ==================================================================================================================== #
 #                                  LOG PREDICTED PROBABILITIES FOR THE FIRST 20 ROWS                                   #
 # ==================================================================================================================== #
-log_section_header(title = "Log predicted probabilities for the first 20 rows")
-
-try:
-    logger.info("Calculating predicted probabilities for the first 20 rows...")
-    # Exclude "SK_ID_CURR" for predictions
-    user_data_first_20 = dataset_scaled.drop(columns=["SK_ID_CURR"]).head(20)
-
-    # Predict probabilities for the first 20 rows
-    proba_first_20 = model.predict_proba(user_data_first_20)[:, 1]
-
-    # Log the SK_ID_CURR with the probabilities
-    for idx, proba in zip(dataset_scaled["SK_ID_CURR"].head(20), proba_first_20):
-        logger.debug(f"SK_ID_CURR: {idx}, Predicted Proba: {round(proba, 2)}")
-
-    logger.success("Logged predicted probabilities for the first 20 rows successfully.")
-except Exception as e:
-    logger.error(f"Error logging predicted probabilities for the first 20 rows: {e}")
-    raise RuntimeError("An error occurred while logging predicted probabilities. Please check the logs for details.")
-
+# log_section_header(title = "Log predicted probabilities for the first 20 rows")
+#
+# try:
+#     logger.info("Calculating predicted probabilities for the first 20 rows...")
+#     # Exclude "SK_ID_CURR" for predictions
+#     user_data_first_20 = dataset_scaled.drop(columns=["SK_ID_CURR"]).head(20)
+#
+#     # Predict probabilities for the first 20 rows
+#     proba_first_20 = model.predict_proba(user_data_first_20)[:, 1]
+#
+#     # Log the SK_ID_CURR with the probabilities
+#     for idx, proba in zip(dataset_scaled["SK_ID_CURR"].head(20), proba_first_20):
+#         logger.debug(f"SK_ID_CURR: {idx}, Predicted Proba: {round(proba, 2)}")
+#
+#     logger.success("Logged predicted probabilities for the first 20 rows successfully.")
+# except Exception as e:
+#     logger.error(f"Error logging predicted probabilities for the first 20 rows: {e}")
+#     raise RuntimeError("An error occurred while logging predicted probabilities. Please check the logs for details.")
+#
 
 
 # ==================================================================================================================== #
 #                                                          API                                                         #
 # ==================================================================================================================== #
-log_section_header(title = "API ")
+log_section_header(title = "API")
 
 app = Flask(__name__)
 

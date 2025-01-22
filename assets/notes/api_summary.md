@@ -39,12 +39,10 @@ heroku login
 # View the last log of the App 
 heroku logs --tail --app credit-score-attribution
 
-
-
+# ======================================================= LINK ======================================================= #
+# BASIC Heroku: https://credit-score-attribution-003464da4de3.herokuapp.com/
+# FOR THE PREDICTIONS REQUEST : https://credit-score-attribution-003464da4de3.herokuapp.com/predict
 ```
-
-
-ML FLOW &xrarr; `mlflow ui --backend-store-uri "sqlite:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/ml_flow.db" --default-artifact-root "file:///C:/Users/KDTB0620/Documents/Study/Open Classrooms/Git Repository/projet7/ml_flow/artifacts"`
 
 ## Context 
 

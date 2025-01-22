@@ -33,18 +33,25 @@ Michaël, votre manager, vous incite à sélectionner un ou des kernels Kaggle p
 
 ## Key Files
 
+**Notes & Documentation**
+- :star: [About the API](assets/notes/api_summary.md)
+- [Quick into on ML Flow](assets/notes/mlflow_doc.md)
+
+
+**Notebooks:**
 - [(notebook) EDA & Feature Engineering](./notebooks/01.%20Preprocessing.ipynb) &xrarr; Datasets exploration, merging, feature engineering & filling missing values
 - [(notebook) Modelisation of the models](notebooks/02.%20Modelisation.ipynb) &xrarr; Models finetuning, refined tuning for chosen model, global & local feature importance, datadrift of the features 
-- [The Data Drift report (html)](assets/html/data_drift_report_raw.html)
+
+
+**API files:**
 - [The API](api/local_main.py) 
   - [Streamlit test of the API in local](scripts/streamlit_local.py)
   - [Streamlit test of the API in the cloud](scripts/streamlit_cloud.py)
   - [Python Scrip test of the API (no UI)](scripts/api_test_no_ui.py)
   - [Unit testing of the API](tests/test_local_api.py)
 
-These are some markdown documents that could be helpful to the reader: 
-- [Quick API summary](assets/notes/api_summary) 
-- [A quick introductory note on ML Flow](assets/notes/mlflow_doc.md)
+**Html files:**
+- [The Data Drift report (html)](assets/html/data_drift_report_raw.html)
 
 
 ## Arborescence 
