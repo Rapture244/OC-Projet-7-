@@ -1,3 +1,29 @@
+"""
+This module defines the `/client-info` endpoint in the Flask API, allowing retrieval of client information from the database.
+
+Key Features:
+1. Uses `Flask` and `Blueprint` to modularize client-related API functionality.
+2. Integrates `Loguru` for structured logging of API requests and responses.
+3. Enhances response visualization using `Rich` for console-based pretty-printing.
+4. Implements robust error handling for missing or invalid client IDs.
+
+Endpoint:
+- `POST /client-info`: Retrieves personal, financial, and credit profile details of a client.
+
+Dependencies:
+- Flask: For API request handling.
+- Loguru: For improved logging and debugging.
+- Rich: For better console output formatting.
+- JSON: For request payload processing and response formatting.
+- SQLite: As the database source for client information.
+
+Notes:
+- Ensure `api.utils.database_utils.extract_client_info` is properly configured to fetch client data.
+- The endpoint expects a JSON payload containing an integer `id` field.
+- If the client ID is not found, the API returns a `404 Not Found` response.
+"""
+
+
 # ====================================================== IMPORTS ===================================================== #
 # Standard library imports
 from flask import Blueprint, request, jsonify

@@ -1,3 +1,33 @@
+"""
+This module provides API endpoints for feature importance analysis using SHAP (SHapley Additive exPlanations).
+
+Key Features:
+1. Serves precomputed SHAP beeswarm plots to visualize global feature importance.
+2. Computes local feature importance for individual clients and returns structured data.
+3. Generates SHAP waterfall plots to explain predictions at the instance level.
+4. Utilizes `Flask Blueprint` for modular API design.
+5. Integrates `Loguru` for structured logging and `Rich` for enhanced console output.
+
+Endpoints:
+- `GET /model-predictors`: Returns a SHAP beeswarm plot for global feature importance.
+- `POST /local-feature-importance`: Computes and returns local feature importance for a given client.
+- `POST /local-waterfall-plot`: Generates a SHAP waterfall plot to explain an individual prediction.
+
+Dependencies:
+- Flask: API framework for handling HTTP requests.
+- Loguru: Enhanced logging for debugging and error handling.
+- Rich: Pretty-printing for console output.
+- SHAP: Explainability library for machine learning models.
+- Pandas: Data handling and transformation.
+- Pathlib: File path management.
+
+Notes:
+- Ensure `api.utils.database_utils` contains valid implementations of data extraction methods.
+- The API assumes the presence of precomputed SHAP values; update logic if real-time computation is needed.
+- The feature importance computations rely on trained models and saved SHAP explainers.
+"""
+
+
 # ====================================================== IMPORTS ===================================================== #
 # Standard library imports
 from flask import Blueprint, request, jsonify, send_file, current_app

@@ -1,3 +1,36 @@
+"""
+This module implements a Streamlit-based interactive dashboard for credit scoring and loan decision explainability.
+
+Key Features:
+1. Retrieves client data and loan predictions via API calls.
+2. Displays model-level and client-specific feature importance using SHAP values.
+3. Provides interactive visualizations, including SHAP beeswarm plots, waterfall plots, and positioning histograms.
+4. Implements a real-time, cache-optimized data fetching mechanism using `st.session_state` and `st.cache_data`.
+5. Uses a visually accessible colorblind-friendly theme for enhanced readability.
+
+API Endpoints Used:
+- `/client-info`: Retrieves client details.
+- `/predict`: Returns loan approval probability.
+- `/model-predictors`: Fetches global SHAP feature importance.
+- `/local-feature-importance`: Retrieves top features influencing a client’s loan decision.
+- `/local-waterfall-plot`: Generates a SHAP waterfall plot for individual explanations.
+- `/client-positioning-plot`: Visualizes the client's position relative to the dataset.
+- `/features-name`: Lists available feature names.
+- `/feature-positioning-plot`: Generates histograms and boxplots for a specific feature.
+
+Dependencies:
+- Streamlit: UI framework for interactive web applications.
+- Requests: Handles API communication.
+- Pandas: Data processing and structuring.
+- Plotly: Generates dynamic and interactive plots.
+
+Notes:
+- Ensure the backend API is running before launching the dashboard.
+- Cached API calls reduce redundant network requests and improve performance.
+- Users can input a client ID in the sidebar to retrieve relevant insights.
+"""
+
+
 # ==================================================================================================================== #
 #                                                        IMPORTS                                                       #
 # ==================================================================================================================== #

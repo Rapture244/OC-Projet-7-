@@ -1,3 +1,31 @@
+"""
+This module handles the creation, loading, and saving of a machine learning pipeline for credit scoring predictions.
+
+Key Features:
+1. Loads a pre-trained LightGBM model and applies a preprocessing pipeline.
+2. Uses `RobustScaler` to normalize features before making predictions.
+3. Saves and loads the full pipeline as a serialized joblib object.
+4. Implements logging with `Loguru` for tracking model and scaler loading.
+5. Ensures proper error handling for missing or corrupted model files.
+
+Core Functions:
+- `create_pipeline()`: Constructs a scikit-learn `Pipeline` combining preprocessing and the trained model.
+- `save_pipeline()`: Saves the constructed pipeline to disk for reuse.
+- `load_pipeline()`: Loads the saved pipeline for inference.
+
+Dependencies:
+- LightGBM: The core model for credit risk prediction.
+- Scikit-learn: Provides the `Pipeline` and preprocessing utilities.
+- Joblib: Handles efficient model serialization.
+- Loguru: Manages structured logging for debugging.
+
+Notes:
+- Ensure `API_MODELS_DIR` contains valid `.joblib` model and scaler files.
+- The pipeline should be trained and validated before saving to production.
+- Threshold values for classification can be adjusted as needed.
+"""
+
+
 # ================================================= IMPORTS ================================================= #
 # Standard library imports
 from pathlib import Path

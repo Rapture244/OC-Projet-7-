@@ -1,3 +1,33 @@
+"""
+This module provides API endpoints for visualizing client positioning in relation to dataset distributions.
+
+Key Features:
+1. Generates a client positioning plot to show how a client's data compares to the dataset based on SHAP features.
+2. Creates feature-specific positioning plots for individual clients.
+3. Retrieves available feature names for model analysis.
+4. Uses `Flask Blueprint` for modular API organization.
+5. Implements structured logging with `Loguru` and enhances console output using `Rich`.
+
+Endpoints:
+- `POST /client-positioning-plot`: Returns a visualization comparing a client's data to the dataset.
+- `POST /feature-positioning-plot`: Generates a plot displaying a client's value for a specific feature.
+- `GET /features-name`: Returns a list of feature names used in the model.
+
+Dependencies:
+- Flask: API framework for handling requests.
+- Loguru: Structured logging for debugging.
+- Rich: Pretty-printing for console output.
+- SHAP: Used for feature importance analysis.
+- Matplotlib & Seaborn: Used for plotting feature distributions.
+
+Notes:
+- Ensure `api.utils.database_utils` functions are correctly implemented for retrieving client data.
+- The positioning plots require a valid dataset and precomputed SHAP values.
+- The `client-positioning-plot` assumes a top 15 SHAP feature selection methodology.
+"""
+
+
+
 # ====================================================== IMPORTS ===================================================== #
 # Standard library imports
 from flask import Blueprint, request, jsonify, send_file

@@ -1,3 +1,39 @@
+"""
+This module provides database interaction utilities and model-related functions for credit scoring.
+
+Key Features:
+1. Connects to an SQLite database to fetch client and model input data.
+2. Extracts client-specific information, including personal, financial, and credit details.
+3. Computes SHAP-based global and local feature importance for explainability.
+4. Generates histograms and boxplots for client positioning visualization.
+5. Loads machine learning artifacts such as trained models and scalers.
+
+Database & Model Paths:
+- `credit_scoring.sqlite`: Stores customer and model input data.
+- `RobustScaler.joblib`: Pretrained scaler for feature normalization.
+- `shap_explainer.joblib`: SHAP explainer for interpretability.
+
+Core Functions:
+- `extract_client_info(client_id)`: Retrieves structured client information.
+- `extract_predict_client_info(client_id)`: Fetches preprocessed features for model inference.
+- `extract_feat_global_importance()`: Computes global feature importance via SHAP.
+- `extract_local_feature_importance(client_id)`: Computes SHAP values for a specific client.
+- `extract_client_positioning_plot(client_id)`: Generates a visualization of the client's position in the dataset.
+- `extract_feature_positioning_plot(client_id, feature_name)`: Compares a client’s feature value to the overall distribution.
+
+Dependencies:
+- SQLite: For database queries.
+- Pandas & NumPy: Data manipulation and transformations.
+- SHAP: Model explainability framework.
+- Matplotlib & Seaborn: Data visualization libraries.
+
+Notes:
+- Ensure `DATABASE_DIR`, `API_MODELS_DIR`, and `API_STATIC_DIR` are correctly set.
+- Data extraction functions assume consistent schema in `model_input_data`.
+- SHAP computations rely on a trained pipeline and saved explainer model.
+"""
+
+
 # ====================================================== IMPORTS ===================================================== #
 # Standard library imports
 from pathlib import Path

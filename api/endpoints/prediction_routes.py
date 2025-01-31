@@ -1,3 +1,30 @@
+"""
+This module defines the `/predict` endpoint for making predictions using a pre-trained machine learning model.
+
+Key Features:
+1. Loads a trained prediction pipeline for scoring client data.
+2. Retrieves client information from the database and applies the model for prediction.
+3. Implements structured logging with `Loguru` for tracking API requests and responses.
+4. Uses `Rich` for improved console output, making debugging and monitoring easier.
+5. Includes error handling for invalid requests and missing client data.
+
+Endpoint:
+- `POST /predict`: Predicts loan approval probability for a given `SK_ID_CURR`.
+
+Dependencies:
+- Flask: API framework for handling HTTP requests.
+- Loguru: Enhanced logging for debugging and error tracking.
+- Rich: Pretty-printing for structured console output.
+- Scikit-learn: Used for loading and running the prediction pipeline.
+- Pandas: Data manipulation for preparing model inputs.
+
+Notes:
+- Ensure `api.utils.database_utils.extract_predict_client_info` correctly fetches client data.
+- The threshold for loan approval is set at `0.48` but can be adjusted as needed.
+- The prediction response includes probability, binary classification, and loan status.
+"""
+
+
 # ====================================================== IMPORTS ===================================================== #
 # Standard library imports
 from flask import Blueprint, request, jsonify

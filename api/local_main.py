@@ -1,3 +1,30 @@
+"""
+This module initializes and configures the Flask API for credit scoring predictions and explainability.
+
+Key Features:
+1. Registers multiple API endpoints using Flask Blueprints.
+2. Configures `Loguru` for structured logging with automatic file rotation.
+3. Serves static files for API-generated visualizations.
+4. Implements modular API design for easy extension and maintenance.
+
+Registered Endpoints:
+- `/api/client-info`: Retrieves client details.
+- `/api/predict`: Returns loan prediction results.
+- `/api/model-predictors`: Provides global feature importance using SHAP.
+- `/api/positioning`: Generates client and feature positioning visualizations.
+
+Dependencies:
+- Flask: Micro-framework for API routing.
+- Loguru: Enhanced logging with file rotation.
+- Pathlib: Handles directory and file paths.
+
+Notes:
+- Ensure `LOG_DIR` is correctly configured for storing logs.
+- All endpoints are prefixed with `/api` for consistency.
+- Debug mode is enabled by default; disable in production for security.
+"""
+
+
 # ====================================================== IMPORTS ===================================================== #
 # Standard library imports
 from flask import Flask
