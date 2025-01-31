@@ -51,6 +51,9 @@ import pandas as pd
 import chardet
 from loguru import logger
 import pyopencl as cl
+from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
 
 # Typing Imports
 from typing import Optional as Opt
@@ -141,12 +144,34 @@ def check_full_system_environment() -> None:
 # ==================================================================================================================== #
 #                                                   TERMINAL HEADERS                                                   #
 # ==================================================================================================================== #
+# rich
+console = Console(width=120)
+
+
 def log_section_header(title: str):
     """
-    Logs a visually distinct section header with the title capitalized.
+    Logs a visually distinct section header as a boxed panel with Rich.
     """
-    capitalized_title = title.upper()
-    logger.info(f"\n{'=' * 120}\n{capitalized_title.center(80)}\n{'=' * 120}")
+    # Create a centered Text object for the panel content
+    centered_title = Text(title.upper(), style="bold cyan", justify="center")
+
+    # Pass the Text object into the Panel
+    panel = Panel(
+        centered_title,  # Renderable content
+        style="bold cyan",  # Add styling for the panel
+        title_align="center",  # Align the border title in the center
+        border_style="cyan",  # Border styling
+        expand=True,  # Adjusts the panel width to fit the console width
+        )
+    console.print(panel)
+
+
+def log_section_subheader(title: str):
+    """
+    Logs a visually distinct section header with Rich, using a bold, centered title and decorative borders.
+    """
+    console.rule(title.upper(), style="bold cyan")
+
 
 # ==================================================================================================================== #
 #                                                       DATASETS                                                       #
