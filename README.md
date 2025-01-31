@@ -48,7 +48,7 @@ Michaël, votre manager, vous incite à sélectionner un ou des kernels Kaggle p
   - [Streamlit test of the API in local](scripts/streamlit_local.py)
   - [Streamlit test of the API in the cloud](scripts/streamlit_cloud.py)
   - [Python Scrip test of the API (no UI)](scripts/api_test_no_ui.py)
-  - [Unit testing of the API](tests/test_local_api.py)
+  - [Unit testing of the API](tests/test_api.py)
 
 **Html files:**
 - [The Data Drift report (html)](assets/html/data_drift_report_raw.html)

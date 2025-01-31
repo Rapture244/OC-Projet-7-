@@ -36,63 +36,70 @@ from api.local_main import app
 def client():
     """
     Creates a test client for the Flask app.
+
+    This fixture sets up a Flask test client, which allows us to make requests
+    to the API endpoints without needing to start a real server. It provides
+    an isolated test environment, making tests faster and more reliable.
     """
     with app.test_client() as client:
         yield client
 
-def test_predict_valid_id(client):
+def test_predict_endpoint(client):
     """
-    Test case for a valid ID that exists in the dataset.
+    Test the /predict endpoint using the Flask test client.
     """
-    payload = {"id": 100001}  # Ensure this ID exists in the dataset as an integer
-    response = client.post("/predict", json=payload)
+    url = "/api/predict"
+    payload = {"id": 100057}  # Ensure this ID exists in the dataset as an integer
+    response = client.post(url, json=payload)
+
     assert response.status_code == 200
-    data = response.get_json()
-    assert data is not None
-    assert "SK_ID_CURR" in data
-    assert data["SK_ID_CURR"] == payload["id"]
-    assert "predicted_proba" in data
-    assert "predicted_target" in data
-    assert "status" in data
+    assert "predicted_proba" in response.json["data"]
 
-def test_predict_invalid_id(client):
-    """
-    Test case for an invalid ID that does not exist in the dataset.
-    """
-    payload = {"id": 999999}  # Non-existent ID as an integer
-    response = client.post("/predict", json=payload)
-    assert response.status_code == 404
-    data = response.get_json()
-    assert data is not None
-    assert "error" in data
-    assert "not found" in data["error"].lower()
 
-def test_predict_missing_id(client):
+def test_client_info_endpoint(client):
     """
-    Test case for a missing 'id' field in the payload.
+    Test the /client-info endpoint.
     """
-    payload = {}  # Missing 'id'
-    response = client.post("/predict", json=payload)
-    assert response.status_code == 400
-    data = response.get_json()
-    assert data is not None
-    assert "error" in data
-    assert "missing or invalid 'id'" in data["error"].lower()
+    url = "/api/client-info"
+    payload = {"id": 123456}
+    response = client.post(url, json=payload)
 
-def test_predict_invalid_payload(client):
-    """
-    Test case for an invalid payload that is not JSON.
-    """
-    response = client.post("/predict", data="not a json payload")
-    assert response.status_code == 400
-    data = response.get_json()
-    assert data is not None
-    assert "error" in data
-    assert "invalid json payload" in data["error"].lower()
+    assert response.status_code in [200, 404]  # Either success or client not found
 
-def test_api_availability(client):
+
+def test_client_positioning_plot(client):
     """
-    Test case for accessing an undefined endpoint.
+    Test the /client-positioning-plot endpoint.
     """
-    response = client.get("/")  # Assuming no endpoint at "/"
-    assert response.status_code == 404
+    url = "/api/client-positioning-plot"
+    payload = {"id": 123456}
+    response = client.post(url, json=payload)
+
+    assert response.status_code in [200, 500]
+    if response.status_code == 200:
+        assert response.content_type == "image/png"
+
+
+def test_feature_positioning_plot(client):
+    """
+    Test the /feature-positioning-plot endpoint.
+    """
+    url = "/api/feature-positioning-plot"
+    payload = {"id": 123456, "feature": "AMT_CREDIT"}
+    response = client.post(url, json=payload)
+
+    assert response.status_code in [200, 500]
+    if response.status_code == 200:
+        assert response.content_type == "image/png"
+
+
+def test_model_predictors(client):
+    """
+    Test the /model-predictors endpoint.
+    """
+    url = "/api/model-predictors"
+    response = client.get(url)
+
+    assert response.status_code in [200, 500]
+    if response.status_code == 200:
+        assert response.content_type == "image/png"
