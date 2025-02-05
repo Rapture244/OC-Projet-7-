@@ -67,6 +67,7 @@ LOCAL_WATERFALL_PLOT_API_URL = f"{BASE_URL}/local-waterfall-plot"
 CLIENT_POSITIONING_PLOT_API_URL = f"{BASE_URL}/client-positioning-plot"
 FEATURE_NAMES_API_URL = f"{BASE_URL}/features-name"
 FEATURE_POSITIONING_PLOT_API_URL = f"{BASE_URL}/feature-positioning-plot"
+BIVARIATE_ANALYSIS_API_URL = f"{BASE_URL}/bivariate-analysis"
 
 
 # Streamlit App Configuration
@@ -313,6 +314,21 @@ def fetch_feature_positioning_plot(client_id: int, feature_name: str) -> Optiona
         return None
 
 
+# =========================================== FETCH BIVARIATE ANALYSIS PLOT ========================================== #
+@st.cache_data(show_spinner=False)
+def fetch_bivariate_plot(client_id: int, feature_1: str, feature_2: str) -> Optional[io.BytesIO]:
+    """Fetches bivariate analysis plot from API and caches it."""
+    try:
+        response = requests.post(
+            url=BIVARIATE_ANALYSIS_API_URL,
+            json={"id": client_id, "feature_1": feature_1, "feature_2": feature_2}
+        )
+        response.raise_for_status()
+        return io.BytesIO(response.content)
+    except requests.exceptions.RequestException as e:
+        st.sidebar.error(f"Failed to fetch bivariate plot: {e}")
+        return None
+
 
 # ===================================================== MAIN PAGE ==================================================== #
 def main_page():
@@ -331,41 +347,55 @@ def main_page():
     st.markdown(
         """
         <style>
+        /* ==================================== TAB BUTTON STYLING ==================================== */
+
         /* Style the tab headers */
-        div[class*="stTabs"] button {
-            font-size: 18px !important;                         /* Make the text larger */
-            padding: 15px 25px;                                 /* Increased padding for bigger tabs */
-            background-color: var(--light-color);               /* Use theme's light color */
-            color: var(--dark-color);                           /* Use theme's dark color for text */
-            border: 1px solid var(--dark-color);                /* Use theme's dark color for border */
-            border-radius: 5px;                                 /* Rounded corners for a smoother look */
-            margin-right: 5px;                                  /* Add spacing between tabs */
+        div[data-baseweb="tab-list"] button {
+            font-size: 30px !important;                           /* Make text larger */
+            padding: 20px 30px !important;                        /* Increase button size */
+            background-color: var(--light-color);                 /* Use theme's light color */
+            color: var(--dark-color);                             /* Use theme's dark color for text */
+            border: 1px solid var(--dark-color);                  /* Use theme's dark color for border */
+            border-radius: 5px;                                   /* Rounded corners for a smoother look */
+            margin-right: 5px;                                    /* Add spacing between tabs */
         }
 
         /* Style for the active/selected tab */
-        div[class*="stTabs"] button[aria-selected="true"] {
-            background-color: var(--primary-color);             /* Use theme's primary color for active tab */
-            color: var(--light-color);                          /* Use theme's light color for text */
-            border: 2px solid var(--secondary-color);           /* Use theme's secondary color for active border */
+        div[data-baseweb="tab-list"] button[aria-selected="true"] {
+            background-color: var(--primary-color);               /* Use theme's primary color for active tab */
+            color: var(--light-color);                            /* Use theme's light color for text */
+            border: 2px solid var(--secondary-color);             /* Use theme's secondary color for active border */
+            font-size: 32px !important;                           /* Even bigger for active tab */
+            font-weight: bold !important;                         /* Make it bold */
         }
 
         /* Hover effect for tabs */
-        div[class*="stTabs"] button:hover {
-            background-color: var(--secondary-color);           /* Use theme's secondary color for hover effect */
-            color: var(--light-color);                          /* Use theme's light color for text on hover */
+        div[data-baseweb="tab-list"] button:hover {
+            background-color: var(--secondary-color);             /* Use theme's secondary color for hover effect */
+            color: var(--light-color);                            /* Use theme's light color for text on hover */
+        }
+
+        /* ==================================== INSIDE TAB CONTENT STYLING ==================================== */
+
+        /* Increase font size for text inside tabs */
+        div[class*="stTabs"] div[data-baseweb="tab-panel"] {
+            font-size: 18px !important;                           /* Adjust text size */
+            line-height: 1.6;                                     /* Improve readability */
         }
         </style>
         """,
-        unsafe_allow_html=True,
-        )
+        unsafe_allow_html=True
+    )
 
     # Create tabs
-    tab1, tab2, tab3, tab4 = st.tabs([
-        "Model Predictors (Top 15)",
-        "Client Explanatory Variables (Top 15)",
-        "Positioning of Credit Applicant in Relation to Other Applications",
-        "Positioning of Credit Applicant on a Particular Variable"
-        ])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "📊 Model Predictors (Top 15)",
+        "🔍 Client Explanatory Variables (Top 15)",
+        "📌 Positioning of Credit Applicant",
+        "📈 Positioning on a Single Variable",
+        "🔬 Bivariate Analysis"
+    ])
+
 
     # --------------------------------------- TAB 1: SHAP Beeswarm Plot (Model Predictors) --------------------------------------- #
     with tab1:
@@ -538,10 +568,34 @@ def main_page():
             """
             )
 
+    # --------------------------------------- TAB 5: Bivariate Analysis --------------------------------------- #
+    with tab5:
+        st.info("ℹ️ Select two features to perform a bivariate analysis and compare the client's data.")
 
-# ==================================================================================================================== #
-#                                               FUNCTIONS SECTION - END                                                #
-# ==================================================================================================================== #
+        client_id = st.session_state.get("cached_client_id")
+
+        if client_id:
+            # Dropdowns for selecting two features
+            feature_1 = st.selectbox("Select First Feature:", st.session_state.feature_names, key="feature_1")
+            feature_2 = st.selectbox("Select Second Feature:", st.session_state.feature_names, key="feature_2")
+
+            # Validation button
+            if st.button("Generate Bivariate Analysis"):
+                st.session_state.bivariate_plot = fetch_bivariate_plot(client_id, feature_1, feature_2)
+
+            # Display the positioning plot
+            if st.session_state.get("bivariate_plot") is not None:
+                st.image(
+                    st.session_state.bivariate_plot,
+                    caption=f"Bivariate Analysis: {feature_1} vs {feature_2}",
+                    width=900
+                )
+            else:
+                st.warning("No bivariate plot available.")
+        else:
+            st.warning("Please enter a valid Client ID to proceed.")
+
+
 
 # ==================================================================================================================== #
 #                                                          UI                                                          #
@@ -569,6 +623,8 @@ if prediction_info is None:
 
 prediction_info = prediction_info.get("data", {})
 
+GRANTED_ICON = "✅"
+DENIED_ICON = "❌"
 
 if prediction_info:
     st.sidebar.divider()
@@ -583,10 +639,12 @@ if prediction_info:
         st.sidebar.markdown(f"<p><b>Estimated Default Probability:</b> {int(predicted_proba * 100)}%</p>", unsafe_allow_html=True)
         loan_status = prediction_info["status"]
         status_color = "green" if loan_status == "Granted" else "red"
-        st.sidebar.markdown(f"<p style='color:{status_color};'><b>Loan Status:</b> {loan_status}</p>", unsafe_allow_html=True)
+        status_icon = GRANTED_ICON if loan_status == "Granted" else DENIED_ICON
+        st.sidebar.markdown(f"<p style='color:{status_color};'><b>Loan Status:</b> {status_icon} {loan_status}</p>", unsafe_allow_html=True)
 
         gauge_plot = create_gauge_plotly(predicted_proba, threshold)
         st.sidebar.plotly_chart(gauge_plot, use_container_width=True)
+
 
 # ===================================================== DISPLAY CLIENT INFO ================================================= #
 client_info = st.session_state.get("client_data")

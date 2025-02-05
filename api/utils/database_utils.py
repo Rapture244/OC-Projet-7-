@@ -40,6 +40,7 @@ from pathlib import Path
 import sqlite3
 from typing import Optional, Dict, Any, List
 import io
+import os
 
 # Third-party library imports
 from loguru import logger
@@ -51,7 +52,8 @@ import seaborn as sns
 import shap
 from sklearn.preprocessing import RobustScaler
 
-
+# For PostgrSQL ! To be used instead of sqlite3 !
+import psycopg2
 
 # Local application imports
 from prod.paths import DATABASE_DIR, API_STATIC_DIR, API_MODELS_DIR
@@ -61,13 +63,23 @@ from api.utils.model_pipeline import load_pipeline
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
 # ==================================================================================================================== #
-DB_PATH: Path = DATABASE_DIR / "credit_scoring.sqlite"
+# Model paths
 SCALER_PATH: Path = API_MODELS_DIR / "2025-01-17 - RobustScaler.joblib"
 SHAP_EXPLAINER_PATH: Path = API_MODELS_DIR / "shap_explainer.joblib"
+
+# LOCAL SQLITE DATABASE
+DB_PATH: Path = DATABASE_DIR / "credit_scoring.sqlite"
+
+# HEROKU POSTGRES
+# When you deploy your app to Heroku, Heroku automatically provides the correct database URL in the environment based on this !
+# DATABASE_URL = os.getenv("DATABASE_URL")  # Fetch from Heroku environment variables
+
 
 # ==================================================================================================================== #
 #                                                       FUNCTIONS                                                      #
 # ==================================================================================================================== #
+
+# LOCAL DB CONNECTION
 def get_db_connection() -> sqlite3.Connection:
     """Create and return a connection to the SQLite database."""
     try:
@@ -77,6 +89,17 @@ def get_db_connection() -> sqlite3.Connection:
     except sqlite3.Error as e:
         logger.error(f"Database connection failed: {e}")
         raise
+
+
+# # REMOTE DB CONNECTION
+# def get_db_connection():
+#     """Create and return a connection to the PostgreSQL database."""
+#     try:
+#         conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+#         return conn
+#     except psycopg2.Error as e:
+#         print(f"Database connection failed: {e}")
+#         return None
 
 
 # ================================================ EXTRACT CLIENT INFO =============================================== #
@@ -619,6 +642,72 @@ def extract_feature_positioning_plot(client_id: int, feature_name: str) -> Optio
         return None
 
 
+# ================================================ BIVARIATE ANALYSIS ================================================ #
+def bi_variate_analysis(client_id: int, feature_1: str, feature_2: str) -> Optional[io.BytesIO]:
+    """
+    Generates a scatter plot for two features from the 'model_input_metadata' table,
+    highlighting the given client_id's data point in orange.
+
+    Args:
+        client_id (int): The ID of the client to highlight.
+        feature_1 (str): The first feature to plot.
+        feature_2 (str): The second feature to plot.
+
+    Returns:
+        io.BytesIO: A BytesIO object containing the generated plot.
+    """
+    conn = get_db_connection()
+    if conn is None:
+        return None
+
+    try:
+        # Fetch the full dataset for the given features
+        query = f"""
+        SELECT SK_ID_CURR, "{feature_1}", "{feature_2}" 
+        FROM model_input_data;
+        """
+        df = pd.read_sql_query(query, conn)
+
+        # Fetch the client-specific data
+        client_query = f"""
+        SELECT "{feature_1}", "{feature_2}"
+        FROM model_input_data
+        WHERE SK_ID_CURR = ?;
+        """
+        client_data = pd.read_sql_query(client_query, conn, params=(client_id,))
+        conn.close()
+
+        if df.empty:
+            logger.warning("No data found for the given features.")
+            return None
+
+        if client_data.empty:
+            logger.warning(f"Client ID {client_id} not found in dataset.")
+            return None
+
+        # Extract client values
+        client_x, client_y = client_data.iloc[0][feature_1], client_data.iloc[0][feature_2]
+
+        # Create scatter plot
+        plt.figure(figsize=(8, 6))
+        sns.scatterplot(x=df[feature_1], y=df[feature_2], alpha=0.5, label="Other Clients")
+        plt.scatter(client_x, client_y, color='orange', edgecolors='black', s=100, label=f"Client {client_id}")
+        plt.xlabel(feature_1)
+        plt.ylabel(feature_2)
+        plt.title(f"Bivariate Analysis: {feature_1} vs {feature_2}")
+        plt.legend()
+
+        # Save plot to a BytesIO object
+        img_buffer = io.BytesIO()
+        plt.savefig(img_buffer, format='png', bbox_inches='tight')
+        plt.close()
+        img_buffer.seek(0)
+
+        return img_buffer
+
+    except sqlite3.Error as e:
+        logger.error(f"Database query failed: {e}")
+        return None
 
 
 

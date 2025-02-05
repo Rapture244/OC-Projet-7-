@@ -40,6 +40,7 @@ from api.utils.database_utils import (
     extract_client_positioning_plot,
     extract_feature_positioning_plot,
     extract_features_name,
+    bi_variate_analysis,
     )
 
 # ==================================================================================================================== #
@@ -147,3 +148,37 @@ def get_features_name_endpoint():
         logger.error(f"Error retrieving feature names: {e}")
         console.print_exception()  # Print stack trace with Rich
         return jsonify({"error": "Internal server error"}), 500
+
+
+# ================================================ GET BIVARIATE PLOT ================================================ #
+@positioning_bp.route("/bivariate-analysis", methods=["POST"])
+def bivariate_analysis_endpoint():
+    """
+    API endpoint to generate and return a bivariate scatter plot for a given client and two features.
+    """
+    try:
+        user_request = request.get_json(force=True)
+        client_id = user_request.get("id")
+        feature_1 = user_request.get("feature_1")
+        feature_2 = user_request.get("feature_2")
+
+        # Validate inputs
+        if client_id is None or not isinstance(client_id, int):
+            return jsonify({"error": "Invalid or missing 'id'"}), 400
+        if not feature_1 or not isinstance(feature_1, str):
+            return jsonify({"error": "Invalid or missing 'feature_1'"}), 400
+        if not feature_2 or not isinstance(feature_2, str):
+            return jsonify({"error": "Invalid or missing 'feature_2'"}), 400
+
+        # Generate Bivariate Analysis Plot
+        img_buffer = bi_variate_analysis(client_id, feature_1, feature_2)
+
+        if img_buffer is None:
+            return jsonify({"error": f"Failed to generate bivariate plot for Client ID {client_id}"}), 500
+
+        return send_file(img_buffer, mimetype="image/png")
+
+    except Exception as e:
+        logger.error(f"Error generating bivariate plot: {e}")
+        return jsonify({"error": "Failed to retrieve bivariate plot"}), 500
+
