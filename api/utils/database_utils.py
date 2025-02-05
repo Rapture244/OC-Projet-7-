@@ -60,6 +60,15 @@ from prod.paths import DATABASE_DIR, API_STATIC_DIR, API_MODELS_DIR
 from api.utils.model_pipeline import load_pipeline
 
 
+# ============================= GLOBAL PLOT CONFIGURATION ============================= #
+# Set a colorblind-friendly palette globally
+sns.set_palette("colorblind")
+plt.rcParams["axes.prop_cycle"] = plt.cycler(color=sns.color_palette("colorblind"))   # Applies a WCAG-friendly color theme for Matplotlib
+
+# Ensure SHAP plots also respect the colorblind theme
+shap.initjs()  # Enables JS-based visualizations
+
+
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
 # ==================================================================================================================== #

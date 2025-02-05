@@ -44,6 +44,10 @@ import requests
 import streamlit as st
 import plotly.graph_objects as go
 import pandas as pd
+import seaborn as sns
+
+sns.set_palette("colorblind")  # Ensures accessibility for colorblind users
+
 
 
 # ==================================================================================================================== #
@@ -71,7 +75,7 @@ BIVARIATE_ANALYSIS_API_URL = f"{BASE_URL}/bivariate-analysis"
 
 
 # Streamlit App Configuration
-PAGE_TITLE = "Credit Score Predictor"
+PAGE_TITLE = "Credit Score Dashboard - Loan Decision Analysis"
 PAGE_ICON = ":bar_chart:"
 PAGE_LAYOUT = "wide"
 
@@ -98,9 +102,42 @@ def set_colorblind_theme():
             --light-color: #f5f5f5;
             --dark-color: #333333;
         }
+
+        /* ========================== HIGH CONTRAST FOR READABILITY (WCAG 1.4.3) ========================== */
+
+        body {
+            color: black !important;             /* Ensures high contrast text */
+            background-color: white !important;  /* Maintains readability */
+        }
+
+        div[class*="stTabs"] button {
+            color: black !important;             /* Ensure tab text is readable */
+            background-color: white !important;  /* High contrast for inactive tabs */
+        }
+
+        div[class*="stTabs"] button[aria-selected="true"] {
+            background-color: var(--primary-color) !important;
+            color: white !important;             /* White text for active tab contrast */
+        }
+
+        /* ========================== RESIZABLE TEXT FOR BETTER ACCESSIBILITY (WCAG 1.4.4) ========================== */
+        
+        html, body {
+            font-size: 1rem !important;         /* Standard default text size */
+        }
+        
+        div[data-baseweb="tab-list"] button {
+            font-size: 1.2em !important;        /* Further reduced tab button text size */
+        }
+        
+        div[class*="stTabs"] div[data-baseweb="tab-panel"] {
+            font-size: 1rem !important;         /* Slightly smaller content text size */
+            line-height: 1.4;                   /* Keep readability balanced */
+        }
+
         </style>""",
         unsafe_allow_html=True
-        )
+    )
 
 # Apply Streamlit's built-in colorblind theme
 set_colorblind_theme()
@@ -408,8 +445,10 @@ def main_page():
         st.image(
             MODEL_PREDICTORS_API_URL,
             caption="Model Predictors (Top 15)",
-            width=900,
+            width=900
         )
+        st.markdown('<p aria-label="SHAP beeswarm plot displaying top 15 model predictors."></p>',
+                    unsafe_allow_html=True)
 
         # Explanation for interpreting the SHAP violin plot
         st.markdown("### How to Read and Interpret the SHAP Violin Plot:")
