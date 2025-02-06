@@ -55,8 +55,8 @@ log_section_header(title="API")
 app = Flask(__name__, static_folder="static")
 
 # Allow only the Streamlit app's domain
-# CORS(app, resources={r"/api/*": {"origins": "https://credit-score-attribution-003464da4de3.herokuapp.com"}})
-CORS(app, resources={r"/api/*": {"origins": "*"}})  # Allow all origins for testing
+CORS(app, resources={r"/api/*": {"origins": "https://credit-score-attribution-003464da4de3.herokuapp.com"}})
+#CORS(app, resources={r"/api/*": {"origins": "*"}})  # Allow all origins for testing
 
 
 
