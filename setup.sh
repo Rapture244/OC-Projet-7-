@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Start Flask API in the background
-gunicorn api.local_main:app &
+# Start Flask API on port 5000
+gunicorn api.local_main:app --bind 0.0.0.0:5000 &
 
-# Wait for Flask to start before Streamlit runs
+# Start Streamlit on the Heroku-assigned port
+streamlit run dashboard/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0 &
+
+# Keep dyno alive until both processes are stopped
 wait

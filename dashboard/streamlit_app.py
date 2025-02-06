@@ -63,10 +63,10 @@ for key in ["cached_client_id", "client_data", "prediction_data", "local_feat_im
 # ==================================================================================================================== #
 
 # # Local development
-# BASE_URL = "http://127.0.0.1:5000/api"  # Add '/api'
+BASE_URL = "http://127.0.0.1:5000/api"
 
-# Cloud deployment
-BASE_URL = "https://credit-score-attribution-003464da4de3.herokuapp.com/api"
+# # Cloud deployment
+# BASE_URL = "https://credit-score-attribution-003464da4de3.herokuapp.com/api"
 
 
 CLIENT_INFO_API_URL = f"{BASE_URL}/client-info"
