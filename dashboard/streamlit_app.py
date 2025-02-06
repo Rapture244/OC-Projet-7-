@@ -558,44 +558,41 @@ def main_page():
             "ℹ️ This section allows you to select a specific feature and view the client's positioning "
             "relative to other applicants using histograms and boxplots. "
             "⭐ **Choose a feature from the dropdown to get started.**"
-            )
+        )
 
-        # Check if a client ID is entered
         client_id = st.session_state.get("cached_client_id")
 
         if client_id:
-            # If no feature is selected, default to the first feature
-            if st.session_state.get("selected_feature") is None:
-                st.session_state.selected_feature = st.session_state.feature_names[0]
+            # Only display the dropdown if features are available
+            if st.session_state.feature_names:
+                # Function to fetch feature plot on selection change
+                def update_feature_plot():
+                    selected_feature = st.session_state.get("selected_feature")
+                    if selected_feature:
+                        st.session_state.feature_plot = fetch_feature_positioning_plot(client_id, selected_feature)
 
-            # Function to fetch feature plot on selection change
-            def update_feature_plot():
-                selected_feature = st.session_state["selected_feature"]
-                if selected_feature:
-                    st.session_state.feature_plot = fetch_feature_positioning_plot(client_id, selected_feature)
-
-            # Dropdown for feature selection with callback
-            selected_feature = st.selectbox(
-                "Select a Feature:",
-                st.session_state.feature_names,
-                key="selected_feature",
-                index=st.session_state.feature_names.index(st.session_state.selected_feature),  # Default selection
-                on_change=update_feature_plot  # Trigger plot update when selection changes
+                selected_feature = st.selectbox(
+                    "Select a Feature:",
+                    st.session_state.feature_names,
+                    key="selected_feature",
+                    on_change=update_feature_plot
                 )
 
-            # Ensure the feature plot is fetched on first load
-            if st.session_state.feature_plot is None:
-                update_feature_plot()  # Fetch the plot for the first feature automatically
+                # Ensure the feature plot is fetched on first load
+                if st.session_state.feature_plot is None:
+                    update_feature_plot()
 
-            # Display the positioning plot
-            if st.session_state.feature_plot is not None:
-                st.markdown("### Feature Positioning Plot")
-                st.image(st.session_state.feature_plot, caption=f"Positioning Plot for {selected_feature}", width=1200)
+                # Display the positioning plot
+                if st.session_state.feature_plot is not None:
+                    st.markdown("### Feature Positioning Plot")
+                    st.image(st.session_state.feature_plot, caption=f"Positioning Plot for {selected_feature}",
+                             width=1200)
+                else:
+                    st.warning("No feature positioning plot available.")
             else:
-                st.warning("No feature positioning plot available.")
+                st.warning("No features available to select. Please check the API.")
         else:
             st.warning("Feature names are not loaded. Please check the API.")
-
 
         # Explanation for interpreting the feature positioning visualization
         st.markdown("### How to Read and Interpret the Feature Positioning Visualization:")
@@ -611,7 +608,7 @@ def main_page():
               - Check if the client is an outlier or within the interquartile range (middle 50% of values).
             - **Takeaway**: This visualization helps you understand how the client's data compares to others, providing insights into the model's prediction.
             """
-            )
+        )
 
     # --------------------------------------- TAB 5: Bivariate Analysis --------------------------------------- #
     with tab5:
