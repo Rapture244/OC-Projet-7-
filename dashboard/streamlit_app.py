@@ -65,13 +65,10 @@ for key in ["cached_client_id", "client_data", "prediction_data", "local_feat_im
 # # Local development
 BASE_URL = "http://127.0.0.1:5000/api"
 
-# # Cloud deployment
-# BASE_URL = "https://credit-score-attribution-003464da4de3.herokuapp.com/api"
-
 
 CLIENT_INFO_API_URL = f"{BASE_URL}/client-info"
 PREDICT_API_URL = f"{BASE_URL}/predict"
-MODEL_PREDICTORS_API_URL = f"{BASE_URL}/model-predictors"
+MODEL_PREDICTORS_API_URL = f"{BASE_URL}/serve-model-predictors"
 LOCAL_FEATURES_API_URL = f"{BASE_URL}/local-feature-importance"
 LOCAL_WATERFALL_PLOT_API_URL = f"{BASE_URL}/local-waterfall-plot"
 CLIENT_POSITIONING_PLOT_API_URL = f"{BASE_URL}/client-positioning-plot"
@@ -155,8 +152,8 @@ set_colorblind_theme()
 # =============================================== VALIDATE & FETCH DATA ============================================== #
 def validate_and_fetch_data():
     """
-    Validates user ID and fetches client & prediction data if ID has changed.
-    Uses cached results to avoid unnecessary API calls.
+    Validates user ID, fetches data if it's a new client,
+    and clears previous cache for different client IDs.
     """
     user_id = st.session_state.get("user_id", "").strip()
 
@@ -166,22 +163,31 @@ def validate_and_fetch_data():
 
     user_id = int(user_id)
 
-    # Check if the client ID has changed
+    # If same client ID is entered, reuse cached data
     if st.session_state.get("cached_client_id") == user_id:
-        return  # Use cached data, no API call
+        return  # Skip API calls, use cached data
 
-    # Update cached ID
+    # New client ID entered: Clear old cached data
+    clear_previous_client_data()
+
+    # Update the cache with new client ID
     st.session_state.cached_client_id = user_id
 
-    # Reset feature plot when new client ID is entered
-    st.session_state.feature_plot = None
-
-    # Use cached functions
+    # Fetch and cache new data
     st.session_state.client_data = fetch_client_info(user_id)
     st.session_state.prediction_data = fetch_predict_info(user_id)
     st.session_state.local_feat_importance = fetch_local_feat_importance(user_id)
     st.session_state.local_feat_plot = fetch_waterfall_plot(user_id)
     st.session_state.positioning_plot = fetch_positioning_plot(user_id)
+
+
+def clear_previous_client_data():
+    """
+    Clears cached data related to the previous client.
+    """
+    for key in ["client_data", "prediction_data", "local_feat_importance", "local_feat_plot", "positioning_plot"]:
+        if key in st.session_state:
+            del st.session_state[key]
 
 
 # ================================================= FETCH CLIENT INFO ================================================ #
@@ -275,6 +281,31 @@ def create_gauge_plotly(predicted_proba: float, threshold: float):
         )
 
     return fig
+
+
+# ============================================ FETCH MODEL PREDICTORS PLOT =========================================== #
+@st.cache_resource(show_spinner=False)
+def fetch_model_predictors_image() -> io.BytesIO:
+    """
+    Fetches the static 'model_predictors.png' from the API once and caches it globally.
+    """
+    try:
+        response = requests.get(f"{BASE_URL}/serve-model-predictors")
+        # Check for non-200 responses
+        if response.status_code != 200:
+            st.sidebar.error(f"Error fetching model predictors image: {response.status_code} - {response.reason}")
+            return None
+
+        # Return image if successful
+        return io.BytesIO(response.content)
+
+    except requests.exceptions.RequestException as e:
+        st.sidebar.error(f"Failed to fetch model predictors image: {e}")
+        return None
+
+
+# Fetch the model predictors image once when the app starts
+model_predictors_image = fetch_model_predictors_image()
 
 
 # ================================================= FETCH LOCAL FEATURE IMPORTANCE TABLE ================================================ #
@@ -448,11 +479,11 @@ def main_page():
         )
 
         # Display the SHAP beeswarm plot (static)
-        st.image(
-            MODEL_PREDICTORS_API_URL,
-            caption="Model Predictors (Top 15)",
-            width=900
-        )
+        if model_predictors_image:
+            st.image(model_predictors_image, caption="Model Predictors (Top 15)", width=900)
+        else:
+            st.warning("Failed to load model predictors image.")
+
         st.markdown('<p aria-label="SHAP beeswarm plot displaying top 15 model predictors."></p>',
                     unsafe_allow_html=True)
 
@@ -686,7 +717,7 @@ if prediction_info:
         st.sidebar.markdown(f"<p style='color:{status_color};'><b>Loan Status:</b> {status_icon} {loan_status}</p>", unsafe_allow_html=True)
 
         gauge_plot = create_gauge_plotly(predicted_proba, threshold)
-        st.sidebar.plotly_chart(gauge_plot, use_container_width=True)
+        st.sidebar.plotly_chart(gauge_plot, use_container_width=True, config={"staticPlot": True})
 
 
 # ===================================================== DISPLAY CLIENT INFO ================================================= #

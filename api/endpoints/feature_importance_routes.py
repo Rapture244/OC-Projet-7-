@@ -30,7 +30,7 @@ Notes:
 
 # ====================================================== IMPORTS ===================================================== #
 # Standard library imports
-from flask import Blueprint, request, jsonify, send_file, current_app
+from flask import Blueprint, request, jsonify, send_file, current_app, send_from_directory
 from rich.console import Console
 from rich.table import Table
 from loguru import logger
@@ -130,6 +130,26 @@ def local_feature_importance_endpoint():
         logger.error(f"Error serving local feature importance: {e}")
         console.print_exception()  # Log the stack trace in Rich
         return jsonify({"error": "Failed to retrieve local feature importance"}), 500
+
+
+
+# ======================================= GLOBAL FEATURE IMPORTANCE PLOT (IMAGE) ====================================== #
+@feature_importance_bp.route("/serve-model-predictors", methods=["GET"])
+def serve_model_predictors():
+    """
+    Serves the static 'model_predictors.png' from the static folder.
+    """
+    try:
+        static_folder = Path(current_app.static_folder)
+        filename = "model_predictors.png"  # Ensure this file exists in your 'static/' folder
+
+        logger.info(f"Serving static image: {filename}")
+
+        return send_from_directory(static_folder, filename, mimetype='image/png')
+
+    except Exception as e:
+        logger.error(f"Failed to serve the image: {e}")
+        return jsonify({"error": f"Failed to serve the image: {e}"}), 500
 
 
 # ======================================= LOCAL FEATURE IMPORTANCE PLOT (IMAGE) ====================================== #
