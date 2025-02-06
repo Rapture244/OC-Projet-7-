@@ -48,6 +48,7 @@ dependencies = [
     "rich (>=13.9.4,<14.0.0)",                # Rich text formatting in the terminal
     "plotly (>=6.0.0,<7.0.0)",                # Interactive plotting and visualization
     "shap (>=0.46.0,<0.47.0)",                # Model explainability
+    "flask-cors (>=5.0.0,<6.0.0)",
 ]
 
 [tool.poetry]

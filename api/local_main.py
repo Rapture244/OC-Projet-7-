@@ -28,6 +28,7 @@ Notes:
 # ====================================================== IMPORTS ===================================================== #
 # Standard library imports
 from flask import Flask
+from flask_cors import CORS
 from loguru import logger
 from pathlib import Path
 
@@ -52,6 +53,9 @@ from prod.utils import log_section_header
 log_section_header(title="API")
 
 app = Flask(__name__, static_folder="static")
+
+# Allow only the Streamlit app's domain
+CORS(app, resources={r"/api/*": {"origins": "https://credit-score-attribution-003464da4de3.herokuapp.com"}})
 
 
 # ==================================================================================================================== #
