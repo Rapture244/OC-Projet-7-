@@ -1,0 +1,36 @@
+@startuml
+actor Client
+participant "Streamlit Sidebar" as Sidebar
+participant "Session State" as SessionState
+participant "API" as API
+participant "Streamlit Main Page" as MainPage
+
+Client -> Sidebar: Enter Client ID
+Client -> Sidebar: Click "Get Client & Prediction Info"
+
+Sidebar -> SessionState: Check if Client ID is numeric
+alt Invalid Input
+    Sidebar -> Client: Display "Please enter a valid numeric Client ID."
+else Valid Input
+    Sidebar -> SessionState: Compare with cached_client_id
+    alt Client ID matches cached_client_id
+        SessionState -> Sidebar: Use cached data
+    else New Client ID
+        Sidebar -> SessionState: Call validate_and_fetch_data()
+        SessionState -> SessionState: Clear previous client data
+        SessionState -> SessionState: Update cached_client_id
+
+        SessionState -> API: Fetch client_info
+        SessionState -> API: Fetch prediction_info
+        SessionState -> API: Fetch local_feature_importance
+        SessionState -> API: Fetch SHAP waterfall plot
+        SessionState -> API: Fetch positioning plot
+
+        API --> SessionState: Return fetched data
+        SessionState -> Sidebar: Display "Data fetched successfully"
+    end
+end
+
+Sidebar -> MainPage: Display data in tabs (Model Predictors, SHAP, Positioning, etc.)
+MainPage -> Client: Show visualizations and insights
+@enduml

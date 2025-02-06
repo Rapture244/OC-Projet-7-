@@ -1,0 +1,28 @@
+flowchart TD
+    A[Client Enters Client ID] --> B{Is Client ID Numeric?}
+    B -- No --> C[Display Error: Please enter a valid numeric Client ID]
+    B -- Yes --> D{Is Client ID same as cached_client_id?}
+
+    D -- Yes --> E[Use Cached Data - No API Calls]
+    D -- No --> F[Call validate_and_fetch_data]
+
+    F --> G[Clear Previous Client Data]
+    G --> H[Update cached_client_id]
+    H --> I[Fetch Data from APIs]
+
+    I --> I1[Fetch client_info]
+    I --> I2[Fetch prediction_info]
+    I --> I3[Fetch local_feature_importance]
+    I --> I4[Fetch SHAP waterfall plot]
+    I --> I5[Fetch positioning plot]
+
+    I5 --> J[Store Fetched Data in session_state]
+    J --> K[Display Success Message in Sidebar]
+
+    E --> L[Display Cached Data on UI]
+    K --> M[Display Fetched Data on UI]
+
+    L --> N[Sidebar: Prediction Results and Client Info]
+    M --> N
+
+    N --> O[Main Page Tabs: Model Predictors, SHAP, Positioning, etc.]

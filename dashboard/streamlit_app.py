@@ -53,7 +53,26 @@ sns.set_palette("colorblind")  # Ensures accessibility for colorblind users
 # ==================================================================================================================== #
 #                                         INITIALIZE SESSION STATE VARIABLES                                          #
 # ==================================================================================================================== #
-for key in ["cached_client_id", "client_data", "prediction_data", "local_feat_importance", "local_feat_plot", "positioning_plot", "feature_names", "feature_plot"]:
+for key in [
+    # Input client id
+    "cached_client_id",
+    # Sidebar
+    "client_data",
+    "prediction_data",
+    # tab1
+    "model_predictors_image",
+    # tab2
+    "local_feat_importance",
+    "local_feat_plot",
+    # tab3
+    "positioning_plot",
+    # For Tab 4 & 5
+    "feature_names",
+    # tab4
+    "feature_plot",
+    # tab5
+    "bivariate_plot",
+]:
     if key not in st.session_state:
         st.session_state[key] = None  # Set a default value
 
@@ -147,53 +166,56 @@ set_colorblind_theme()
 
 
 # ==================================================================================================================== #
-#                                               FUNCTIONS SECTION - BEGIN                                              #
+#                                               FUNCTIONS SECTION                                                      #
 # ==================================================================================================================== #
+
 # =============================================== VALIDATE & FETCH DATA ============================================== #
 def validate_and_fetch_data():
     """
-    Validates user ID, fetches data if it's a new client,
-    and clears previous cache for different client IDs.
+    Fetches data for the new client and clears the cache for the previous client.
     """
-    user_id = st.session_state.get("user_id", "").strip()
+    user_id = int(st.session_state.get("user_id"))  # No need to strip/validate here since it's already done
 
-    if not user_id or not user_id.isdigit():
-        st.sidebar.error("Please enter a valid numeric Client ID.")
-        return
-
-    user_id = int(user_id)
-
-    # If same client ID is entered, reuse cached data
-    if st.session_state.get("cached_client_id") == user_id:
-        return  # Skip API calls, use cached data
-
-    # New client ID entered: Clear old cached data
+    # Clear previous client data before fetching new data
     clear_previous_client_data()
 
-    # Update the cache with new client ID
+    # Update cached client ID
     st.session_state.cached_client_id = user_id
 
     # Fetch and cache new data
+    # -- Sidebar --
     st.session_state.client_data = fetch_client_info(user_id)
     st.session_state.prediction_data = fetch_predict_info(user_id)
+    # -- tab2 --
     st.session_state.local_feat_importance = fetch_local_feat_importance(user_id)
     st.session_state.local_feat_plot = fetch_waterfall_plot(user_id)
+    # -- tab3 --
     st.session_state.positioning_plot = fetch_positioning_plot(user_id)
+
+    st.sidebar.success(f"Data fetched successfully for Client ID: {user_id}")
 
 
 def clear_previous_client_data():
     """
     Clears cached data related to the previous client.
     """
-    for key in ["client_data", "prediction_data", "local_feat_importance", "local_feat_plot", "positioning_plot"]:
+    keys_to_clear = [
+        "client_data",
+        "prediction_data",
+        "local_feat_importance",
+        "local_feat_plot",
+        "positioning_plot",
+        "feature_plot",
+        "bivariate_plot",
+    ]
+    for key in keys_to_clear:
         if key in st.session_state:
             del st.session_state[key]
 
 
-# ================================================= FETCH CLIENT INFO ================================================ #
-@st.cache_data(show_spinner=False)
+# ------------------------------------------------------ SIDEBAR ----------------------------------------------------- #
 def fetch_client_info(user_id: int) -> dict:
-    """Fetches client information from API and caches the result."""
+    """Fetches client information from API without caching."""
     try:
         response = requests.post(url=CLIENT_INFO_API_URL, json={"id": user_id})
         response.raise_for_status()
@@ -203,10 +225,8 @@ def fetch_client_info(user_id: int) -> dict:
         return {}
 
 
-# ================================================= FETCH PREDICT INFO ================================================ #
-@st.cache_data(show_spinner=False)
 def fetch_predict_info(user_id: int) -> dict:
-    """Fetches prediction results from API and caches the result."""
+    """Fetches prediction results from API without caching."""
     try:
         response = requests.post(url=PREDICT_API_URL, json={"id": user_id})
         response.raise_for_status()
@@ -216,8 +236,6 @@ def fetch_predict_info(user_id: int) -> dict:
         return {}
 
 
-
-# ================================================= PREDICTION GAUGE ================================================= #
 def create_gauge_plotly(predicted_proba: float, threshold: float):
     """
     Create a static gauge chart using Plotly with custom ticks, a gray gauge bar,
@@ -283,35 +301,30 @@ def create_gauge_plotly(predicted_proba: float, threshold: float):
     return fig
 
 
-# ============================================ FETCH MODEL PREDICTORS PLOT =========================================== #
-@st.cache_resource(show_spinner=False)
+# ------------------------------------------------------- TAB1 ------------------------------------------------------- #
 def fetch_model_predictors_image() -> io.BytesIO:
     """
-    Fetches the static 'model_predictors.png' from the API once and caches it globally.
+    Fetches the static 'model_predictors.png' from the API once.
     """
     try:
         response = requests.get(f"{BASE_URL}/serve-model-predictors")
-        # Check for non-200 responses
         if response.status_code != 200:
             st.sidebar.error(f"Error fetching model predictors image: {response.status_code} - {response.reason}")
             return None
-
-        # Return image if successful
         return io.BytesIO(response.content)
-
     except requests.exceptions.RequestException as e:
         st.sidebar.error(f"Failed to fetch model predictors image: {e}")
         return None
 
 
-# Fetch the model predictors image once when the app starts
-model_predictors_image = fetch_model_predictors_image()
+# Fetch the model predictors image once at app startup
+if st.session_state.model_predictors_image is None:
+    st.session_state.model_predictors_image = fetch_model_predictors_image()
 
 
-# ================================================= FETCH LOCAL FEATURE IMPORTANCE TABLE ================================================ #
-@st.cache_data(show_spinner=False)
+# ------------------------------------------------------- TAB2 ------------------------------------------------------- #
 def fetch_local_feat_importance(user_id: int) -> list:
-    """Fetches local feature importance table from API and caches it."""
+    """Fetches local feature importance table from API."""
     try:
         response = requests.post(url=LOCAL_FEATURES_API_URL, json={"id": user_id})
         response.raise_for_status()
@@ -322,10 +335,8 @@ def fetch_local_feat_importance(user_id: int) -> list:
         return []
 
 
-# ================================================= FETCH LOCAL FEATURE IMPORTANCE PLOT ================================================= #
-@st.cache_data(show_spinner=False)
 def fetch_waterfall_plot(user_id: int) -> io.BytesIO:
-    """Fetches SHAP waterfall plot from API and caches it."""
+    """Fetches SHAP waterfall plot from API."""
     try:
         response = requests.post(url=LOCAL_WATERFALL_PLOT_API_URL, json={"id": user_id})
         if response.status_code != 200:
@@ -337,10 +348,9 @@ def fetch_waterfall_plot(user_id: int) -> io.BytesIO:
         return None
 
 
-# ============================================== FETCH POSITIONING PLOT ============================================== #
-@st.cache_data(show_spinner=False)
+# ------------------------------------------------------- TAB3 ------------------------------------------------------- #
 def fetch_positioning_plot(user_id: int) -> io.BytesIO:
-    """Fetches client positioning plot from API and caches it."""
+    """Fetches client positioning plot from API."""
     try:
         response = requests.post(url=CLIENT_POSITIONING_PLOT_API_URL, json={"id": user_id})
         if response.status_code != 200:
@@ -351,17 +361,18 @@ def fetch_positioning_plot(user_id: int) -> io.BytesIO:
         st.sidebar.error(f"Failed to fetch positioning plot: {e}")
         return None
 
-# ================================================= FEATURE NAMES API CALL ================================================= #
-@st.cache_data(show_spinner=False)
+
+# ==================================================================================================================== #
+# ----------------------------------------------------- TAB 4 & 5 ---------------------------------------------------- #
 def fetch_feature_names() -> list:
-    """Fetches feature names from the API and caches them."""
+    """Fetches feature names from the API."""
     try:
         response = requests.get(FEATURE_NAMES_API_URL)
         response.raise_for_status()
         return response.json().get("features", [])
     except requests.exceptions.RequestException as e:
         st.sidebar.error(f"Error fetching feature names: {e}")
-        return []  # Return an empty list instead of None
+        return []
 
 
 # Fetch feature names once when the app starts
@@ -369,27 +380,22 @@ if st.session_state.feature_names is None:
     st.session_state.feature_names = fetch_feature_names()
 
 
-# ================================================= FEATURE POSITIONING API CALL ================================================= #
-@st.cache_data(show_spinner=False)
+# ------------------------------------------------------- TAB4 ------------------------------------------------------- #
 def fetch_feature_positioning_plot(client_id: int, feature_name: str) -> Optional[io.BytesIO]:
-    """Fetches feature positioning plot from API and caches it."""
+    """Fetches feature positioning plot from API."""
     try:
         response = requests.post(
             url=FEATURE_POSITIONING_PLOT_API_URL,
             json={"id": client_id, "feature": feature_name}
-            )
+        )
         response.raise_for_status()
-
-        # Return image as BytesIO
         return io.BytesIO(response.content)
-
     except requests.exceptions.RequestException as e:
         st.sidebar.error(f"Failed to fetch feature positioning plot: {e}")
         return None
 
 
-# =========================================== FETCH BIVARIATE ANALYSIS PLOT ========================================== #
-@st.cache_data(show_spinner=False)
+# ------------------------------------------------------- TAB5 ------------------------------------------------------- #
 def fetch_bivariate_plot(client_id: int, feature_1: str, feature_2: str) -> Optional[io.BytesIO]:
     """Fetches bivariate analysis plot from API and caches it."""
     try:
@@ -404,7 +410,9 @@ def fetch_bivariate_plot(client_id: int, feature_1: str, feature_2: str) -> Opti
         return None
 
 
-# ===================================================== MAIN PAGE ==================================================== #
+# ==================================================================================================================== #
+#                                                  MAIN PAGE FUNCTION                                                  #
+# ==================================================================================================================== #
 def main_page():
     """
     Renders the main content of the dashboard with styled clickable tabs.
@@ -416,7 +424,7 @@ def main_page():
         "to transparency and its core values."
         )
 
-    # ================================================== TABS START HERE ================================================= #
+    # ----------------------------------------------------- CSS STYLE ---------------------------------------------------- #
     # Custom CSS for larger clickable tabs, respecting colorblind theme
     st.markdown(
         """
@@ -479,8 +487,8 @@ def main_page():
         )
 
         # Display the SHAP beeswarm plot (static)
-        if model_predictors_image:
-            st.image(model_predictors_image, caption="Model Predictors (Top 15)", width=900)
+        if st.session_state.model_predictors_image:
+            st.image(st.session_state.model_predictors_image, caption="Model Predictors (Top 15)", width=900)
         else:
             st.warning("Failed to load model predictors image.")
 
@@ -516,16 +524,20 @@ def main_page():
         if local_feat_data:
             # Reorder keys manually to ensure correct column order
             column_order = ["Features", "Value", "SHAP Value", "Description"]
-            ordered_local_feat_data = [{col: row[col] for col in column_order} for row in local_feat_data]
+
+            # Handle missing columns gracefully
+            ordered_local_feat_data = [
+                {col: row.get(col, "N/A") for col in column_order} for row in local_feat_data
+            ]
 
             # Display Feature Importance Table
             st.markdown("### Local Feature Importance Table")
-            st.table(ordered_local_feat_data)  # Force correct order
+            st.table(ordered_local_feat_data)
         else:
-            st.warning("No feature importance data available.")
+            st.warning("No feature importance data available. Please enter a valid Client ID.")
 
-        # Fetch and Display SHAP Waterfall Plot
-        if st.session_state.local_feat_plot is not None:
+        # Fetch and Display SHAP Waterfall Plot from session state
+        if st.session_state.get("local_feat_plot") is not None:
             st.markdown("### SHAP Waterfall Plot")
             st.image(
                 st.session_state.local_feat_plot,
@@ -533,7 +545,7 @@ def main_page():
                 width=1200,
             )
         else:
-            st.warning("No SHAP waterfall plot available.")
+            st.warning("No SHAP waterfall plot available. Please enter a valid Client ID.")
 
         # Explanation for interpreting the SHAP waterfall plot
         st.markdown("### How to Read and Interpret the SHAP Waterfall Plot:")
@@ -558,14 +570,16 @@ def main_page():
             "through histograms and boxplots. ⭐ **Scroll down to learn how to interpret the visualizations**."
             )
 
-        # Fetch & Display positionint plot
+        # Display Positioning Plot from session state
         if st.session_state.positioning_plot is not None:
-            st.markdown("### Client positioning")
+            st.markdown("### Client Positioning")
             st.image(
                 st.session_state.positioning_plot,
                 caption="Client Positioning",
                 width=1200,
             )
+        else:
+            st.warning("No positioning plot available. Please enter a valid Client ID.")
 
         # Add explanation for interpreting the client positioning visualization
         st.markdown("### How to Read and Interpret the Client Positioning Visualization:")
@@ -594,14 +608,14 @@ def main_page():
         client_id = st.session_state.get("cached_client_id")
 
         if client_id:
-            # Only display the dropdown if features are available
-            if st.session_state.feature_names:
-                # Function to fetch feature plot on selection change
+            if st.session_state.feature_names and len(st.session_state.feature_names) > 0:
+                # Function to fetch the feature positioning plot when a feature is selected
                 def update_feature_plot():
                     selected_feature = st.session_state.get("selected_feature")
                     if selected_feature:
                         st.session_state.feature_plot = fetch_feature_positioning_plot(client_id, selected_feature)
 
+                # Dropdown to select features
                 selected_feature = st.selectbox(
                     "Select a Feature:",
                     st.session_state.feature_names,
@@ -610,20 +624,19 @@ def main_page():
                 )
 
                 # Ensure the feature plot is fetched on first load
-                if st.session_state.feature_plot is None:
+                if st.session_state.get("feature_plot") is None:
                     update_feature_plot()
 
-                # Display the positioning plot
-                if st.session_state.feature_plot is not None:
-                    st.markdown("### Feature Positioning Plot")
-                    st.image(st.session_state.feature_plot, caption=f"Positioning Plot for {selected_feature}",
-                             width=1200)
+                # Display the positioning plot if available
+                if st.session_state.get("feature_plot"):
+                    st.markdown(f"### Positioning Plot for **{selected_feature}**")
+                    st.image(st.session_state.feature_plot, width=1200)
                 else:
-                    st.warning("No feature positioning plot available.")
+                    st.warning("No feature positioning plot available. Please select a feature.")
             else:
-                st.warning("No features available to select. Please check the API.")
+                st.warning("No features available to select. Please check the API or refresh the app.")
         else:
-            st.warning("Feature names are not loaded. Please check the API.")
+            st.warning("Please enter a valid Client ID to load features.")
 
         # Explanation for interpreting the feature positioning visualization
         st.markdown("### How to Read and Interpret the Feature Positioning Visualization:")
@@ -675,22 +688,23 @@ def main_page():
 #                                                          UI                                                          #
 # ==================================================================================================================== #
 
-# ====================================================== SIDEBAR ===================================================== #
+# ------------------------------------------------------ SIDEBAR ----------------------------------------------------- #
 st.sidebar.title("Client Selection")
 
-# Input for Client ID with callback
-st.sidebar.text_input(
-    "Enter Client ID:",
-    key="user_id",
-    on_change=validate_and_fetch_data
-)
+# Input for Client ID without callback
+client_id_input = st.sidebar.text_input("Enter Client ID:", key="user_id")
 
 # Button to manually trigger data fetch
 if st.sidebar.button("Get Client & Prediction Info"):
-    validate_and_fetch_data()
+    current_user_id = st.session_state.get("user_id", "").strip()
 
+    if not current_user_id.isdigit():
+        st.sidebar.error("Please enter a valid numeric Client ID.")
+    elif int(current_user_id) != st.session_state.get("cached_client_id"):
+        validate_and_fetch_data()  # Only call if the ID is new
 
-# ===================================================== DISPLAY PREDICTION INFO ================================================= #
+# ---------------------------------------------- DISPLAY PREDICTION INFO --------------------------------------------- #
+
 prediction_info = st.session_state.get("prediction_data")
 if prediction_info is None:
     prediction_info = {}  # Ensure it's a dictionary to avoid 'NoneType' issues
@@ -720,7 +734,7 @@ if prediction_info:
         st.sidebar.plotly_chart(gauge_plot, use_container_width=True, config={"staticPlot": True})
 
 
-# ===================================================== DISPLAY CLIENT INFO ================================================= #
+# ------------------------------------------------ DISPLAY CLIENT INFO ----------------------------------------------- #
 client_info = st.session_state.get("client_data")
 
 if client_info:
@@ -737,5 +751,6 @@ if client_info:
     display_client_section("Financial Profile", client_info.get("Financial Profile"), ["Income type", "Employment Sector", "Income", "Housing situation", "Owns Car", "Owns Real Estate"])
     display_client_section("Credit Profile", client_info.get("Credit Profile"), ["Contract type", "Credit", "Annuity"])
 
-# ================================================= DISPLAY MAIN PAGE ================================================ #
+
+# ------------------------------------------------- DISPLAY MAIN PAGE ------------------------------------------------ #
 main_page()
