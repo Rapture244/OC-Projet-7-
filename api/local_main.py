@@ -42,16 +42,16 @@ from prod.utils import log_section_header
 # ==================================================================================================================== #
 #                                                     CONFIGURATION                                                    #
 # ==================================================================================================================== #
-# Loguru Configuration
-LOG_PATH = LOG_DIR / "api"
-logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
+# # Loguru Configuration for local testing
+# LOG_PATH = LOG_DIR / "api"
+# logger.add(LOG_PATH, rotation="1 MB", retention="7 days", level="INFO")
 
 # ==================================================================================================================== #
 #                                                          API                                                         #
 # ==================================================================================================================== #
-log_section_header(title = "API")
+log_section_header(title="API")
 
-app = Flask(__name__, static_folder = "static")
+app = Flask(__name__, static_folder="static")
 
 
 # ==================================================================================================================== #
@@ -67,6 +67,11 @@ app.register_blueprint(positioning_bp, url_prefix="/api")
 # ==================================================================================================================== #
 #                                                       RUN APP                                                        #
 # ==================================================================================================================== #
-if __name__ == "__main__":
-    app.run(debug=True)
 
+# # For local development
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
+# For Cloud Deployment
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=False)

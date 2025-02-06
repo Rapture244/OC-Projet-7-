@@ -53,7 +53,7 @@ import shap
 from sklearn.preprocessing import RobustScaler
 
 # For PostgrSQL ! To be used instead of sqlite3 !
-import psycopg2
+# import psycopg2
 
 # Local application imports
 from prod.paths import DATABASE_DIR, API_STATIC_DIR, API_MODELS_DIR
@@ -79,8 +79,8 @@ SHAP_EXPLAINER_PATH: Path = API_MODELS_DIR / "shap_explainer.joblib"
 # LOCAL SQLITE DATABASE
 DB_PATH: Path = DATABASE_DIR / "credit_scoring.sqlite"
 
-# HEROKU POSTGRES
-# When you deploy your app to Heroku, Heroku automatically provides the correct database URL in the environment based on this !
+# # HEROKU POSTGRES
+# # When you deploy your app to Heroku, Heroku automatically provides the correct database URL in the environment based on this !
 # DATABASE_URL = os.getenv("DATABASE_URL")  # Fetch from Heroku environment variables
 
 

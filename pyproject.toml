@@ -67,3 +67,4 @@ missingno = ">=0.5.2,<0.6.0"              # Visualization for missing data
 evidently = ">=0.5.1,<0.6.0"              # Model performance monitoring and reporting
 ipywidgets = ">=8.1.5,<9.0.0"             # Interactive widgets for Jupyter
 gputil = ">=1.4.0,<2.0.0"                 # GPU utility functions
+psycopg2 = ">=2.9.10,<3.0.0"

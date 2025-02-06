@@ -83,6 +83,52 @@
 # After this, i still had an issue during Heroku deployment after CI/CD validation ---> siphash24  & lightgbm were required
 
 
+# ======================================================================================================================================== #
+#                                                                 P8 API & DASHBOARD BONE ANEW                                             #
+# ======================================================================================================================================== #
+
+
+# -------------------------------- TRIED USING POSTGRESQL BUT VPN DOES NOT ALLOW IT, WILL BE USING SQLITE FUCK IT ------------------------ #
+# --- STEP 1: Migrate from SQLite to PostGreSQL on Heroku --- #
+# SQLite databases are stored as files and Heroku resets the filesytem on each deployment, deleting the SQlite database
+# PostgreSQL is cloud-ready and can handle many API requests at once.
+# Heroku Postgres is a managed database service, fully compatible with Flask and Streamlit. It is persistent (data is stored even if the app restarts).
+
+# INSTRUCTION: Go to ur app on Heroku.com, click on 'Resources' and add on "Heroku Postgres"
+
+# CLI: Command to get the Database url. This URL is how your application connects to PostgreSQL.
+# $ heroku config:get DATABASE_URL --app credit-score-attribution
+# it works but for security reason i wont show.
+
+# --- STEP 2: Modify database_utils.py to Use PostgreSQL  --- #
+# Added: DATABASE_URL = os.getenv("DATABASE_URL") and heroku will read it when deployed
+
+# --- STEP 3: Export SQlite Data  --- #
+# from the directory containing the database aka databases/
+
+# INFO: require to download 'sqlite-tools-win-x64-3480000.zip' from teh sqlite site, unzip the folder and move it to the Program Files before goin got the Path variables.
+# Inside the System variables, search and click on "Path" and then add the sqlite/ folder as a path
+# reload git bash and try $ sqlite3 --version
+# if it works u can move to the rest !
+
+# STEP 1: turn the sqlite database into a PostgreSQL                     $ sqlite3 credit_scoring.sqlite .dump > backup.sql
+# STEP 2: Open a Connection to Your Heroku PostgreSQL Database           $ heroku pg:psql --app credit-score-attribution
+
+# WARNING STEP 2: Require to have installed PostGreSQL locally and update the PATH environment variables using to add the 'bin'
+# Something like this: "C:\Program Files\PostgreSQL\<VERSION>\bin"
+# Otherwise commands like "heroku pg:psql" depend on the PATH and wont work if there is no path or if it is incorrect
+
+# INFO Step 2: The command line is not working because of the work VPN
+# Alternative, load the .db to my github and send it to deployment on the Heroku machine and launch a script to migrate the backup.db to the Heroku PostGres but only once and if it launched then not do it
+# PS: i did "$$ heroku config:get DATABASE_URL --app credit-score-attribution" and added the url to the github Repository secrets under HEROKU_DATABASE_URL
+
+# Okay fuck this shit, moving on to using simple, good, reliable sqlite database
+
+# ----------------------------------------------------------- USING SQLITE DATABASE  --------------------------------------------------- #
+
+
+
+
 
 # ==================================================================================================================== #
 #                                                         CI/CD                                                        #
@@ -117,7 +163,7 @@ jobs:
         run: poetry install
 
       - name: Run tests
-        run: poetry run pytest tests/test_local_api.py --maxfail=1 --disable-warnings
+        run: poetry run pytest tests/test_api.py --maxfail=1 --disable-warnings
 
   deploy:
     # Only run this after build-and-test passes

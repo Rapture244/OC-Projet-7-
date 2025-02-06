@@ -613,6 +613,7 @@ def main_page():
 
         client_id = st.session_state.get("cached_client_id")
 
+        st.markdown("### Bivariate Analysis")
         if client_id:
             # Dropdowns for selecting two features
             feature_1 = st.selectbox("Select First Feature:", st.session_state.feature_names, key="feature_1")
