@@ -6,5 +6,5 @@ gunicorn api.local_main:app --bind 0.0.0.0:5000 &
 # Start Streamlit with headless mode and session timeout
 streamlit run dashboard/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0 &
 
-# Use wait -n to let Heroku auto-idle when no processes are active
+# Exit when either process ends (allows Heroku to auto-idle)
 wait -n
