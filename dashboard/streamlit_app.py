@@ -40,6 +40,7 @@ import io
 from typing import Optional, Dict, Any, List
 import os
 import time
+import gc
 
 # Third-party library imports
 import requests
@@ -98,17 +99,22 @@ for key in [
 if 'last_active' not in st.session_state:
     st.session_state.last_active = time.time()
 
-# Detect user interactions (any input or button click)
-if st.button("Interact") or st.session_state.get("user_id"):
+# Detect user interaction with the Interact button
+if st.button("Interact"):
     st.session_state.last_active = time.time()
 
-# Calculate inactivity duration
+# Calculate inactivity duration and remaining time
 inactivity_duration = time.time() - st.session_state.last_active
+remaining_time = max(0, 300 - int(inactivity_duration))  # 300 seconds = 5 minutes
+
+# Display remaining time with the Interact button
+st.info(f"⏳ Time remaining before auto-shutdown: {remaining_time // 60}m {remaining_time % 60}s")
 
 # Auto shutdown after 5 minutes of inactivity
-if inactivity_duration > 300:  # 5 minutes
+if inactivity_duration > 300:
     st.warning("No activity detected for 5 minutes. Shutting down the app.")
     os.system("kill 1")
+
 
 
 # ------------------------------------------------- API CONFIGURATION ------------------------------------------------ #
@@ -183,6 +189,14 @@ def set_colorblind_theme():
 set_colorblind_theme()
 
 
+# ML ops/ Dev ops / certif
+# Cloud -> microsoft azure/ AWS machine learning specialization
+# https://huggingface.co/blog/modernbert
+# https://github.com/DataTalksClub/llm-zoomcamp (Top mais pas de certif)
+# https://www.udemy.com/course/aws-machine-learning/
+# https://www.udemy.com/course/aws-machine-learning-a-complete-guide-with-python/
+
+
 # ==================================================================================================================== #
 #                                               FUNCTIONS SECTION                                                      #
 # ==================================================================================================================== #
@@ -210,6 +224,9 @@ def validate_and_fetch_data():
     # -- tab3 --
     st.session_state.positioning_plot = fetch_positioning_plot(user_id)
 
+    # Trigger garbage collection
+    gc.collect()
+
     st.sidebar.success(f"Data fetched successfully for Client ID: {user_id}")
 
 
@@ -229,6 +246,9 @@ def clear_previous_client_data():
     for key in keys_to_clear:
         if key in st.session_state:
             del st.session_state[key]
+
+    # Trigger garbage collection after clearing data
+    gc.collect()
 
 
 # ------------------------------------------------------ SIDEBAR ----------------------------------------------------- #
