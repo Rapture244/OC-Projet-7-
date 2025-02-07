@@ -41,6 +41,7 @@ from typing import Optional, Dict, Any, List
 import os
 import time
 import gc
+import sys
 
 # Third-party library imports
 import requests
@@ -713,7 +714,7 @@ if terminate:
     if confirm:
         st.sidebar.warning("App is shutting down...")
         time.sleep(2)  # Display the warning for 2 seconds
-        os.system("kill 1")  # Gracefully terminate the Streamlit app
+        sys.exit()  # Forcefully exit the Streamlit app
 
 # ------------------------------------------------------ SIDEBAR ----------------------------------------------------- #
 st.sidebar.title("Client Selection")
