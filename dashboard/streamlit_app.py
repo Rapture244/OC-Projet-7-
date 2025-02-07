@@ -698,17 +698,21 @@ def main_page():
             st.warning("Please enter a valid Client ID to proceed.")
 
 
-
 # ==================================================================================================================== #
 #                                                          UI                                                          #
 # ==================================================================================================================== #
+
 # ------------------------------------------------ SHUT DOWN BUTTON ------------------------------------------------ #
-# Terminate button with confirmation (placed in the sidebar above the title)
-if st.sidebar.button("Terminate App 🚨"):
-    confirm = st.sidebar.confirm("Are you sure you want to terminate the app?")
+# Terminate button with manual confirmation
+terminate = st.sidebar.button("🚨 Terminate App")
+
+if terminate:
+    # Show confirmation checkbox after clicking the terminate button
+    confirm = st.sidebar.checkbox("Confirm Termination")
+
     if confirm:
         st.sidebar.warning("App is shutting down...")
-        time.sleep(2)  # Show the warning for 2 seconds
+        time.sleep(2)  # Display the warning for 2 seconds
         os.system("kill 1")  # Gracefully terminate the Streamlit app
 
 # ------------------------------------------------------ SIDEBAR ----------------------------------------------------- #
