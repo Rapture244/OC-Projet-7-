@@ -94,29 +94,6 @@ for key in [
         st.session_state[key] = None  # Set a default value
 
 
-# ------------------------------------------------ AUTO IDLE TRACKING ------------------------------------------------ #
-# Initialize last activity timestamp
-if 'last_active' not in st.session_state:
-    st.session_state.last_active = time.time()
-
-# Detect user interaction with the Interact button
-if st.button("Interact"):
-    st.session_state.last_active = time.time()
-
-# Calculate inactivity duration and remaining time
-inactivity_duration = time.time() - st.session_state.last_active
-remaining_time = max(0, 300 - int(inactivity_duration))  # 300 seconds = 5 minutes
-
-# Display remaining time with the Interact button
-st.info(f"⏳ Time remaining before auto-shutdown: {remaining_time // 60}m {remaining_time % 60}s")
-
-# Auto shutdown after 5 minutes of inactivity
-if inactivity_duration > 300:
-    st.warning("No activity detected for 5 minutes. Shutting down the app.")
-    os.system("kill 1")
-
-
-
 # ------------------------------------------------- API CONFIGURATION ------------------------------------------------ #
 # Local development
 BASE_URL = "http://127.0.0.1:5000/api"
@@ -725,6 +702,14 @@ def main_page():
 # ==================================================================================================================== #
 #                                                          UI                                                          #
 # ==================================================================================================================== #
+# ------------------------------------------------ SHUT DOWN BUTTON ------------------------------------------------ #
+# Terminate button with confirmation (placed in the sidebar above the title)
+if st.sidebar.button("Terminate App 🚨"):
+    confirm = st.sidebar.confirm("Are you sure you want to terminate the app?")
+    if confirm:
+        st.sidebar.warning("App is shutting down...")
+        time.sleep(2)  # Show the warning for 2 seconds
+        os.system("kill 1")  # Gracefully terminate the Streamlit app
 
 # ------------------------------------------------------ SIDEBAR ----------------------------------------------------- #
 st.sidebar.title("Client Selection")

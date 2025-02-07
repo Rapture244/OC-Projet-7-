@@ -13,12 +13,5 @@ showSidebarNavigation = false
 [theme]
 base = "light"
 
-[global]
-dataFrameSerialization = "legacy"
-disableWatchdogWarning = true
-
 [runner]
 magicEnabled = false
-
-[session]
-idle_timeout = 300
