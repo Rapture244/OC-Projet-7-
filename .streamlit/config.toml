@@ -1,0 +1,26 @@
+[server]
+headless = true
+port = $PORT
+enableCORS = false
+enableXsrfProtection = false
+fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false
+
+[client]
+showSidebarNavigation = false
+
+[theme]
+base = "light"
+
+[global]
+dataFrameSerialization = "legacy"
+disableWatchdogWarning = true
+
+[runner]
+magicEnabled = false
+
+[session]
+# Auto shutdown session after 5 mins of inactivity
+idle_timeout = 300
