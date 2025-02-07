@@ -38,6 +38,8 @@ Notes:
 # Standard library imports
 import io
 from typing import Optional, Dict, Any, List
+import os
+import time
 
 # Third-party library imports
 import requests
@@ -48,6 +50,25 @@ import seaborn as sns
 
 sns.set_palette("colorblind")  # Ensures accessibility for colorblind users
 
+
+# ==================================================================================================================== #
+#                                                  AUTO IDLE TRACKING                                                  #
+# ==================================================================================================================== #
+# Initialize last activity timestamp
+if 'last_active' not in st.session_state:
+    st.session_state.last_active = time.time()
+
+# Detect user interactions (any input or button click)
+if st.button("Interact") or st.session_state.get("user_id"):
+    st.session_state.last_active = time.time()
+
+# Calculate inactivity duration
+inactivity_duration = time.time() - st.session_state.last_active
+
+# Auto shutdown after 5 minutes of inactivity
+if inactivity_duration > 300:  # 5 minutes
+    st.warning("No activity detected for 5 minutes. Shutting down the app.")
+    os.system("kill 1")
 
 
 # ==================================================================================================================== #
