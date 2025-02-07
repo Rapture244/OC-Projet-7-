@@ -39,9 +39,7 @@ Notes:
 import io
 from typing import Optional, Dict, Any, List
 import os
-import time
 import gc
-import sys
 
 # Third-party library imports
 import requests
@@ -702,19 +700,6 @@ def main_page():
 # ==================================================================================================================== #
 #                                                          UI                                                          #
 # ==================================================================================================================== #
-
-# ------------------------------------------------ SHUT DOWN BUTTON ------------------------------------------------ #
-# Terminate button with manual confirmation
-terminate = st.sidebar.button("🚨 Terminate App")
-
-if terminate:
-    # Show confirmation checkbox after clicking the terminate button
-    confirm = st.sidebar.checkbox("Confirm Termination")
-
-    if confirm:
-        st.sidebar.warning("App is shutting down...")
-        time.sleep(2)  # Display the warning for 2 seconds
-        sys.exit()  # Forcefully exit the Streamlit app
 
 # ------------------------------------------------------ SIDEBAR ----------------------------------------------------- #
 st.sidebar.title("Client Selection")
