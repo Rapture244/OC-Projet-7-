@@ -52,28 +52,23 @@ sns.set_palette("colorblind")  # Ensures accessibility for colorblind users
 
 
 # ==================================================================================================================== #
-#                                                  AUTO IDLE TRACKING                                                  #
+#                                                     CONFIGURATION                                                    #
 # ==================================================================================================================== #
-# Initialize last activity timestamp
-if 'last_active' not in st.session_state:
-    st.session_state.last_active = time.time()
 
-# Detect user interactions (any input or button click)
-if st.button("Interact") or st.session_state.get("user_id"):
-    st.session_state.last_active = time.time()
+# -------------------------------------------------------- APP ------------------------------------------------------- #
+# Streamlit App Configuration
+PAGE_TITLE = "Credit Score Dashboard - Loan Decision Analysis"
+PAGE_ICON = ":bar_chart:"
+PAGE_LAYOUT = "wide"
 
-# Calculate inactivity duration
-inactivity_duration = time.time() - st.session_state.last_active
+# Set the page layout and appearance
+st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout=PAGE_LAYOUT)
 
-# Auto shutdown after 5 minutes of inactivity
-if inactivity_duration > 300:  # 5 minutes
-    st.warning("No activity detected for 5 minutes. Shutting down the app.")
-    os.system("kill 1")
+# Add page title explicitly
+st.title(PAGE_TITLE)
 
 
-# ==================================================================================================================== #
-#                                         INITIALIZE SESSION STATE VARIABLES                                          #
-# ==================================================================================================================== #
+# ---------------------------------------- INITIALIZE SESSION STATE VARIABLES ---------------------------------------- #
 for key in [
     # Input client id
     "cached_client_id",
@@ -98,11 +93,26 @@ for key in [
         st.session_state[key] = None  # Set a default value
 
 
-# ==================================================================================================================== #
-#                                                     CONFIGURATION                                                    #
-# ==================================================================================================================== #
+# ------------------------------------------------ AUTO IDLE TRACKING ------------------------------------------------ #
+# Initialize last activity timestamp
+if 'last_active' not in st.session_state:
+    st.session_state.last_active = time.time()
 
-# # Local development
+# Detect user interactions (any input or button click)
+if st.button("Interact") or st.session_state.get("user_id"):
+    st.session_state.last_active = time.time()
+
+# Calculate inactivity duration
+inactivity_duration = time.time() - st.session_state.last_active
+
+# Auto shutdown after 5 minutes of inactivity
+if inactivity_duration > 300:  # 5 minutes
+    st.warning("No activity detected for 5 minutes. Shutting down the app.")
+    os.system("kill 1")
+
+
+# ------------------------------------------------- API CONFIGURATION ------------------------------------------------ #
+# Local development
 BASE_URL = "http://127.0.0.1:5000/api"
 
 
@@ -116,19 +126,6 @@ FEATURE_NAMES_API_URL = f"{BASE_URL}/features-name"
 FEATURE_POSITIONING_PLOT_API_URL = f"{BASE_URL}/feature-positioning-plot"
 BIVARIATE_ANALYSIS_API_URL = f"{BASE_URL}/bivariate-analysis"
 
-
-# Streamlit App Configuration
-PAGE_TITLE = "Credit Score Dashboard - Loan Decision Analysis"
-PAGE_ICON = ":bar_chart:"
-PAGE_LAYOUT = "wide"
-
-
-# ====================================================== APP ========================================================= #
-# Set the page layout and appearance
-st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout=PAGE_LAYOUT)
-
-# Add page title explicitly
-st.title(PAGE_TITLE)
 
 # ================================================ SET COLORBLIND THEME ============================================== #
 # Enable Streamlit's built-in colorblind theme
